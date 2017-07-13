@@ -1,0 +1,12 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Effacer un arrivage</h1>
+<h2>Attention!</h2>
+<p>Tous les articles relies seront aussi <strong>effacés</strong>!
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Confirmez l'effacement" />
+</form>
+
+{% endblock %}

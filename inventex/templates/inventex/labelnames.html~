@@ -1,0 +1,32 @@
+{% extends "inventex.html" %}
+{% load static %}
+{% block content %}
+  <h1>Liste des nom d'étiquettes</h1>
+  
+  <p>
+    <table>
+      <thead>
+         <tr>
+            <th>No</th> 
+            <th>Nom</th> 
+         </tr>
+      </thead>
+      
+      <tfoot>
+         <tr>
+            <tr>
+            <th>No</th> 
+            <th>Nom</th> 
+         </tr>
+         </tr>
+      </tfoot>
+      
+      <tbody>
+      {% for labelname in labelnames %}
+          <tr>  <td>{{forloop.counter}}</td><td>{{labelname.name}}</td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </p>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "inventex.html" %}
+{% load static %}
+{% block content %}
+<div id="bienvenue">
+<h1>Bienvenue! Welcome!</h1>
+<p>
+<!-- <img src="{% static 'images/logindoor.jpg' %}" alt="Logo metacoh"/>  -->
+</p>  
+</div>
+{% endblock %}

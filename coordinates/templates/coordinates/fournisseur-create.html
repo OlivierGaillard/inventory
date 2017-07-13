@@ -1,0 +1,23 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Ajout d'un fournisseur</h1>
+
+<p>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+</p>
+
+<nav class="article_detail">
+<ul>
+<li><a href="#">Ajouter une adresse</a></li>
+<li><a href="{% url "coordinates:contact-create" %}">Ajouter un contact</a></li>
+<li><a href="{% url "coordinates:fournisseurs-list" %}">Retour à la liste des fournisseurs</a></li>
+</ul>
+</nav>
+
+
+
+{% endblock %}

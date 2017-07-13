@@ -1,0 +1,26 @@
+{% extends "inventex.html" %}
+{% block content %}
+
+
+<h1>Arrivage</h1>
+<p>Pour renseigner un champ cliquez sur <em>Modifier</em>.</p>
+<ol>
+   <li>Date: {{arrivage.date}}</li>
+   <li>Designation: {{arrivage.designation}}</li>
+   <li>Devise principale: {{arrivage.devise}}</li>
+   <li>Lieu de provenance: {{arrivage.lieu_provenance|default_if_none:"<em>à renseigner</em>"}}</li>
+   <li>Pays: {{arrivage.pays|default_if_none:"<em>à renseigner</em>"}}</li>      
+</ol>
+
+
+
+<nav class="article_detail">
+  <ul>
+    <li><a href="{% url "coordinates:arrivage-update" pk=arrivage.pk %}"> Modifier</a></li>
+    <li><a href="{% url "coordinates:arrivage-delete" pk=arrivage.pk %}"> Effacer</a></li>
+    <li><a href="{% url "coordinates:arrivages" %}">Liste des arrivages</a></li>
+  </ul>
+</nav>
+
+
+{% endblock %}

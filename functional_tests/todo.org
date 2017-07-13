@@ -1,0 +1,6 @@
+* Ajoût des articles
+  - le dernier inventaire-header créé est la valeur par défaut lorsque
+    l'utilisateur ajoûte un inventaire-contenu
+* Bugs 01.03.2017
+  1. Lorsque l'utilisateur choisit un inventaire c'est toujours le
+     plus ancien qui est affiché.

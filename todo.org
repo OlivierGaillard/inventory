@@ -1,0 +1,15 @@
+* Corriger le test fonctionnel pour tester ajouter Ã  l'inventaire vid.e
+* DONE Refactoring de la grosse vue edit_inventaire
+* DONE Refactoring des tests correspondant à edit_inventaire
+* DONE Ajouter des nouveaux types d'articles (robe, etc.) Ã  "Article"
+* TODO Revoir théorie sur les urls avec / avant et après
+* DONE Modifier les quantités des articles d'un inventaire
+  Actuellement il est seulement possible d'ajouter.
+* Changer les rÃ©fÃ©rences codÃ©es en dur dans les templates
+* TODO Ajouter une photo aux articles.
+  Ceci présuppose d'autres connaissances.
+** DONE Régler les variables MEDIA_ROOT et MEDIA_URL
+** DONE Mettre à jour la vue
+** TODO Générer des miniatures automatiquement
+** Mettre à jour les tests.
+

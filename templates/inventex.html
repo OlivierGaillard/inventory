@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header %}Mon super programme d'inventaire avec <strong>Django</strong>
+{% endblock %}
+{% block site_wrapper %}
+<div id="bloc_page">
+    <header>
+        <div id="titre_principal">
+            <div id="logo">
+                <img src="{% static 'images/kaba.jpg' %}" alt="Logo metacoh"/>   
+                <h1>Rythms & Colors</h1>
+            </div>
+        </div> 
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <ul class="dropdown">
+                  <li class="dropbtn">Arrivages</li>
+                     <div class="dropdown-content">
+                        <a href="{% url "coordinates:arrivage-create" %}">Créer un arrivage</a>
+                        <a href="{% url "coordinates:arrivages" %}">Arrivages</a>
+                        <a href="{% url "coordinates:locations" %}">Localités</a>
+                        <a href="{% url "finance:list" %}">Liste des frais</a>
+                     </div>
+                </ul> 
+                <ul class="dropdown">
+                  <li class="dropbtn">Habits</li>
+                  <div class="dropdown-content">
+                        <a href="{% url "clothes:category_create" %}" title="crée une catégorie d'habit">Créer catégorie d'habit</a>
+                        <a href="{% url "clothes:category-list" %}" title="Affiche les catégories">Affiche les catégories d'habits</a>
+                        <a href="{% url "clothes:clothes_create" %}" title="Saisir un habit">Saisir un habit</a>
+                        <a href="{% url "clothes:clothes-list" %}" title="Liste des habits">Liste des habits</a>
+                        <a href="{% url "clothes:inventory_create" %}" title="après avoir entré les habits">Générer un inventaire</a>
+                        <a href="{% url "clothes:inventory" %}" title="Visualiser un inventaire, par défaut le plus récent est affiché.">Afficher un inventaire</a>
+
+
+                        {# <a href="{% url "inventex:articles-list" %}" title="Affiche les habits">Afficher les articles</a> #}
+                        {# <a href="{% url "inventex:article-create" %}" title="crée un article de base">Créer un article et compléter plus tard</a> #}
+                     </div>
+                </ul>
+                <ul class="dropdown">
+                  <li class="dropbtn">Chaussures</li>
+                  <div class="dropdown-content">
+                        <a href="{% url "shoes:category_create" %}" title="crée une catégorie">Créer catégorie chaussure</a>
+                        <a href="{% url "shoes:category-list" %}" title="Affiche les catégories">Affiche les catégories chaussures</a>
+                        <a href="{% url "shoes:shoe_create" %}" title="">Entrer une chaussure</a>
+                        <a href="{% url "shoes:shoe-list" %}" title="">Liste des chaussures</a>
+                        <a href="{% url "shoes:inventory_create" %}" title="après avoir entré les articles">Générer un inventaire</a>
+                        <a href="{% url "shoes:inventory" %}" title="Visualiser un inventaire, par défaut le plus récent est affiché.">Afficher un inventaire</a>
+                     </div>
+                </ul>
+
+                <ul class="dropdown">
+                  <li class="dropbtn">Accessoires</li>
+                  <div class="dropdown-content">
+                        <a href="{% url "accessories:category-create" %}" title="crée une catégorie d'accessoire">Créer catégorie d'accessoire</a>
+                        <a href="{% url "accessories:category-list" %}" title="Affiche les catégories d'accessoires">Affiche les catégories d'accessoires</a>
+                        <a href="{% url "accessories:create" %}" title="Crée un accessoire">Créer un accessoire</a>
+                        <a href="{% url "accessories:list" %}" title="Liste des accessoires">Liste des accessoires</a>
+                        <a href="{% url "accessories:inventory-create" %}" title="après avoir entré les articles">Générer un inventaire</a>
+                        <a href="{% url "accessories:inventory-list" %}" title="Visualiser un inventaire, par défaut le plus récent est affiché.">Afficher un inventaire</a>
+                     </div>
+                </ul>
+
+                 <ul class="dropdown">
+                  <li class="dropbtn">Connexion</li>
+                  <div class="dropdown-content">
+                      {% if request.user.is_authenticated %}
+                      <li><a href="{% url "accounts:logout" %}" title="Logout">Logout</a></li>
+                      <li><a href="#">En ligne: {{request.user.username}}</a></li>
+                      {% else %}
+                      <li><a href="{% url "accounts:login" %}" title="Login">Login</a></li>
+                      {% endif %}
+                 </ul>
+            </ul>
+        </nav>
+    </header>
+    
+    {% block content %}
+
+    {% endblock %}
+    <footer>
+        <nav id="footernav">
+            {% block footernav %}{% endblock %}
+        </nav>
+        <p>An Open Green Solution: inventaires</p>
+    </footer>
+</div>
+{% endblock %}

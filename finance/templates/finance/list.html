@@ -1,0 +1,79 @@
+{% extends "inventex.html" %}
+{% block content %}
+<p>
+<form action="" method="get">
+        {{ filter.form.as_p }}
+    <label>Choix de la devise pour le total</label>
+    <select name="monnaie">
+        {% for m in devises %}
+          <option value="{{m}}">{{m}}</option>
+        {% endfor %}
+        {% if devise_total %}
+          <option value="{{m}}" selected>{{devise_total}}</option>
+        {% endif %}
+
+    </select><br>
+    <input type="submit" />
+</form>
+</p>
+
+<h1>Frais</h1>
+    <table>
+      <thead>
+         <tr>
+            <th>No</th>
+            <th>Arrivage</th>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Objet</th>
+            <th>Devise</th>
+            <th>Montant</th>
+            <th title="Vous pouvez modifier la devise">{{ devise_total|default:'XOF' }}</th>
+            <th title="Ajouter nouveaux frais">Ajout</th>
+            <th title="Supprimer">Supp.</th>
+            <th title="Modifier">Mod.</th>
+         </tr>
+      </thead>
+
+      <tfoot>
+
+      </tfoot>
+
+      <tbody>
+      {% for a in filter.qs %}
+      <tr><td>{{ forloop.counter }}</td>
+          <td>{{ a.arrivage_ref }}</td>
+          <td>{{ a.arrivage_ref.id }}</td>
+          <td>{{ a.date_frais }}  </td>
+          <td>{{ a.objet }}</td>
+          <td>{{ a.devise_id }}</td>
+          <td id="amount">{{ a.montant }}</td>
+          {% if devise_total %}
+            <td id="amount">{{ a.montantTargetAmount|floatformat:2 }}</td>
+          {% else %}
+            <td id="amount">{{ a.montant }}</td>
+          {% endif %}
+          {% ifchanged a.arrivage_ref %}
+          <td id="AMS" title="Ajouter nouveaux frais">
+              <a href="{% url "finance:add_frais" a.arrivage_ref.id %}">A</a></td>
+          <td id="AMS" title="Supprimer">
+              <a  href="{% url "finance:delete" a.pk %}">S</a></td>
+          <td id="AMS" title="Modifier">
+              <a href="{% url "finance:update" a.pk %}">M</a></td>
+          {% else %}
+          <td></td>
+          <td id="AMS" title="Supprimer">
+              <a href="{% url "finance:delete" a.pk %}">S</a></td>
+          <td id="AMS" title="Modifier">
+              <a href="{% url "finance:update" a.pk %}">M</a></td>
+
+          {% endifchanged %}
+      </tr>
+      {% endfor %}
+      <tr>
+          <th colspan="7">Total</th>
+          <td>{{ total|floatformat:2 }}</td>
+      </tr>
+    </table>
+
+{% endblock %}

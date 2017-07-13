@@ -1,0 +1,44 @@
+{% extends "inventex.html" %}
+{% load static %}
+{% block content %}
+  <h1>Contacts</h1>
+   
+  
+  <p>
+    <table>
+      <thead>
+         <tr>
+            <th>Nom</th> 
+            <th>Prénom</th> 
+            <th>Tel: mobile</th>
+            <th>Tel: autre</th>
+         </tr>
+      </thead>
+      
+      <tfoot>
+         <tr>
+            <th>Nom</th> 
+            <th>Prénom</th> 
+         </tr>
+      </tfoot>
+      
+      <tbody>
+      {% for i in liste %}
+          <tr>  <td>{{i.nom}}</td>
+                <td>{{i.prenom}}</td>
+                {% for p in i.contactphone_set.all %}
+                <td>{{p.phone_type[1]}}:{{p.phone_number}}</td>
+                {% endfor %}
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </p>
+ <nav class="article_detail">
+<ul>
+<li><a href="{% url "coordinates:contact-create" %}">Ajouter un contact</a></li>
+<li><a href="{% url "coordinates:fournisseurs-list" %}">Retour à la liste des fournisseurs</a></li>
+</ul>
+</nav>
+
+{% endblock %}

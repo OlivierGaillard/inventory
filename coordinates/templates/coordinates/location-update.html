@@ -1,0 +1,11 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Modifier un lieu</h1>
+{% load crispy_forms_tags %}
+{% crispy form %}
+{% endblock %}
+{% block footernav %}
+  <ul>
+    <li><a href="{% url "coordinates:location-delete" location.pk %}"> Effacer</a></li>
+  </ul>
+{% endblock %}

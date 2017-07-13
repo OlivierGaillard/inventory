@@ -1,0 +1,24 @@
+{% extends "inventex.html" %}
+{% block content %}
+
+
+<h1>Arrivage</h1>
+<ul>
+   <li>Date: {{arrivage.date}}</li>
+   <li>Designation: {{arrivage.designation}}</li>
+   <li>Lieu de provenance: {{arrivage.lieu_provenance}}</li>
+   <li>Pays: {{arrivage.pays}}</li>
+</ul>
+
+
+
+<nav class="article_detail">
+  <ul>
+    <li><a href="{% url "inventex:arrivage-update" pk=arrivage.pk %}"> Modifier</a></li>
+    <li><a href="{% url "inventex:arrivage-delete" pk=arrivage.pk %}"> Effacer</a></li>
+    <li><a href="{% url "inventex:arrivages" %}">Liste des arrivages</a></li>
+  </ul>
+</nav>
+
+
+{% endblock %}

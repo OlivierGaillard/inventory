@@ -1,0 +1,14 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Effacer un article</h1>
+<h2>Attention!</h2>
+<p>L'article {{article.modele}} sera <strong>effacé</strong>!
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Confirmez l'effacement" />
+</form>
+<p>
+    <img src="{{article.photo.url}}" alt="image" height="80%"/>
+</p>
+{% endblock %}

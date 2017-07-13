@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header %}Mon super programme d'inventaire avec <strong>Django</strong>
+{% endblock %}
+{% block site_wrapper %}
+<div id="bloc_page">
+    <header>
+        <div id="titre_principal">
+            <div id="logo">
+                <img src="{% static 'images/kaba.jpg' %}" alt="Logo metacoh"/>   
+                <h1>Rythms & Colors</h1>
+            </div>
+        </div> 
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <ul class="dropdown">
+                  <li class="dropbtn">Inventaires</li>
+                     <div class="dropdown-content">
+                        <a href="{% url "coordinates:arrivage-create" %}">Créer un arrivage</a>
+                        <a href="{% url "coordinates:arrivages" %}">Arrivages</a>
+                        
+                        <a href="{% url "inventex:entrees-list" %}">Entrées</a>
+                        <a href="#inventory_creation">Créer un inventaire</a>
+                     </div>
+                </ul> 
+                <ul class="dropdown">
+                  <li class="dropbtn">Articles</li>
+                  <div class="dropdown-content">
+                        <a href="{% url "inventex:articles-list" %}" title="Affiche les habits">Afficher les articles</a>
+                        <a href="{% url "inventex:marke-article" %}" title="crée un article, avec sa photo">Créer un article</a>
+                        <a href="{% url "inventex:make-create" %}" title="crée un article de base">Créer un article et compléter plus tard</a>
+                     </div>
+                </ul>          
+	    {% if request.user.is_authenticated %}
+	      <li><a href="{% url "accounts:logout" %}" title="Logout">Logout</a></li>
+	    {% else %}
+	      <li><a href="{% url "accounts:login" %}" title="Login">Login</a></li>
+	    {% endif %}
+                {# <li><a href="/admin">Django Admin</a></li> #}
+            </ul>    
+        </nav>
+    </header>
+    
+    {% block content %}{% endblock %}
+    <footer>
+        <p>An Open Green Solution: inventaires</p>
+    </footer>
+</div>
+{% endblock %}

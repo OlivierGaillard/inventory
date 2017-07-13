@@ -1,0 +1,23 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Ajout d'un arrivage</h1>
+
+<p>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+</p>
+
+<nav class="article_detail">
+<ul>
+    <li><a href="{% url "coordinates:arrivage-update" pk=arrivage.pk %}"> Modifier</a></li>
+    <li><a href="{% url "coordinates:arrivage-delete" pk=arrivage.pk %}"> Effacer</a></li>
+    <li><a href="{% url "coordinates:arrivages" %}">Liste des arrivages</a></li>
+</ul>
+</nav>
+
+
+
+{% endblock %}

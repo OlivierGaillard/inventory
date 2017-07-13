@@ -1,0 +1,21 @@
+{% extends "inventex.html" %}
+{% block content %}
+
+<nav class="article_detail">
+  <ul>
+    <li><a href="{% url "inventex:exemplaires-list" %}">Retour à la liste des exemplaires</a></li>
+  </ul>
+</nav>
+
+<h1>Nom: {{exemplaire.article.nom}}</h1>
+<h2>Propriétés</h2>
+
+<h3>Images</h3>
+
+{% for p in exemplaire.photos.all %}
+<figure>
+    <img class="img_detail" src="{{p.photo.url}}" alt="{{p.legende}}"/>
+    <figcaption>{{p.legende}}</figcaption>
+</figure>
+{% endfor %}
+{% endblock %}

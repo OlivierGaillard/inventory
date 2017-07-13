@@ -1,0 +1,21 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Ajout d'un contact</h1>
+
+<p>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+</p>
+
+<nav class="article_detail">
+<ul>
+<li><a href="{% url "coordinates:contacts-list" %}">Liste des contacts</a></li>
+</ul>
+</nav>
+
+
+
+{% endblock %}

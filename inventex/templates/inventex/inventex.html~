@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header %}Mon super programme d'inventaire avec <strong>Django</strong>
+{% endblock %}
+{% block site_wrapper %}
+<div id="bloc_page">
+    <header>
+        <div id="titre_principal">
+            <div id="logo">
+                <img src="{% static 'inventaire/images/kaba.jpg' %}" alt="Logo metacoh"/>   
+                <h1>MikaAfrica</h1>
+            </div>
+        </div> 
+        <nav>
+            <ul>
+                <li><a href="{% url "inventaire:index" %}">Home</a></li>
+                <ul class="dropdown">
+                  <li class="dropbtn">Inventaires</li>
+                     <div class="dropdown-content">
+                        <a href="{% url "inventaire:headers_list" %}" >Afficher les inventaires</a>
+                        <a href="{% url "inventaire:inventory_creation" %}">Créer un inventaire</a>
+                     </div>
+                </ul> 
+                <ul class="dropdown">
+                  <li class="dropbtn">Articles</li>
+                  <div class="dropdown-content">
+
+                        <a href="{% url "inventaire:articles-list" %}" title="Affiche les habits">Afficher les articles</a>
+                        <a href="{% url "inventaire:article-creation" %}" title="crée un article, avec sa photo">Créer un article</a>
+                     </div>
+                </ul>          
+	    {% if request.user.is_authenticated %}
+	      <li><a href="{% url "accounts:logout" %}" title="Login">Logout</a></li>
+	    {% else %}
+	      <li><a href="{% url "accounts:login" %}" title="Login">Login</a></li>
+	    {% endif %}
+                {# <li><a href="/admin">Django Admin</a></li> #}
+            </ul>    
+        </nav>
+    </header>
+    
+    {% block content %}{% endblock %}
+    <footer>
+        <p>An Open Green Solution: inventaires</p>
+    </footer>
+</div>
+{% endblock %}

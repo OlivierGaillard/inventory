@@ -1,0 +1,34 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Inventaire des accessoires</h1>
+<p>
+    <table class="table">
+      <thead>
+         <tr>
+            <th>No</th>
+            <th>Date d'entrée</th>
+            <th>Nom</th>
+            <th>Quantité</th>
+         </tr>
+      </thead>
+
+      <tfoot>
+         <tr>
+            <th>No</th>
+            <th>Date d'entrée</th>
+            <th>Nom</th>
+            <th>Quantité</th>
+         </tr>
+      </tfoot>
+
+      <tbody>
+      {% for a in entries %}
+      <tr><td>{{ forloop.counter }}</td>
+          <td>{{ a.date }}</td>
+          <td>{{ a.article.name }} </td>
+          <td>{{ a.quantity }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </p>
+{% endblock %}

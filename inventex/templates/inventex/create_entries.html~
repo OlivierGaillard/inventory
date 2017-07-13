@@ -1,0 +1,11 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Test génération exemplaires</h1>
+
+<form action="{% url "inventex:create-entries" %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+     {{ form.as_ul }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

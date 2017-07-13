@@ -1,0 +1,3 @@
+{% extends "inventaire.html" %}
+{% block content %}
+{% endblock %}

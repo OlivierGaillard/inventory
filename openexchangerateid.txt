@@ -1,0 +1,98 @@
+af2115e60e7c4690b4d1876c8b7cd7bb
+
+>>> import requests
+>>> id = 'af2115e60e7c4690b4d1876c8b7cd7bb'
+>>> url = 'https://openexchangerates.org/api/'
+>>> param = {'app_id' : id}
+>>> param
+{'app_id': 'af2115e60e7c4690b4d1876c8b7cd7bb'}
+>>> url + 'latest.json'
+'https://openexchangerates.org/api/latest.json'
+>>> latest = _
+>>> latest
+'https://openexchangerates.org/api/latest.json'
+>>> r = requests.get(latest, params=param)
+>>> print (r.url)
+https://openexchangerates.org/api/latest.json?app_id=af2115e60e7c4690b4d1876c8b7cd7bb
+>>> r.text
+'{\n  "disclaimer": "Usage subject to terms: https://openexchangerates.org/terms",\n  "license": "https://openexchangerates.org/license",\n  "timestamp": 1494666012,\n  "base": "USD",\n  "rates": {\n    "AED": 3.672896,\n    "AFN": 68.005,\n    "ALL": 122.740964,\n    "AMD": 484.55,\n    "ANG": 1.78015,\n    "AOA": 165.9125,\n    "ARS": 15.43525,\n    "AUD": 1.354463,\n    "AWG": 1.801247,\n    "AZN": 1.6775,\n    "BAM": 1.79905,\n    "BBD": 2,\n    "BDT": 81.194384,\n    "BGN": 1.789965,\n    "BHD": 0.37707,\n    "BIF": 1711,\n    "BMD": 1,\n    "BND": 1.404517,\n    "BOB": 6.914794,\n    "BRL": 3.12205,\n    "BSD": 1,\n    "BTC": 0.000591125271,\n    "BTN": 64.315276,\n    "BWP": 10.42355,\n    "BYN": 1.862493,\n    "BZD": 2.010106,\n    "CAD": 1.371385,\n    "CDF": 1405,\n    "CHF": 1.00095,\n    "CLF": 0.025023,\n    "CLP": 672.025,\n    "CNH": 6.897265,\n    "CNY": 6.8989,\n    "COP": 2920.67,\n    "CRC": 563.035,\n    "CUC": 1,\n    "CUP": 25.5,\n    "CVE": 101.55,\n    "CZK": 24.2929,\n    "DJF": 178.77,\n    "DKK": 6.806675,\n    "DOP": 47.4,\n    "DZD": 109.406514,\n    "EGP": 18.05,\n    "ERN": 15.339159,\n    "ETB": 23.175,\n    "EUR": 0.914662,\n    "FJD": 2.115497,\n    "FKP": 0.775885,\n    "GBP": 0.775885,\n    "GEL": 2.419032,\n    "GGP": 0.775885,\n    "GHS": 4.218527,\n    "GIP": 0.775885,\n    "GMD": 46.15,\n    "GNF": 9120,\n    "GTQ": 7.334907,\n    "GYD": 205.135298,\n    "HKD": 7.79366,\n    "HNL": 23.458882,\n    "HRK": 6.7945,\n    "HTG": 68.881909,\n    "HUF": 283.5085,\n    "IDR": 13329.277767,\n    "ILS": 3.6004,\n    "IMP": 0.775885,\n    "INR": 64.1755,\n    "IQD": 1162.05,\n    "IRR": 32461.708224,\n    "ISK": 104.23,\n    "JEP": 0.775885,\n    "JMD": 128.79864,\n    "JOD": 0.709498,\n    "JPY": 113.375,\n    "KES": 103.217974,\n    "KGS": 67.827301,\n    "KHR": 4045,\n    "KMF": 450.55,\n    "KPW": 900.09,\n    "KRW": 1123.92,\n    "KWD": 0.304709,\n    "KYD": 0.833428,\n    "KZT": 314.359199,\n    "LAK": 8200,\n    "LBP": 1511.5,\n    "LKR": 151.844292,\n    "LRD": 94.5,\n    "LSL": 13.354449,\n    "LYD": 1.405,\n    "MAD": 9.897516,\n    "MDL": 18.638105,\n    "MGA": 3145,\n    "MKD": 56.34105,\n    "MMK": 1349.65,\n    "MNT": 2408.049606,\n    "MOP": 8.02772,\n    "MRO": 358.584045,\n    "MUR": 35.219,\n    "MVR": 15.399668,\n    "MWK": 725.22,\n    "MXN": 18.8087,\n    "MYR": 4.346505,\n    "MZN": 64.010493,\n    "NAD": 13.365,\n    "NGN": 317.5,\n    "NIO": 29.628191,\n    "NOK": 8.5609,\n    "NPR": 102.950772,\n    "NZD": 1.457301,\n    "OMR": 0.384984,\n    "PAB": 1,\n    "PEN": 3.27305,\n    "PGK": 3.158161,\n    "PHP": 49.676,\n    "PKR": 104.241584,\n    "PLN": 3.85409,\n    "PYG": 5561.7,\n    "QAR": 3.641398,\n    "RON": 4.159997,\n    "RSD": 112.717357,\n    "RUB": 57.1034,\n    "RWF": 833.564879,\n    "SAR": 3.7505,\n    "SBD": 7.870713,\n    "SCR": 13.354691,\n    "SDG": 6.69,\n    "SEK": 8.82569,\n    "SGD": 1.404,\n    "SHP": 0.775885,\n    "SLL": 7454.655428,\n    "SOS": 575.58,\n    "SRD": 7.5375,\n    "SSP": 117.453244,\n    "STD": 22471.032938,\n    "SVC": 8.750942,\n    "SYP": 214.33,\n    "SZL": 13.375,\n    "THB": 34.661,\n    "TJS": 8.732061,\n    "TMT": 3.50998,\n    "TND": 2.421497,\n    "TOP": 2.311577,\n    "TRY": 3.570795,\n    "TTD": 6.695851,\n    "TWD": 30.188,\n    "TZS": 2234.2,\n    "UAH": 26.335732,\n    "UGX": 3621.55,\n    "USD": 1,\n    "UYU": 27.923641,\n    "UZS": 3790,\n    "VEF": 9.985022,\n    "VND": 22700.317745,\n    "VUV": 110.527658,\n    "WST": 2.589047,\n    "XAF": 601.423351,\n    "XAG": 0.06071652,\n    "XAU": 0.0008138,\n    "XCD": 2.70255,\n    "XDR": 0.732325,\n    "XOF": 601.220206,\n    "XPD": 0.00123843,\n    "XPF": 109.595327,\n    "XPT": 0.00108402,\n    "YER": 250.3,\n    "ZAR": 13.36674,\n    "ZMW": 9.225,\n    "ZWL": 322.322775\n  }\n}'
+>>> r.encoding
+'utf-8'
+>>> r.json()
+{'rates': {'ANG': 1.78015, 'HUF': 283.5085, 'XPF': 109.595327, 'SOS': 575.58, 'TZS': 2234.2, 'ERN': 15.339159, 'RWF': 833.564879, 'KYD': 0.833428, 'GEL': 2.419032, 'BRL': 3.12205, 'OMR': 0.384984, 'NZD': 1.457301, 'KZT': 314.359199, 'BOB': 6.914794, 'MRO': 358.584045, 'TMT': 3.50998, 'XPT': 0.00108402, 'DOP': 47.4, 'MXN': 18.8087, 'MMK': 1349.65, 'HRK': 6.7945, 'LSL': 13.354449, 'JOD': 0.709498, 'GNF': 9120, 'MZN': 64.010493, 'ISK': 104.23, 'ZMW': 9.225, 'THB': 34.661, 'XCD': 2.70255, 'BAM': 1.79905, 'XAF': 601.423351, 'NIO': 29.628191, 'AZN': 1.6775, 'GBP': 0.775885, 'BMD': 1, 'HKD': 7.79366, 'XAU': 0.0008138, 'ALL': 122.740964, 'IDR': 13329.277767, 'CLP': 672.025, 'LRD': 94.5, 'PLN': 3.85409, 'TRY': 3.570795, 'RUB': 57.1034, 'SBD': 7.870713, 'KMF': 450.55, 'EGP': 18.05, 'CLF': 0.025023, 'KRW': 1123.92, 'ETB': 23.175, 'JPY': 113.375, 'HNL': 23.458882, 'UZS': 3790, 'MDL': 18.638105, 'ZWL': 322.322775, 'KHR': 4045, 'BHD': 0.37707, 'BZD': 2.010106, 'QAR': 3.641398, 'AUD': 1.354463, 'ZAR': 13.36674, 'XOF': 601.220206, 'DKK': 6.806675, 'BTC': 0.000591125271, 'BSD': 1, 'VEF': 9.985022, 'LBP': 1511.5, 'PHP': 49.676, 'CAD': 1.371385, 'KWD': 0.304709, 'CRC': 563.035, 'SCR': 13.354691, 'KPW': 900.09, 'STD': 22471.032938, 'PEN': 3.27305, 'PGK': 3.158161, 'JEP': 0.775885, 'COP': 2920.67, 'AWG': 1.801247, 'SZL': 13.375, 'VND': 22700.317745, 'SHP': 0.775885, 'RSD': 112.717357, 'BGN': 1.789965, 'NAD': 13.365, 'JMD': 128.79864, 'MUR': 35.219, 'GGP': 0.775885, 'BTN': 64.315276, 'LYD': 1.405, 'CZK': 24.2929, 'TOP': 2.311577, 'ILS': 3.6004, 'CHF': 1.00095, 'NOK': 8.5609, 'NGN': 317.5, 'CVE': 101.55, 'RON': 4.159997, 'LKR': 151.844292, 'MWK': 725.22, 'BIF': 1711, 'SRD': 7.5375, 'SEK': 8.82569, 'IMP': 0.775885, 'GIP': 0.775885, 'CDF': 1405, 'CNY': 6.8989, 'GYD': 205.135298, 'GHS': 4.218527, 'AMD': 484.55, 'BYN': 1.862493, 'HTG': 68.881909, 'PYG': 5561.7, 'INR': 64.1755, 'MKD': 56.34105, 'EUR': 0.914662, 'AOA': 165.9125, 'CNH': 6.897265, 'MGA': 3145, 'SVC': 8.750942, 'NPR': 102.950772, 'IQD': 1162.05, 'FJD': 2.115497, 'SLL': 7454.655428, 'TND': 2.421497, 'GTQ': 7.334907, 'MVR': 15.399668, 'TWD': 30.188, 'IRR': 32461.708224, 'XAG': 0.06071652, 'MNT': 2408.049606, 'KES': 103.217974, 'CUP': 25.5, 'AFN': 68.005, 'SDG': 6.69, 'FKP': 0.775885, 'XDR': 0.732325, 'BDT': 81.194384, 'SAR': 3.7505, 'USD': 1, 'UGX': 3621.55, 'PAB': 1, 'MAD': 9.897516, 'MYR': 4.346505, 'DZD': 109.406514, 'SYP': 214.33, 'XPD': 0.00123843, 'GMD': 46.15, 'UAH': 26.335732, 'BND': 1.404517, 'BWP': 10.42355, 'VUV': 110.527658, 'TJS': 8.732061, 'CUC': 1, 'MOP': 8.02772, 'TTD': 6.695851, 'BBD': 2, 'KGS': 67.827301, 'WST': 2.589047, 'YER': 250.3, 'DJF': 178.77, 'SSP': 117.453244, 'SGD': 1.404, 'AED': 3.672896, 'PKR': 104.241584, 'UYU': 27.923641, 'ARS': 15.43525, 'LAK': 8200}, 'disclaimer': 'Usage subject to terms: https://openexchangerates.org/terms', 'license': 'https://openexchangerates.org/license', 'timestamp': 1494666012, 'base': 'USD'}
+>>> r.status_code
+200
+>>> r.headers
+{'Vary': 'Accept-Encoding', 'transfer-encoding': 'chunked', 'Server': 'nginx/1.12.0', 'Cache-Control': 'public', 'Last-Modified': 'Sat, 13 May 2017 09:00:12 GMT', 'Date': 'Sat, 13 May 2017 09:38:46 GMT', 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json; charset=utf-8', 'Content-Encoding': 'gzip', 'Connection': 'keep-alive', 'Etag': 'W/"75836fbd371714ba66c9eeffe452f375"'}
+>>> with open('rates.txt', 'w') as outfile:
+...     r.json().dump(data, outfile)
+... 
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+AttributeError: 'dict' object has no attribute 'dump'
+>>>     r.json.dump(data, outfile)
+  File "<stdin>", line 1
+    r.json.dump(data, outfile)
+    ^
+IndentationError: unexpected indent
+>>> with open('rates.txt', 'w') as outfile:
+...     r.json.dump(data, outfile)
+... 
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+AttributeError: 'function' object has no attribute 'dump'
+>>> r.json()
+{'rates': {'ANG': 1.78015, 'HUF': 283.5085, 'XPF': 109.595327, 'SOS': 575.58, 'TZS': 2234.2, 'ERN': 15.339159, 'RWF': 833.564879, 'KYD': 0.833428, 'GEL': 2.419032, 'BRL': 3.12205, 'OMR': 0.384984, 'NZD': 1.457301, 'KZT': 314.359199, 'BOB': 6.914794, 'MRO': 358.584045, 'TMT': 3.50998, 'XPT': 0.00108402, 'DOP': 47.4, 'MXN': 18.8087, 'MMK': 1349.65, 'HRK': 6.7945, 'LSL': 13.354449, 'JOD': 0.709498, 'GNF': 9120, 'MZN': 64.010493, 'ISK': 104.23, 'ZMW': 9.225, 'THB': 34.661, 'XCD': 2.70255, 'BAM': 1.79905, 'XAF': 601.423351, 'NIO': 29.628191, 'AZN': 1.6775, 'GBP': 0.775885, 'BMD': 1, 'HKD': 7.79366, 'XAU': 0.0008138, 'ALL': 122.740964, 'IDR': 13329.277767, 'CLP': 672.025, 'LRD': 94.5, 'PLN': 3.85409, 'TRY': 3.570795, 'RUB': 57.1034, 'SBD': 7.870713, 'KMF': 450.55, 'EGP': 18.05, 'CLF': 0.025023, 'KRW': 1123.92, 'ETB': 23.175, 'JPY': 113.375, 'HNL': 23.458882, 'UZS': 3790, 'MDL': 18.638105, 'ZWL': 322.322775, 'KHR': 4045, 'BHD': 0.37707, 'BZD': 2.010106, 'QAR': 3.641398, 'AUD': 1.354463, 'ZAR': 13.36674, 'XOF': 601.220206, 'DKK': 6.806675, 'BTC': 0.000591125271, 'BSD': 1, 'VEF': 9.985022, 'LBP': 1511.5, 'PHP': 49.676, 'CAD': 1.371385, 'KWD': 0.304709, 'CRC': 563.035, 'SCR': 13.354691, 'KPW': 900.09, 'STD': 22471.032938, 'PEN': 3.27305, 'PGK': 3.158161, 'JEP': 0.775885, 'COP': 2920.67, 'AWG': 1.801247, 'SZL': 13.375, 'VND': 22700.317745, 'SHP': 0.775885, 'RSD': 112.717357, 'BGN': 1.789965, 'NAD': 13.365, 'JMD': 128.79864, 'MUR': 35.219, 'GGP': 0.775885, 'BTN': 64.315276, 'LYD': 1.405, 'CZK': 24.2929, 'TOP': 2.311577, 'ILS': 3.6004, 'CHF': 1.00095, 'NOK': 8.5609, 'NGN': 317.5, 'CVE': 101.55, 'RON': 4.159997, 'LKR': 151.844292, 'MWK': 725.22, 'BIF': 1711, 'SRD': 7.5375, 'SEK': 8.82569, 'IMP': 0.775885, 'GIP': 0.775885, 'CDF': 1405, 'CNY': 6.8989, 'GYD': 205.135298, 'GHS': 4.218527, 'AMD': 484.55, 'BYN': 1.862493, 'HTG': 68.881909, 'PYG': 5561.7, 'INR': 64.1755, 'MKD': 56.34105, 'EUR': 0.914662, 'AOA': 165.9125, 'CNH': 6.897265, 'MGA': 3145, 'SVC': 8.750942, 'NPR': 102.950772, 'IQD': 1162.05, 'FJD': 2.115497, 'SLL': 7454.655428, 'TND': 2.421497, 'GTQ': 7.334907, 'MVR': 15.399668, 'TWD': 30.188, 'IRR': 32461.708224, 'XAG': 0.06071652, 'MNT': 2408.049606, 'KES': 103.217974, 'CUP': 25.5, 'AFN': 68.005, 'SDG': 6.69, 'FKP': 0.775885, 'XDR': 0.732325, 'BDT': 81.194384, 'SAR': 3.7505, 'USD': 1, 'UGX': 3621.55, 'PAB': 1, 'MAD': 9.897516, 'MYR': 4.346505, 'DZD': 109.406514, 'SYP': 214.33, 'XPD': 0.00123843, 'GMD': 46.15, 'UAH': 26.335732, 'BND': 1.404517, 'BWP': 10.42355, 'VUV': 110.527658, 'TJS': 8.732061, 'CUC': 1, 'MOP': 8.02772, 'TTD': 6.695851, 'BBD': 2, 'KGS': 67.827301, 'WST': 2.589047, 'YER': 250.3, 'DJF': 178.77, 'SSP': 117.453244, 'SGD': 1.404, 'AED': 3.672896, 'PKR': 104.241584, 'UYU': 27.923641, 'ARS': 15.43525, 'LAK': 8200}, 'disclaimer': 'Usage subject to terms: https://openexchangerates.org/terms', 'license': 'https://openexchangerates.org/license', 'timestamp': 1494666012, 'base': 'USD'}
+>>> import json
+>>> rates = r.json()
+>>> rates
+{'rates': {'ANG': 1.78015, 'HUF': 283.5085, 'XPF': 109.595327, 'SOS': 575.58, 'TZS': 2234.2, 'ERN': 15.339159, 'RWF': 833.564879, 'KYD': 0.833428, 'GEL': 2.419032, 'BRL': 3.12205, 'OMR': 0.384984, 'NZD': 1.457301, 'KZT': 314.359199, 'BOB': 6.914794, 'MRO': 358.584045, 'TMT': 3.50998, 'XPT': 0.00108402, 'DOP': 47.4, 'MXN': 18.8087, 'MMK': 1349.65, 'HRK': 6.7945, 'LSL': 13.354449, 'JOD': 0.709498, 'GNF': 9120, 'MZN': 64.010493, 'ISK': 104.23, 'ZMW': 9.225, 'THB': 34.661, 'XCD': 2.70255, 'BAM': 1.79905, 'XAF': 601.423351, 'NIO': 29.628191, 'AZN': 1.6775, 'GBP': 0.775885, 'BMD': 1, 'HKD': 7.79366, 'XAU': 0.0008138, 'ALL': 122.740964, 'IDR': 13329.277767, 'CLP': 672.025, 'LRD': 94.5, 'PLN': 3.85409, 'TRY': 3.570795, 'RUB': 57.1034, 'SBD': 7.870713, 'KMF': 450.55, 'EGP': 18.05, 'CLF': 0.025023, 'KRW': 1123.92, 'ETB': 23.175, 'JPY': 113.375, 'HNL': 23.458882, 'UZS': 3790, 'MDL': 18.638105, 'ZWL': 322.322775, 'KHR': 4045, 'BHD': 0.37707, 'BZD': 2.010106, 'QAR': 3.641398, 'AUD': 1.354463, 'ZAR': 13.36674, 'XOF': 601.220206, 'DKK': 6.806675, 'BTC': 0.000591125271, 'BSD': 1, 'VEF': 9.985022, 'LBP': 1511.5, 'PHP': 49.676, 'CAD': 1.371385, 'KWD': 0.304709, 'CRC': 563.035, 'SCR': 13.354691, 'KPW': 900.09, 'STD': 22471.032938, 'PEN': 3.27305, 'PGK': 3.158161, 'JEP': 0.775885, 'COP': 2920.67, 'AWG': 1.801247, 'SZL': 13.375, 'VND': 22700.317745, 'SHP': 0.775885, 'RSD': 112.717357, 'BGN': 1.789965, 'NAD': 13.365, 'JMD': 128.79864, 'MUR': 35.219, 'GGP': 0.775885, 'BTN': 64.315276, 'LYD': 1.405, 'CZK': 24.2929, 'TOP': 2.311577, 'ILS': 3.6004, 'CHF': 1.00095, 'NOK': 8.5609, 'NGN': 317.5, 'CVE': 101.55, 'RON': 4.159997, 'LKR': 151.844292, 'MWK': 725.22, 'BIF': 1711, 'SRD': 7.5375, 'SEK': 8.82569, 'IMP': 0.775885, 'GIP': 0.775885, 'CDF': 1405, 'CNY': 6.8989, 'GYD': 205.135298, 'GHS': 4.218527, 'AMD': 484.55, 'BYN': 1.862493, 'HTG': 68.881909, 'PYG': 5561.7, 'INR': 64.1755, 'MKD': 56.34105, 'EUR': 0.914662, 'AOA': 165.9125, 'CNH': 6.897265, 'MGA': 3145, 'SVC': 8.750942, 'NPR': 102.950772, 'IQD': 1162.05, 'FJD': 2.115497, 'SLL': 7454.655428, 'TND': 2.421497, 'GTQ': 7.334907, 'MVR': 15.399668, 'TWD': 30.188, 'IRR': 32461.708224, 'XAG': 0.06071652, 'MNT': 2408.049606, 'KES': 103.217974, 'CUP': 25.5, 'AFN': 68.005, 'SDG': 6.69, 'FKP': 0.775885, 'XDR': 0.732325, 'BDT': 81.194384, 'SAR': 3.7505, 'USD': 1, 'UGX': 3621.55, 'PAB': 1, 'MAD': 9.897516, 'MYR': 4.346505, 'DZD': 109.406514, 'SYP': 214.33, 'XPD': 0.00123843, 'GMD': 46.15, 'UAH': 26.335732, 'BND': 1.404517, 'BWP': 10.42355, 'VUV': 110.527658, 'TJS': 8.732061, 'CUC': 1, 'MOP': 8.02772, 'TTD': 6.695851, 'BBD': 2, 'KGS': 67.827301, 'WST': 2.589047, 'YER': 250.3, 'DJF': 178.77, 'SSP': 117.453244, 'SGD': 1.404, 'AED': 3.672896, 'PKR': 104.241584, 'UYU': 27.923641, 'ARS': 15.43525, 'LAK': 8200}, 'disclaimer': 'Usage subject to terms: https://openexchangerates.org/terms', 'license': 'https://openexchangerates.org/license', 'timestamp': 1494666012, 'base': 'USD'}
+>>> rates.keys()
+dict_keys(['rates', 'disclaimer', 'license', 'timestamp', 'base'])
+>>> rates = rates['rates']
+>>> rates
+{'ANG': 1.78015, 'HUF': 283.5085, 'XPF': 109.595327, 'SOS': 575.58, 'TZS': 2234.2, 'ERN': 15.339159, 'RWF': 833.564879, 'KYD': 0.833428, 'GEL': 2.419032, 'BRL': 3.12205, 'OMR': 0.384984, 'NZD': 1.457301, 'KZT': 314.359199, 'BOB': 6.914794, 'MRO': 358.584045, 'TMT': 3.50998, 'XPT': 0.00108402, 'DOP': 47.4, 'MXN': 18.8087, 'MMK': 1349.65, 'HRK': 6.7945, 'LSL': 13.354449, 'JOD': 0.709498, 'GNF': 9120, 'MZN': 64.010493, 'ISK': 104.23, 'ZMW': 9.225, 'THB': 34.661, 'XCD': 2.70255, 'BAM': 1.79905, 'XAF': 601.423351, 'NIO': 29.628191, 'AZN': 1.6775, 'GBP': 0.775885, 'BMD': 1, 'HKD': 7.79366, 'XAU': 0.0008138, 'ALL': 122.740964, 'IDR': 13329.277767, 'CLP': 672.025, 'LRD': 94.5, 'PLN': 3.85409, 'TRY': 3.570795, 'RUB': 57.1034, 'SBD': 7.870713, 'KMF': 450.55, 'EGP': 18.05, 'CLF': 0.025023, 'KRW': 1123.92, 'ETB': 23.175, 'JPY': 113.375, 'HNL': 23.458882, 'UZS': 3790, 'MDL': 18.638105, 'ZWL': 322.322775, 'KHR': 4045, 'BHD': 0.37707, 'BZD': 2.010106, 'QAR': 3.641398, 'AUD': 1.354463, 'ZAR': 13.36674, 'XOF': 601.220206, 'DKK': 6.806675, 'BTC': 0.000591125271, 'BSD': 1, 'VEF': 9.985022, 'LBP': 1511.5, 'PHP': 49.676, 'CAD': 1.371385, 'KWD': 0.304709, 'CRC': 563.035, 'SCR': 13.354691, 'KPW': 900.09, 'STD': 22471.032938, 'PEN': 3.27305, 'PGK': 3.158161, 'JEP': 0.775885, 'COP': 2920.67, 'AWG': 1.801247, 'SZL': 13.375, 'VND': 22700.317745, 'SHP': 0.775885, 'RSD': 112.717357, 'BGN': 1.789965, 'NAD': 13.365, 'JMD': 128.79864, 'MUR': 35.219, 'GGP': 0.775885, 'BTN': 64.315276, 'LYD': 1.405, 'CZK': 24.2929, 'TOP': 2.311577, 'ILS': 3.6004, 'CHF': 1.00095, 'NOK': 8.5609, 'NGN': 317.5, 'CVE': 101.55, 'RON': 4.159997, 'LKR': 151.844292, 'MWK': 725.22, 'BIF': 1711, 'SRD': 7.5375, 'SEK': 8.82569, 'IMP': 0.775885, 'GIP': 0.775885, 'CDF': 1405, 'CNY': 6.8989, 'GYD': 205.135298, 'GHS': 4.218527, 'AMD': 484.55, 'BYN': 1.862493, 'HTG': 68.881909, 'PYG': 5561.7, 'INR': 64.1755, 'MKD': 56.34105, 'EUR': 0.914662, 'AOA': 165.9125, 'CNH': 6.897265, 'MGA': 3145, 'SVC': 8.750942, 'NPR': 102.950772, 'IQD': 1162.05, 'FJD': 2.115497, 'SLL': 7454.655428, 'TND': 2.421497, 'GTQ': 7.334907, 'MVR': 15.399668, 'TWD': 30.188, 'IRR': 32461.708224, 'XAG': 0.06071652, 'MNT': 2408.049606, 'KES': 103.217974, 'CUP': 25.5, 'AFN': 68.005, 'SDG': 6.69, 'FKP': 0.775885, 'XDR': 0.732325, 'BDT': 81.194384, 'SAR': 3.7505, 'USD': 1, 'UGX': 3621.55, 'PAB': 1, 'MAD': 9.897516, 'MYR': 4.346505, 'DZD': 109.406514, 'SYP': 214.33, 'XPD': 0.00123843, 'GMD': 46.15, 'UAH': 26.335732, 'BND': 1.404517, 'BWP': 10.42355, 'VUV': 110.527658, 'TJS': 8.732061, 'CUC': 1, 'MOP': 8.02772, 'TTD': 6.695851, 'BBD': 2, 'KGS': 67.827301, 'WST': 2.589047, 'YER': 250.3, 'DJF': 178.77, 'SSP': 117.453244, 'SGD': 1.404, 'AED': 3.672896, 'PKR': 104.241584, 'UYU': 27.923641, 'ARS': 15.43525, 'LAK': 8200}
+>>> 'EUR' in rates
+True
+>>> rates['EUR']
+0.914662
+>>> rates['USD']
+1
+>>> rates['XOF']
+601.220206
+>>> with open('rates.txt', 'w') as outfile:
+...     pass
+... 
+>>> import pickle
+>>> with open('rates.txt', 'w') as outfile:
+...     pickle.dump(rates, outfile)
+... 
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+TypeError: write() argument must be str, not bytes
+>>> with open('rates.txt', 'wb') as outfile:
+...     pickle.dump(rates, outfile)
+... 
+>>> 
+(boutiqueEnv) [golivier@colibri boutique]$ 
+
+import pickle
+>>> with open('rates.txt', 'rb') as f:
+...     rates = pickle.load(f)
+from decimal import Decimal
+>>> from money  import xrates
+>>> xrates.install('money.exchange.SimpleBackend')
+>>> xrates.base = 'USD'
+>>> xrates.setrate('EUR', Decimal('0.914662'))
+>>> xrates.setrate('CHF', Decimal('1.00095'))
+
+a = Money(1, 'EUR')
+>>> a
+EUR 1
+>>> b = Money(1, 'CHF')
+>>> b
+CHF 1
+>>> a.to('CHF')
+CHF 1.094338673739589050381452384
+>>> b.to('EUR')
+EUR 0.9137938957989909585893401269

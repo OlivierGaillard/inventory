@@ -1,0 +1,44 @@
+{% extends "inventex.html" %}
+{% load static %}
+{% block content %}
+  <h1>Fournisseurs</h1>
+  
+  <p>
+    <table>
+      <thead>
+         <tr>
+            <th>Nom d'entreprise</th> 
+            <th>Contact</th> 
+            <th>Adresse</th>
+            <th>Email</th>
+         </tr>
+      </thead>
+      
+      <tfoot>
+         <tr>
+            <th>Nom d'entreprise</th> 
+            <th>Contact</th> 
+            <th>Adresse</th>
+            <th>Email</th>
+         </tr>
+      </tfoot>
+      
+      <tbody>
+      {% for i in liste %}
+          <tr>  <td>{{i.nom_entreprise}}</td>
+                <td>{{i.contact}}</td>
+                <td>{{i.adresse}}</td>
+                <td><a href="mailto:{{i.email}}">{{i.email}}</a></td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </p>
+  
+  <nav class="article_detail">
+<ul>
+<li><a href="#">Ajouter une adresse</a></li>
+<li><a href="{% url "coordinates:contact-create" %}">Ajouter un contact</a></li>
+</ul>
+</nav>
+{% endblock %}

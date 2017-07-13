@@ -1,0 +1,45 @@
+{% extends "inventex.html" %}
+{% load static %}
+{% block content %}
+  <h1>Liste des articles</h1>
+  
+  <p>
+    <table>
+      <thead>
+         <tr>
+            <th>No</th> 
+            <th>Modèle</th> 
+            <th title="Cliquer pour voir les détails">Lien</th>
+         </tr>
+      </thead>
+      
+      <tfoot>
+         <tr>
+            <th>No</th> 
+            <th>Modèle</th> 
+            <th title="Cliquer pour voir les détails">Lien</th>
+         </tr>
+      </tfoot>
+      
+      <tbody>
+      {% for i in liste %}
+          <tr>  <td>{{forloop.counter}}</td><td>{{i.modele}}</td>
+                <td>
+                {% comment %}                
+                {% if i.photo %}
+                   <a href="{{i.pk}}" title="Cliquer pour agrandir ou modifier/effacer"> 
+                   <img class="img_thumbnail" src="{{i.photo.url}}" alt="image" ></a>    
+                {% else %}
+                    <a href="{% url "inventex:article-update" i.pk %}">lien</a>
+                {% endif %}
+                {% endcomment %}
+                <a href="{% url "inventex:article-update" i.pk %}">Update </a>
+                <a href="{% url "inventex:article-detail" i.pk %}">Details </a>
+                <a href="{% url "inventex:article-delete" i.pk %}">Delete</a>
+                </td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </p>
+{% endblock %}

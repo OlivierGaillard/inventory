@@ -1,0 +1,34 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Localités</h1>
+<p>
+    <table class="table">
+      <thead>
+         <tr>
+            <th>No</th>
+            <th>Lieu</th>
+            <th>NPA</th>
+            <th>Pays</th>
+         </tr>
+      </thead>
+
+      <tfoot>
+         <tr>
+            <th>No</th>
+            <th>Lieu</th>
+            <th>NPA</th>
+            <th>Pays</th>
+         </tr>
+      </tfoot>
+
+      <tbody>
+      {% for a in locations %}
+      <tr><td>{{ forloop.counter }}</td>
+          <td>{{ a.nom }} <a href="{% url "coordinates:location-update" a.pk %}">Modifier</a>  </td>
+          <td>{{ a.npa }}</td>
+          <td>{{ a.pays }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </p>
+{% endblock %}

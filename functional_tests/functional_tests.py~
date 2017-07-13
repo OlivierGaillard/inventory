@@ -1,0 +1,67 @@
+from selenium import webdriver
+
+
+import unittest
+
+class NewVisitorTest(unittest.TestCase):
+
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+        self.browser.implicitly_wait(3)
+
+    def tearDown(self):
+        self.browser.quit()
+
+    def test_can_view_link_to_inventaire_on_homepage(self):
+        """ User can see the link to the list of inventaires.
+        """
+        self.browser.get('http://localhost:8000')
+        #elem = self.browser.find_elements_by_link_text('Liste des inventaires')
+        self.assertIn('Liste', self.browser.page_source) 
+
+    def test_can_view_list_of_inventaires(self):
+        """ User can see the page with the list of inventaires. Each
+        inventaire contains a unique field: the date.
+        """
+        self.browser.get('http://localhost:8000/inventaires')
+        self.assertIn('Date', self.browser.page_source, "Pas d'inventaire")
+
+    def test_can_access_inventaire_1(self):
+        """ User can access to the content of the first inventaire.
+        """
+        self.browser.get('http://localhost:8000/inventaire/1/')
+        self.assertIn('2 janvier', self.browser.page_source)
+        self.assertNotIn('1 mars', self.browser.page_source)
+
+    def test_can_access_inventaire_2(self):
+        """ User can access to the content of the first inventaire.
+        """
+        self.browser.get('http://localhost:8000/inventaire/2/')
+        self.assertIn('1 mars', self.browser.page_source)
+        self.assertNotIn('2 janvier', self.browser.page_source)
+
+    def test_can_access_create(self):
+        """ User can access the form to create one new inventory.
+        """
+        self.browser.get('http://localhost:8000/createinventaire')
+        self.assertIn('nouvel inventaire', self.browser.page_source)
+        inputbox = self.browser.find_element_by_id('id_new_inventaireh')
+        self.assertEqual(inputbox.get_attribute('placeholder'), '2017-03-27')
+        # She type the date
+        inputbox.send_keys('2017-06-28')
+        # When she hits enter, the page updates and the new list
+        # of inventaires is displayed.
+        submit_button = self.browser.find_element_by_name('submit_button')
+        submit_button.click()
+        self.browser.get('http://localhost:8000/inventaires')
+        self.assertIn('28 juin 2017', self.browser.page_source)
+        
+    def test_can_delete_inventaire(self):
+        self.assertFalse(2 == 2, "Write deletion of inventaire.")
+        
+
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
+
+

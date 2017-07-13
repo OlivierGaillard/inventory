@@ -1,0 +1,35 @@
+{% extends "inventex.html" %}
+{% load mptt_tags %}
+{% block content %}
+<h1>Liste des habits</h1>
+<p>
+    <table>
+      <thead>
+         <tr>
+            <th>No</th>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>Quantité</th>
+         </tr>
+      </thead>
+
+      <tfoot>
+         <tr>
+            <th>No</th>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>Quantité</th>
+         </tr>
+      </tfoot>
+
+      <tbody>
+      {% for a in clothes %}
+      <tr><td>{{ forloop.counter }}</td>
+          <td>{{ a.name }}</td>
+          <td>{{ a.categories.last }}</td>
+          <td>{{ a.get_quantity }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </p>
+{% endblock %}

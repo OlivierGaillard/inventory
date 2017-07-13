@@ -1,0 +1,21 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Ajout de notes de frais pour l'arrivage <em>{{ arrivage.designation }}</em></h1>
+<p>
+{% comment %}
+<form method="POST">
+    {% csrf_token %}
+    <table>
+    {{ formset }}
+    </table>
+    <input type="submit" value="Submit" />
+</form>
+</p>
+{% endcomment %}
+
+{% load crispy_forms_tags %}
+{% crispy formset helper %}
+<p>
+{{ formset.non_form_errors }}
+</p>
+{% endblock %}

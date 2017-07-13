@@ -1,0 +1,15 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Modification des frais de <em>{{frais.arrivage_ref}}</em></h1>
+{% load crispy_forms_tags %}
+{% crispy form %}
+{% comment %}
+<p>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Sauvegarder" />
+</form>
+</p>
+{% endcomment %}
+{% endblock %}

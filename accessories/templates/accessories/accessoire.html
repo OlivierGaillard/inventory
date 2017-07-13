@@ -1,0 +1,62 @@
+{% extends "inventex.html" %}
+{% block content %}
+<p>
+<div class="container">
+  <table class="table">
+    <tbody>
+      <tr>
+        <th>Date d'arrivage</th><td>{{accessory.arrivage.date}}</td>
+      </tr>
+      <tr>
+          <th>Nom de l'arrivage</th>
+        <td>{{accessory.arrivage.designation}}</td>
+      </tr>
+      <tr>
+          <th>Client</th>
+        <td>{{accessory.get_type_client_display}}</td>
+      </tr>
+      <tr>
+          <th>Catégorie</th>
+        <td>{{ accessory.categories.last }}</td>
+      </tr>
+      <tr>
+        <th>Nom</th>
+        <td>{{accessory.name}}</td>
+      </tr>
+      <tr>
+        <th>Marque</th>
+        <td>{{accessory.marque_ref|default_if_none:"<em>à renseigner</em>"}}</td>
+      </tr>
+      <tr>
+        <th>Quantité en stock</th>
+        <td>{{accessory.get_quantity|default_if_none:"<em>à renseigner</em>"}}</td>
+      </tr>
+      {% if perms.accessories.view_achat %}
+      <tr>
+        <th>Prix d'achat</th>
+        <td>{{accessory.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+
+</div>
+</p>
+
+
+
+
+{% comment %}
+<p>
+    <img class="img_detail" src="{{article.photo.url}}" alt="image"/>
+</p>
+{% endcomment %}
+{% endblock %}
+
+{% block footernav %}
+  <ul>
+    <li><a href="{% url "accessories:delete" accessory.pk %}"> Effacer</a></li>
+    <li><a href="{% url "accessories:update" accessory.pk %}"> Modifier</a></li>
+    <li><a href="{% url "accessories:list" %}">Retour à la liste des accessoires</a></li>
+  </ul>
+{% endblock %}

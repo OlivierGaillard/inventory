@@ -1,0 +1,43 @@
+{% extends "inventex.html" %}
+{% block content %}
+
+
+<h1>Arrivage du {{article.arrivage.date}} / {{article.arrivage.lieu_provenance}}</h1>
+<h2>Type de produit: {{article.type_de_produit}}</h2>
+<ul>
+   <li>Genre: {{article.genre_article|default_if_none:"<em>à renseigner</em>"}}</li>
+   <li>Espèce: {{article.espece_article|default_if_none:"<em>à renseigner</em>"}}</li>
+   {% if article.sous_espece %}
+   <li>Sous-espèce: {{article.sous_espece|default_if_none:"<em>à renseigner</em>"}}</li>
+   {% endif %}
+   {% if article.modele %}
+   <li>Modèle: {{article.modele|default_if_none:"<em>à renseigner</em>"}}</li>
+   {% endif %}
+   {% if article.marque %}
+   <li>Marque: {{article.marque|default_if_none:"<em>à renseigner</em>"}}</li>
+   {% endif %}
+   <li>Prix d'achat: {{article.prix_achat|default_if_none:"<em>à renseigner</em>"}}</li>
+   <li>Clientèle: {{article.type_client}}</li>
+</ul>
+
+
+{% if article.precisions %}
+<h3>Précisions</h3>
+<p>{{article.precisions}}</p>
+{% endif %}
+
+
+<nav class="article_detail">
+  <ul>
+    <li><a href="{% url "inventex:article-update" pk=article.pk %}"> Modifier</a></li>
+    <li><a href="{% url "inventex:article-delete" pk=article.pk %}"> Effacer</a></li>
+    <li><a href="{% url "inventex:articles-list" %}">Retour à la liste des articles</a></li>
+  </ul>
+</nav>
+
+{% comment %}
+<p>
+    <img class="img_detail" src="{{article.photo.url}}" alt="image"/>
+</p>
+{% endcomment %}
+{% endblock %}

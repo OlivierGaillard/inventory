@@ -1,0 +1,37 @@
+{% extends "inventex.html" %}
+{% load static %}
+{% block content %}
+  <h1>Entrées</h1>
+  
+  <p>
+    <table>
+      <thead>
+         <tr>
+            <th>No</th> 
+            <th>Date</th> 
+            <th>Article</th>
+            <th>Quantité</th>
+         </tr>
+      </thead>
+      
+      <tfoot>
+         <tr>
+            <th>No</th> 
+            <th>Date</th> 
+            <th>Article</th>
+            <th>Quantité</th>
+         </tr>
+      </tfoot>
+      
+      <tbody>
+      {% for e in liste %}
+          <tr>  <td>{{forloop.counter}}</td>
+          <td>{{e.date}}</td>
+          <td>{{e.article}}</td>
+          <td>{{e.quantity}}</td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </p>
+{% endblock %}

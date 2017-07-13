@@ -1,0 +1,217 @@
+[
+{
+   "model": "inventory.article",
+   "pk": 1,
+   "fields": {
+      "nom": "robe"
+   }
+},
+{
+   "model": "inventory.article",
+   "pk": 2,
+   "fields": {
+      "nom": "jupe"
+   }
+},
+{
+   "model": "inventory.article",
+   "pk": 3,
+   "fields": {
+      "nom": "pantalon"
+   }
+},
+{
+   "model": "inventory.article",
+   "pk": 4,
+   "fields": {
+      "nom": "soutien-gorge"
+   }
+},
+{
+   "model": "inventory.article",
+   "pk": 5,
+   "fields": {
+      "nom": "bas"
+   }
+},
+{
+   "model": "inventory.entree",
+   "pk": 3,
+   "fields": {
+      "date": "2017-01-01",
+      "quantity": 10,
+      "article": 1
+   }
+},
+{
+   "model": "inventory.entree",
+   "pk": 4,
+   "fields": {
+      "date": "2017-01-01",
+      "quantity": 20,
+      "article": 3
+   }
+},
+{
+   "model": "inventory.entree",
+   "pk": 5,
+   "fields": {
+      "date": "2017-01-01",
+      "quantity": 25,
+      "article": 2
+   }
+},
+{
+   "model": "inventory.entree",
+   "pk": 6,
+   "fields": {
+      "date": "2017-01-02",
+      "quantity": 15,
+      "article": 4
+   }
+},
+{
+   "model": "inventory.entree",
+   "pk": 7,
+   "fields": {
+      "date": "2017-02-02",
+      "quantity": 10,
+      "article": 1
+   }
+},
+{
+   "model": "inventory.entree",
+   "pk": 8,
+   "fields": {
+      "date": "2017-02-04",
+      "quantity": 8,
+      "article": 5
+   }
+},
+{
+   "model": "inventory.sortie",
+   "pk": 2,
+   "fields": {
+      "date": "2017-01-15",
+      "quantity": 1,
+      "article": 4
+   }
+},
+{
+   "model": "inventory.sortie",
+   "pk": 3,
+   "fields": {
+      "date": "2017-01-25",
+      "quantity": 5,
+      "article": 1
+   }
+},
+{
+   "model": "inventory.sortie",
+   "pk": 4,
+   "fields": {
+      "date": "2017-01-25",
+      "quantity": 3,
+      "article": 3
+   }
+},
+{
+   "model": "inventory.sortie",
+   "pk": 5,
+   "fields": {
+      "date": "2017-01-28",
+      "quantity": 5,
+      "article": 2
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 3,
+   "fields": {
+      "date": "2017-01-01",
+      "article": 1,
+      "quantity": 10
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 4,
+   "fields": {
+      "date": "2017-01-01",
+      "article": 3,
+      "quantity": 20
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 5,
+   "fields": {
+      "date": "2017-01-01",
+      "article": 2,
+      "quantity": 25
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 6,
+   "fields": {
+      "date": "2017-01-02",
+      "article": 4,
+      "quantity": 15
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 7,
+   "fields": {
+      "date": "2017-01-15",
+      "article": 4,
+      "quantity": 14
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 8,
+   "fields": {
+      "date": "2017-01-25",
+      "article": 1,
+      "quantity": 5
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 9,
+   "fields": {
+      "date": "2017-01-25",
+      "article": 3,
+      "quantity": 17
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 10,
+   "fields": {
+      "date": "2017-01-28",
+      "article": 2,
+      "quantity": 20
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 11,
+   "fields": {
+      "date": "2017-02-02",
+      "article": 1,
+      "quantity": 15
+   }
+},
+{
+   "model": "inventory.inventory",
+   "pk": 12,
+   "fields": {
+      "date": "2017-02-04",
+      "article": 5,
+      "quantity": 8
+   }
+}
+]

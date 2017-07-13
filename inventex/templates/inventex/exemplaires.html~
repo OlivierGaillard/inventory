@@ -1,0 +1,45 @@
+{% extends "inventex.html" %}
+{% load static %}
+{% block content %}
+  <h1>Liste des exemplaires</h1>
+  
+  <p>
+    <table>
+      <thead>
+         <tr>
+            <th>No</th> 
+            <th>ID</th>
+            <th>Article</th> 
+            <th>Total photos</th>
+            <th title="Cliquer pour voir les détails">Détails</th>
+         </tr>
+      </thead>
+      
+      <tfoot>
+         <tr>
+            <th>No</th> 
+            <th>ID</th>
+            <th>Article</th> 
+            <th>Total photos</th>
+            <th title="Cliquer pour voir les détails">Détails</th>
+         </tr>
+      </tfoot>
+      
+      <tbody>
+      {% for i in liste %}
+          <tr>  
+            <td>{{forloop.counter}}</td>
+             <td>{{i.pk}}</td>
+             <td>{{i.article}}</td>
+             <td>{{i.photos.count}} </td>
+             <td><a href="{% url "inventex:exemplaire-detail" i.pk %}" title="Details">
+             <img class="img_thumbnail" src="{{i.photos.all.0.photo.url}}" 
+                alt="{{i.photos.all.0.legende}}" </img>
+               </a>
+             </td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </p>
+{% endblock %}

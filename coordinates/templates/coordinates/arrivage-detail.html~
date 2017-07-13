@@ -1,0 +1,33 @@
+{% extends "inventex.html" %}
+{% block content %}
+
+
+<h1>Arrivage</h1>
+<ul>
+   <li>Date: {{arrivage.date}}</li>
+   <li>Designation: {{arrivage.designation}}</li>
+   <li>Lieu de provenance: {{arrivage.lieu_provenance}}</li>
+   <li>Pays: {{arrivage.pays}}</li>
+</ul>
+
+
+{% if article.precisions %}
+<h3>Précisions</h3>
+<p>{{article.precisions}}</p>
+{% endif %}
+
+
+<nav class="article_detail">
+  <ul>
+    <li><a href="{% url "inventex:article-update" pk=article.pk %}"> Modifier</a></li>
+    <li><a href="{% url "inventex:article-delete" pk=article.pk %}"> Effacer</a></li>
+    <li><a href="{% url "inventex:articles-list" %}">Retour à la liste des articles</a></li>
+  </ul>
+</nav>
+
+{% comment %}
+<p>
+    <img class="img_detail" src="{{article.photo.url}}" alt="image"/>
+</p>
+{% endcomment %}
+{% endblock %}

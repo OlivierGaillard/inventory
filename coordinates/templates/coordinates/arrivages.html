@@ -1,0 +1,46 @@
+{% extends "inventex.html" %}
+{% load static %}
+{% block content %}
+  <h1>Arrivages</h1>
+  
+  <p>
+    <table class="table">
+      <thead>
+         <tr>
+            <th>Date</th> 
+            <th>Désignation</th> 
+            <th>Compléter</th>
+            <th>Détails</th>
+            <th title="Saisir des frais">Frais</th>
+         </tr>
+      </thead>
+      
+      <tfoot>
+         <tr>
+            <th>Date</th> 
+            <th>Désignation</th> 
+            <th>Update</th>
+            <th>Détails</th>
+            <th title="Saisir des frais">Frais</th>
+         </tr>
+      </tfoot>
+      
+      <tbody>
+      {% for i in liste %}
+          <tr>  <td>{{i.date}}</td>
+                <td>{{i.designation}}</td>
+                <td>
+                <a href="{% url "coordinates:arrivage-update" pk=i.pk %}">Modifier</a>
+                </td>
+                <td>
+                <a href="{% url "coordinates:arrivage-detail" pk=i.pk %}">Détails</a>
+                </td>
+                <td>
+                <a href="{% url "finance:add_frais" pk=i.pk %}">Saisir</a>
+                </td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </p>
+{% endblock %}

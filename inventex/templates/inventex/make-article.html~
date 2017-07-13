@@ -1,0 +1,16 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Ajout d'un article</h1>
+<h2>Courte explication</h2>
+<p> Il faut lier l'article à un <strong>arrivage</strong>, même s'il a été confectionné par l'atelier.</p>
+<p><a href="{% url "coordinates:arrivage-create" %}" >Ajouter un nouvel arrivage</a></p>
+
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+        
+    {{ form.as_p }}
+    </table>
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
