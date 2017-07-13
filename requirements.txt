@@ -3,8 +3,10 @@ binaryornot==0.4.3
 chardet==3.0.2
 click==6.7
 cookiecutter==1.5.1
+coverage==4.4.1
 Django==1.11
 django-crispy-forms==1.6.1
+django-filter==1.0.4
 django-mptt==0.8.7
 django-mptt-admin==0.4.6
 future==0.16.0
@@ -20,6 +22,7 @@ poyo==0.4.1
 python-dateutil==2.6.0
 pytz==2017.2
 requests==2.14.2
+selenium==3.4.3
 simplejson==3.10.0
 six==1.10.0
 whichcraft==0.4.1
