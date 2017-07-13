@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django_mptt_admin.admin import DjangoMpttAdmin
-from .models import Accessory, AccessoryEntry, InventoryAccessory, AccessoryCategory
+from .models import Accessory, AccessoryEntry, InventoryAccessory, AccessoryCategory, Photo
 
 # Register your models here.
 
@@ -19,4 +19,9 @@ class InventoryAccessoryAdmin(admin.ModelAdmin):
 admin.site.register(InventoryAccessory, InventoryAccessoryAdmin)
 
 admin.site.register(AccessoryCategory)
+
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = ['legende', 'photo']
+
+admin.site.register(Photo, PhotoAdmin)
 

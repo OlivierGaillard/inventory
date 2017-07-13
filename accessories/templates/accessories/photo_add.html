@@ -1,0 +1,15 @@
+{% extends "inventex.html" %}
+{% block content %}
+<h1>Ajouter une photo</h1>
+<h2>Accessoire: {{accessory.name}}</h2>
+<form action="{% url "accessories:upload_pic" accessory.pk %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>
+        ID:<input type="text" name="Accessoire-ID" value="{{accessory.pk}}" readonly><br>
+        <br>
+        <input id="id_image" type="file" class="" name="image" /><br>
+        Légende:<input id="id_legende" type="text" name="legende"/>
+    </p>
+    <input type="submit" value="Ajouter"/>
+</form>
+{% endblock %}

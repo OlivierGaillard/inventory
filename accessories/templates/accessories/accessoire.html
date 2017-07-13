@@ -43,7 +43,18 @@
 </div>
 </p>
 
+<h2>Images</h2>
 
+<p>
+<ul>
+{% for image in accessory.photo_set.all %}
+<li>{{forloop.counter}}: <a href="{{ image.photo.url }}">{{image.legende}}</a></li>
+<li><a href="{% url "accessories:photo_delete" image.pk  %}">Supprimer</a></li>
+{% endfor %}
+</ul>
+</p>
+
+<p>Ajouter une image en cliquant <a href="{% url "accessories:upload_pic" accessory.pk %}">ici</a>.</p>
 
 
 {% comment %}

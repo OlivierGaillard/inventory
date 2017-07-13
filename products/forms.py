@@ -14,7 +14,6 @@ from .models import Category, Inventory
 class ProductCreateForm(forms.ModelForm):
     quantity = forms.IntegerField(min_value=1, required=True, label="Quantité", initial=0)
     marque = forms.CharField(max_length=100, required=False, help_text='Pour entrer une nouvelle marque')
-    photo    = forms.ImageField(required=False)
 
     class Meta:
         abstract = True

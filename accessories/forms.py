@@ -30,6 +30,10 @@ class AccessoryUpdateForm(ProductUpdateForm):
         super(AccessoryUpdateForm, self).__init__(*args, **kwargs)
         
 
+class AddPhotoForm(forms.Form):
+    image   = forms.ImageField()
+    legende = forms.CharField(max_length=20)   #models.CharField(max_length=20, blank=True, null=True)
+ #models.ForeignKey(Accessory, blank=True, null=True)
 
 
 

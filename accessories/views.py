@@ -1,12 +1,14 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import reverse, render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import reverse
 from django.views.generic import CreateView, ListView, FormView, DetailView, UpdateView, DeleteView
-from .models import Accessory, AccessoryCategory, InventoryAccessory, AccessoryEntry
+from .models import Accessory, AccessoryCategory, InventoryAccessory, AccessoryEntry, Photo
 from coordinates.models import Arrivage
 from finance.models import Achat, Currency
 from .forms import AccessoryForm, AccessoryUpdateForm, InventoryAccessoryForm, AccessoryCategoryForm
+from .forms import AddPhotoForm
 
 
 @method_decorator(login_required, name='dispatch')
@@ -169,5 +171,37 @@ class InventoryCreationView(FormView):
 
     def get_success_url(self):
         return reverse('accessories:inventory-list')
+
+
+
+def upload_pic(request, pk):
+    "pk is Accessory ID"
+    if request.method == 'POST':
+        form = AddPhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            accessory = Accessory.objects.get(pk=pk)
+            photo = Photo()
+            photo.photo = form.cleaned_data['image']
+            photo.legende = form.cleaned_data['legende']
+            photo.article = accessory
+            photo.save()
+            return HttpResponseRedirect(reverse('accessories:detail', kwargs={'pk':pk}))
+    else:
+        accessory = Accessory.objects.get(pk=pk)
+        return render(request, "accessories/photo_add.html", {'accessory': accessory})
+
+class PhotoDeleteView(DeleteView):
+    model = Photo
+    template_name = 'accessories/photo_delete.html'
+    context_object_name = 'image'
+    fields = ['legende', 'photo' ]
+
+    def get_success_url(self):
+        accessory = self.object.article
+        return reverse('accessories:detail', kwargs={'pk':accessory.pk})
+
+
+
+
 
 
