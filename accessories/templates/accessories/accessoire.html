@@ -1,4 +1,6 @@
 {% extends "inventex.html" %}
+{# {% load static %} #}
+{% load thumbnails %}
 {% block content %}
 <p>
 <div class="container">
@@ -46,10 +48,19 @@
 <h2>Images</h2>
 
 <p>
+
+
+MEDIA_URL: {{ MEDIA_URL }} <br>
+STATIC_URL: {{STATIC_URL }} <br>
+
+
 <ul>
 {% for image in accessory.photo_set.all %}
-<li>{{forloop.counter}}: <a href="{{ image.photo.url }}">{{image.legende}}</a></li>
-<li><a href="{% url "accessories:photo_delete" image.pk  %}">Supprimer</a></li>
+
+   <li>{{forloop.counter}}: <a href="{{ image.photo.url }}">{{image.legende}}</a></li>
+   <li>{% get_thumbnail image.photo.path  "100x100" crop="center" as thumbnail %}</li>
+   <li><img src="{{ thumbnail.url }}" alt="The thumbnail" style="width: {{ thumbnail.width }}"/></li>
+   <li><a href="{% url "accessories:photo_delete" image.pk  %}">Supprimer</a></li>
 {% endfor %}
 </ul>
 </p>

@@ -39,6 +39,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admindocs',
     'crispy_forms',
     'mptt',
     'django_mptt_admin',
@@ -49,7 +50,7 @@ INSTALLED_APPS = [
     'clothes.apps.ClothesConfig',
     'shoes.apps.ShoesConfig',
     'accounts.apps.AccountsConfig',
-    #'inventex.apps.InventexConfig',
+    'thumbnails',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -84,6 +85,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -151,15 +154,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+print('BASE_DIR', BASE_DIR)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+print('MEDIA_ROOT', MEDIA_ROOT)
+MEDIA_URL = '/'
+print('MEDIA_URL', MEDIA_URL)
 
-# easy_thumbnails settings
-THUMBNAIL_ALIASES = {
-    '': {
-        'avatar': {'size': (50, 50), 'crop': True},
-    },
-}
 
 DJANGO_MONEY_RATES = {
     'DEFAULT_BACKEND': 'djmoney_rates.backends.OpenExchangeBackend',

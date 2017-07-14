@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^coordinates/', include('coordinates.urls', namespace="coordinates")),
     url(r'^accounts/', include('accounts.urls', namespace="accounts")),
     url(r'^finance/', include('finance.urls', namespace="finance")),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', admin.site.urls),] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

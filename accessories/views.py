@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import reverse, render, redirect
 from django.utils.decorators import method_decorator
@@ -47,6 +49,8 @@ class AccessoryDetailView(DetailView):
     #fields = ['arrivage', 'type_client', 'name', 'marque', 'prix_achat']
     fields = ['arrivage', 'type_client', 'name', 'marque']
     context_object_name = 'accessory'
+
+    print('MEDIA_ROOT', settings.MEDIA_ROOT)
 
 
 

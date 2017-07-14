@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.conf.urls import url
+from django.conf.urls.static import static
 from . import views
 
 
@@ -18,4 +20,4 @@ urlpatterns = [
     url(r'^inventory-create/$', views.InventoryCreationView.as_view(), name='inventory-create'),
     url(r'^upload_pic/(?P<pk>[0-9]+)$', views.upload_pic, name='upload_pic'),
     url(r'^photo_delete/(?P<pk>[0-9]+)$', views.PhotoDeleteView.as_view(), name='photo_delete'),
-    ]
+    ] #+ static(settings.MEDIA_URL + 'accessories', document_root=settings.MEDIA_ROOT)

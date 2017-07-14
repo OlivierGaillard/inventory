@@ -1,9 +1,13 @@
+import os
+from django.conf.urls.static import static
 from django.contrib.auth.models import Permission, User, Group
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpRequest
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 from datetime import date
+from thumbnails import get_thumbnail
+from django.conf import settings
 from finance.models import Currency
 from products.models import BadCreationDateException, Marque
 from .models import Accessory, AccessoryMarque, AccessoryCategory, AccessoryEntry, AccessoryOutput, InventoryAccessory
@@ -182,11 +186,11 @@ class TestAccessoryInventory(TestCase):
 
         return data
 
-    def test_create_form(self):
+    def btest_create_form(self):
         form = AccessoryForm(self.prepare_initial_data())
         self.assertTrue(form.is_valid())
 
-    def test_create_marque_empty(self):
+    def btest_create_marque_empty(self):
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': '',
@@ -197,7 +201,7 @@ class TestAccessoryInventory(TestCase):
         #print(form.errors.as_data())
         self.assertFalse(form.is_valid())
 
-    def test_select_marque_ref(self):
+    def btest_select_marque_ref(self):
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': '',
@@ -208,7 +212,7 @@ class TestAccessoryInventory(TestCase):
         print(form.errors.as_data())
         self.assertTrue(form.is_valid())
 
-    def test_add_new_marque_for_new_accessory(self):
+    def btest_add_new_marque_for_new_accessory(self):
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': 'Babar',
@@ -241,7 +245,7 @@ class TestAccessoryInventory(TestCase):
         return data
 
 
-    def test_update_quantity(self):
+    def btest_update_quantity(self):
         c = Client()
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
@@ -290,7 +294,7 @@ class TestAccessoryInventory(TestCase):
         self.assertEqual(8, accessoryEntry.quantity)
         self.assertEqual(8, accessory.get_quantity())
 
-    def test_check_new_marque_is_saved(self):
+    def btest_check_new_marque_is_saved(self):
         c = Client()
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
@@ -332,13 +336,13 @@ class TestAccessoryInventory(TestCase):
         self.assertEqual(accessory.marque_ref, self.constant)
 
 
-    def test_categoryform(self):
+    def btest_categoryform(self):
         data = {'parent':'',
                 'title': 'Valise'}
         form = AccessoryCategoryForm(data)
         self.assertTrue(form.is_valid())
 
-    def test_permission1(self):
+    def btest_permission1(self):
         content_type = ContentType.objects.get_for_model(Accessory)
         permission = Permission.objects.create(
             codename='view_achat_test',
@@ -359,7 +363,7 @@ class TestAccessoryInventory(TestCase):
         self.assertFalse(group_manager in toto.groups.all())
         self.assertTrue(group_manager in boss.groups.all())
 
-    def test_permission2(self):
+    def btest_permission2(self):
         """I retain this solution because it is very easy to test in templates."""
         content_type = ContentType.objects.get_for_model(Accessory)
         permission = Permission.objects.get(
@@ -370,6 +374,24 @@ class TestAccessoryInventory(TestCase):
         boss = User.objects.create(username='Boss')
         boss.user_permissions.set([permission])
         self.assertTrue(boss.has_perm('accessories.view_achat'))
+
+    def test_thumbnail(self):
+        print('MEDIA_URL', settings.MEDIA_URL)
+        base_path = settings.MEDIA_URL + 'accessories'
+        print('base_path', base_path)
+
+        img = 'blazer.jpg'
+
+        print('MEDIA_ROOT', settings.MEDIA_ROOT)
+        img_path = settings.MEDIA_ROOT +  base_path + '/' + img
+        #settings.MEDIA_ROOT = settings.MEDIA_ROOT + '/accessories'
+        print('Calling get_thumbnail with img_path:', img_path)
+        a = get_thumbnail(img_path, '300x300', crop='center')
+        # THUMBNAIL_PATH
+        # Default in Django: django.conf.settings.MEDIA_ROOT + '/thumbnails-cache'
+        print('name: ', a.name)
+        print('path: ', a.path)
+        print('url: ',  a.url)
 
 
 
