@@ -1,0 +1,171 @@
+@font-face {
+	font-family: 'learning-curve-regular';
+	src: url('polices/learning_curve_regular_ot_tt.ttf') format('truetype');
+}
+
+
+* {
+	font-family: Verdana, sans-serif;
+}
+
+h1 {
+	 font-size: 1.5em;  
+    text-align: left;
+    padding: 5px 0px 5px 5px;
+    background-color: rgb(121, 174, 200); 
+}
+
+header {
+    display: flex;
+    align-items: center;
+    padding-bottom: 3px;
+    background-color: rgb(65, 118, 144);
+}
+
+.img_thumbnail {
+   border: 1px solid #ddd; /* Gray border */
+   border-radius: 4px;  /* Rounded border */
+   padding: 5px; /* Some padding */
+   width: 80px; /* Set a small width */
+}
+
+/* Add a hover effect (blue shadow) */
+.img_thumbnail:hover {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+.img_detail {
+   border-radius: 4px;  /* Rounded border */
+   padding: 5px; /* Some padding */
+   width: 300px; /* Set a small width */
+}
+
+.article_detail {
+   background-color: rgb(65, 118, 144); 
+   border: 1px solid rgb(65, 118, 144);
+   width: 50%;
+}
+
+.article_detail a {
+    background-color: rgb(65, 118, 144); 
+    margin: 5px 5px 5px 0px;
+    padding: 5px;
+}
+
+#logo {
+   display: flex;
+   align-items: center;
+   font-family: 'Learning-curve-regular';
+}
+
+#logo h1 {
+   font-family: 'Learning-curve-regular';
+   background-color: rgb(65, 118, 144);
+}
+
+
+#logo img {
+   box-shadow: 0px 4px 4px #1c1a19;
+   border-radius: 5px;
+   margin: 5px;     
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block; 
+    left: -15px;
+}
+
+.dropbtn {
+   font-size: 1.0em;
+   color: rgb(243, 219, 93);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgb(65, 118, 144);
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 5px 5px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: rgb(243, 219, 93);
+    padding: 5px 5px;
+    text-decoration: none;
+    display: block;
+}
+/* Change color of dropdown links on hover 
+.dropdown-content a:hover {background-color: #f1f1f1}
+*/
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+   border-bottom: 3px solid #760001;
+   color: #760001;
+}
+
+
+nav ul {    
+    list-style-type: none;
+    display: flex;
+}
+nav li {
+   margin-right: 8px;
+}
+
+nav a
+{
+    font-size: 1.0em;
+    color: rgb(243, 219, 93);
+    padding-bottom: 3px;
+    text-decoration: none;
+}
+nav a:hover
+{
+    color: #760001;
+    border-bottom: 3px solid #760001;
+}
+
+footer p {
+    font-style: italic;
+    color: green;
+}
+
+table, th, td {
+    border: 0.5px solid black; 
+    border-collapse: collapse;
+}
+
+table th {
+    background-color: #79AEC8;
+}
+
+
+th, td {
+    text-align: center;
+
+}
+
+#welcome
+{
+   background-image: url('images/kaba.jpg');
+}
+
+body
+{
+    color: black;
+    /* box-shadow: 6px 6px 6px; */
+    /* text-decoration: underline; */
+    /* background-image: url('images/logindoor.jpg'); */
+    background-color: blanchedalmond;
+    opacity: 1.0;
+}
