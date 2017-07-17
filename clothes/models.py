@@ -29,6 +29,16 @@ class Clothes(Product):
     def get_sorties(self):
         return ClothesOutput.objects
 
+
+class Photo(models.Model):
+    photo    = models.ImageField(upload_to = 'habits', blank=True, null=True)
+    legende  = models.CharField(max_length=20, blank=True, null=True)
+    article  = models.ForeignKey(Clothes, blank=True, null=True)
+
+    def __str__(self):
+        return self.legende
+
+
 class ClothesEntry(Entree):
     article = models.ForeignKey(Clothes, blank=True, null=True)
 

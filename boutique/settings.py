@@ -138,11 +138,11 @@ USE_L10N = True
 USE_THOUSAND_SEPARATOR = True
 
 USE_TZ = True
-
-DATE_FORMAT = ['%d-%m-%Y', '%Y-%m-%d', '%d %B %Y']
+DATE_FORMAT = ['%d/%m/%Y', '%d-%m-%Y']
 SHORT_DATE_FORMAT = ['%d-%m-%Y']
-DATE_INPUT_FORMATS = ['%d-%m-%Y', '%Y-%m-%d']
-
+DATE_INPUT_FORMATS = ['%d/%m/%Y', '%d.%m.%Y', '%d-%m-%Y', '%d %m %Y',
+    '%d/%m/%y', '%d.%m.%y', '%d-%m-%y', '%d %m %y',
+]
 
 
 # Static files (CSS, JavaScript, Images)

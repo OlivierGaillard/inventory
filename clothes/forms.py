@@ -6,7 +6,7 @@ from django import forms
 from django.shortcuts import reverse
 from mptt.forms import TreeNodeMultipleChoiceField
 from .models import Clothes, ClothesCategory, InventoryClothes
-from products.forms import ProductCreateForm
+from products.forms import ProductCreateForm, ProductUpdateForm
 
 
 class ClothesForm(ProductCreateForm):
@@ -18,6 +18,16 @@ class ClothesForm(ProductCreateForm):
     def __init__(self, *args, **kwargs):
         super(ClothesForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse('clothes:clothes_create')
+
+
+class ClothesUpdateForm(ProductUpdateForm):
+
+    class Meta(ProductUpdateForm.Meta):
+        model = Clothes
+
+    def __init__(self, *args, **kwargs):
+        super(ClothesUpdateForm, self).__init__(*args, **kwargs)
+
 
 
 class ClothesCategoryForm(forms.ModelForm):
@@ -33,6 +43,23 @@ class ClothesCategoryForm(forms.ModelForm):
         self.helper.form_method = 'POST'
         self.helper.form_action = reverse('clothes:category_create')
         self.helper.add_input(Submit('submit', 'Submit'))
+
+class AddPhotoForm(forms.Form):
+    image   = forms.ImageField()
+    legende = forms.CharField(max_length=20)
+
+class CategoryUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = ClothesCategory
+        fields = ['parent', 'title']
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryUpdateForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.add_input(Submit('submit', 'Submit'))
+
 
 
 class InventoryClothesForm(forms.Form):

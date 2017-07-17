@@ -26,7 +26,6 @@ class AccessoryUpdateForm(ProductUpdateForm):
         model = Accessory
 
     def __init__(self, *args, **kwargs):
-        print("In AccessoryUpdateForm")
         super(AccessoryUpdateForm, self).__init__(*args, **kwargs)
 
 class CategoryUpdateForm(forms.ModelForm):

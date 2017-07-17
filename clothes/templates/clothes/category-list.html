@@ -2,10 +2,11 @@
 {% load mptt_tags %}
 {% block content %}
 <h1>Categories d'habits</h1>
+<p>Modifier en cliquant sur le nom de la catégorie</p>
 <ul class="root">
     {% recursetree categories %}
     <li>
-        {{ node.title }}
+        <a href="{% url "clothes:category-update" node.pk %}">{{node.title }}</a>
         {% if not node.is_leafnode %}
            <ul class="children">
                {{ children }}

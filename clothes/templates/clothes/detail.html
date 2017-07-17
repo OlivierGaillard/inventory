@@ -1,0 +1,77 @@
+{% extends "inventex.html" %}
+{# {% load static %} #}
+{% load thumbnails %}
+{% block content %}
+<p>
+<div class="container">
+  <table class="table">
+    <tbody>
+      <tr>
+        <th>Date d'arrivage</th><td>{{cloth.arrivage.date}}</td>
+      </tr>
+      <tr>
+          <th>Nom de l'arrivage</th>
+        <td>{{cloth.arrivage.designation}}</td>
+      </tr>
+      <tr>
+          <th>Client</th>
+        <td>{{cloth.get_type_client_display}}</td>
+      </tr>
+      <tr>
+          <th>Catégorie</th>
+        <td>{{ cloth.categories.last }}</td>
+      </tr>
+      <tr>
+        <th>Nom</th>
+        <td>{{cloth.name}}</td>
+      </tr>
+      <tr>
+        <th>Marque</th>
+        <td>{{cloth.marque_ref|default_if_none:"<em>à renseigner</em>"}}</td>
+      </tr>
+      <tr>
+        <th>Quantité en stock</th>
+        <td>{{cloth.get_quantity|default_if_none:"<em>à renseigner</em>"}}</td>
+      </tr>
+      {% if perms.accessories.view_achat %}
+      <tr>
+        <th>Prix d'achat</th>
+        <td>{{cloth.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+
+</div>
+</p>
+
+
+<div class="pic_container">
+    {% for image in cloth.photo_set.all %}
+    {% get_thumbnail image.photo.path  "200x200" crop="center" as thumbnail %}
+  <div class="pic">
+    <p>
+        <a href="{{ image.photo.url }}" alt="{{image.legende}}">
+        <img src="{{ thumbnail.url }}" alt="The thumbnail" style="width: {{ thumbnail.width }}">
+        </a>
+    </p>
+    <p>
+            <a href="{% url "clothes:photo_delete" image.pk  %}">Supprimer</a>
+    </p>
+
+  </div>
+{% endfor %}
+</div>
+
+<p>Ajouter une image en cliquant <a href="{% url "clothes:upload_pic" cloth.pk %}">ici</a>.</p>
+
+
+{% endblock %}
+
+{% block footernav %}
+  <ul>
+    <li><a href="{% url "clothes:delete" cloth.pk %}"> Effacer</a></li>
+    <li><a href="{% url "clothes:update" cloth.pk %}"> Modifier</a></li>
+    <li><a href="{% url "clothes:list" %}">Retour à la liste des habits</a></li>
+  </ul>
+{% endblock %}
