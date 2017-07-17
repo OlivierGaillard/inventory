@@ -10,7 +10,7 @@ from .models import Accessory, AccessoryCategory, InventoryAccessory, AccessoryE
 from coordinates.models import Arrivage
 from finance.models import Achat, Currency
 from .forms import AccessoryForm, AccessoryUpdateForm, InventoryAccessoryForm, AccessoryCategoryForm
-from .forms import AddPhotoForm
+from .forms import AddPhotoForm, CategoryUpdateForm
 
 
 @method_decorator(login_required, name='dispatch')
@@ -153,7 +153,14 @@ class CategoryListView(ListView):
     context_object_name = 'categories'
 
 
-#TODO: CategoryUpdateView
+class CategoryUpdateView(UpdateView):
+    model = AccessoryCategory
+    template_name = 'accessories/category-update.html'
+    context_object_name = 'category'
+    form_class = CategoryUpdateForm
+
+    def get_success_url(self):
+        return(reverse('accessories:detail', kwargs={'pk': self.object.id}))
 
 @method_decorator(login_required, name='dispatch')
 class InventoryListView(ListView):

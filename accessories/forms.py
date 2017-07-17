@@ -28,7 +28,19 @@ class AccessoryUpdateForm(ProductUpdateForm):
     def __init__(self, *args, **kwargs):
         print("In AccessoryUpdateForm")
         super(AccessoryUpdateForm, self).__init__(*args, **kwargs)
-        
+
+class CategoryUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = AccessoryCategory
+        fields = ['parent', 'title']
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryUpdateForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.add_input(Submit('submit', 'Submit'))
+
 
 class AddPhotoForm(forms.Form):
     image   = forms.ImageField()
