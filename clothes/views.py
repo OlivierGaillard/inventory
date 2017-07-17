@@ -36,7 +36,7 @@ class ClothesCreationView(CreateView):
         return reverse('clothes:list')
 
 
-
+@method_decorator(login_required, name='dispatch')
 class ClothesDetailView(DetailView):
     model = Clothes
     template_name = 'clothes/detail.html'
@@ -148,7 +148,7 @@ class ClothesDeleteView(DeleteView):
     def get_success_url(self):
         return reverse('clothes:list')
 
-
+@method_decorator(login_required, name='dispatch')
 class CategoryCreationView(CreateView):
     model = ClothesCategory
     form_class = ClothesCategoryForm
@@ -173,11 +173,13 @@ class CategoryListView(ListView):
     template_name = 'clothes/category-list.html'
     context_object_name = 'categories'
 
+@method_decorator(login_required, name='dispatch')
 class InventoryListView(ListView):
     model = InventoryClothes
     template_name = 'clothes/inventory.html'
     context_object_name = 'entries'
 
+@method_decorator(login_required, name='dispatch')
 class InventoryCreationView(FormView):
 
     form_class = InventoryClothesForm

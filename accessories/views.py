@@ -42,7 +42,7 @@ class AccessoryListView(ListView):
     template_name = 'accessories/list.html'
     context_object_name = 'accessoires'
 
-
+@method_decorator(login_required, name='dispatch')
 class AccessoryDetailView(DetailView):
     model = Accessory
     template_name = 'accessories/accessoire.html'
