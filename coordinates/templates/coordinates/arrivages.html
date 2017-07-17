@@ -11,6 +11,9 @@
             <th>Désignation</th> 
             <th>Compléter</th>
             <th>Détails</th>
+            {% if perms.accessories.view_achat %}
+            <th>Total frais</th>
+            {% endif %}
             <th title="Saisir des frais">Frais</th>
          </tr>
       </thead>
@@ -19,8 +22,11 @@
          <tr>
             <th>Date</th> 
             <th>Désignation</th> 
-            <th>Update</th>
+            <th>Compléter</th>
             <th>Détails</th>
+            {% if perms.accessories.view_achat %}
+            <th>Total frais</th>
+            {% endif %}
             <th title="Saisir des frais">Frais</th>
          </tr>
       </tfoot>
@@ -35,6 +41,9 @@
                 <td>
                 <a href="{% url "coordinates:arrivage-detail" pk=i.pk %}">Détails</a>
                 </td>
+                {% if perms.accessories.view_achat %}
+                   <td>{{i.get_total_frais}}</td>
+                {% endif %}
                 <td>
                 <a href="{% url "finance:add_frais" pk=i.pk %}">Saisir</a>
                 </td>

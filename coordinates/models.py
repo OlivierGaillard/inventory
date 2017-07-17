@@ -118,3 +118,12 @@ class Arrivage(models.Model):
     
     def __str__(self):
         return self.designation
+
+    def get_total_frais(self):
+        """Return the total as a Money instance.
+        Using montant.amount would return the number only."""
+        total = 0
+        for frais in self.fraisarrivage_set.all():
+            montant = frais.convert(self.devise.currency_code)
+            total += montant
+        return total

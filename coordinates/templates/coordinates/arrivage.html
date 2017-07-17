@@ -4,23 +4,48 @@
 
 <h1>Arrivage</h1>
 <p>Pour renseigner un champ cliquez sur <em>Modifier</em>.</p>
-<ol>
-   <li>Date: {{arrivage.date}}</li>
-   <li>Designation: {{arrivage.designation}}</li>
-   <li>Devise principale: {{arrivage.devise}}</li>
-   <li>Lieu de provenance: {{arrivage.lieu_provenance|default_if_none:"<em>à renseigner</em>"}}</li>
-   <li>Pays: {{arrivage.pays|default_if_none:"<em>à renseigner</em>"}}</li>      
-</ol>
 
+<p>
+<div class="container">
+  <table class="table">
+    <tbody>
+      <tr>
+        <th>Date d'arrivage</th><td>{{arrivage.date}}</td>
+      </tr>
+      <tr>
+          <th>Nom de l'arrivage</th>
+        <td>{{arrivage.designation}}</td>
+      </tr>
+      <tr>
+          <th>Devise principale</th>
+        <td>{{arrivage.devise}}</td>
+      </tr>
+      <tr>
+          <th>Provenance</th>
+        <td>{{arrivage.lieu_provenance|default_if_none:"<em>à renseigner</em>"}}</td>
+      </tr>
+      <tr>
+        <th>Pays</th>
+        <td>{{arrivage.pays|default_if_none:"<em>à renseigner</em>"}}</td>
+      </tr>
+      {% if perms.accessories.view_achat %}
+      <tr>
+        <th>Total des frais</th>
+        <td>{{arrivage.get_total_frais}}</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
 
+</div>
+</p>
 
-<nav class="article_detail">
+{% endblock %}
+
+{% block footernav %}
   <ul>
     <li><a href="{% url "coordinates:arrivage-update" pk=arrivage.pk %}"> Modifier</a></li>
     <li><a href="{% url "coordinates:arrivage-delete" pk=arrivage.pk %}"> Effacer</a></li>
     <li><a href="{% url "coordinates:arrivages" %}">Liste des arrivages</a></li>
   </ul>
-</nav>
-
-
 {% endblock %}

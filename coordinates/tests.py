@@ -3,6 +3,8 @@ from django.http import HttpRequest
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 from datetime import date
+from decimal import Decimal
+from money import Money
 from finance.models import Currency, FraisArrivage, FraisType
 from accessories.models import Accessory, AccessoryMarque, AccessoryCategory, AccessoryEntry, AccessoryOutput, InventoryAccessory
 from coordinates.models import Arrivage, Pays, Localite
@@ -23,10 +25,14 @@ class TestFraisArrivage(TestCase):
         self.cat = AccessoryCategory(parent=self.cat2, title='boum')
         self.cat.save()
         self.arrivage = Arrivage(date=date(2017, 2, 1), designation='Arrivage-1')
-        self.arrivage.save()
+
 
         self.ch = Pays.objects.create(nom='Suisse', code='CH')
         self.chf = Currency.objects.create(currency_code='CHF', rate_usd=0.9981)
+        self.arrivage.devise = self.chf
+        self.arrivage.save()
+
+        self.xof = Currency.objects.create(currency_code='XOF', rate_usd=600.5791)
         self.hublot = AccessoryMarque.objects.create(nom_marque = 'Hublot')
         self.constant = AccessoryMarque.objects.create(nom_marque = 'Constant')
 
@@ -64,6 +70,56 @@ class TestFraisArrivage(TestCase):
         self.arrivage.fraisarrivage_set.add(frais_arrivage3)
         frais_count = self.arrivage.fraisarrivage_set.count()
         self.assertEqual(3, frais_count)
+
+    def test_arrivage_get_total(self):
+        '''One arrivage model has its own method get_total().
+        Return the total in the main currency of the arrivage.'''
+        frais_arrivage = FraisArrivage(arrivage_ref=self.arrivage)
+        frais_arrivage.devise_id = self.chf
+        frais_arrivage.montant = 1200.00
+        frais_arrivage.objet = 'Vol Yaounde-Zurich'
+        frais_arrivage.frais_type = self.frais_type_transport
+        frais_arrivage.save()
+        frais_arrivage2 = FraisArrivage(arrivage_ref=self.arrivage)
+        frais_arrivage2.devise_id = self.chf
+        frais_arrivage2.montant = 120.00
+        frais_arrivage2.objet = 'train'
+        frais_arrivage2.frais_type = self.frais_type_transport
+        frais_arrivage2.save()
+        frais_arrivage3 = FraisArrivage()
+        frais_arrivage3.devise_id = self.chf
+        frais_arrivage3.montant = 15.00
+        frais_arrivage3.objet = 'repas'
+        frais_arrivage3.frais_type = self.frais_type_repas
+        frais_arrivage3.save()
+        self.arrivage.fraisarrivage_set.add(frais_arrivage3)
+        self.assertAlmostEqual(Decimal(1335.00), self.arrivage.get_total_frais().amount, 1)
+
+    def test_arrivage_get_total_frais_multicurrency(self):
+        '''One arrivage model has its own method get_total().
+        Return the total in the main currency of the arrivage.'''
+        frais_arrivage = FraisArrivage(arrivage_ref=self.arrivage)
+        frais_arrivage.devise_id = self.chf
+        frais_arrivage.montant = 1200.00
+        frais_arrivage.objet = 'Vol Yaounde-Zurich'
+        frais_arrivage.frais_type = self.frais_type_transport
+        frais_arrivage.save()
+        frais_arrivage2 = FraisArrivage(arrivage_ref=self.arrivage)
+        frais_arrivage2.devise_id = self.chf
+        frais_arrivage2.montant = 120.00
+        frais_arrivage2.objet = 'train'
+        frais_arrivage2.frais_type = self.frais_type_transport
+        frais_arrivage2.save()
+        frais_arrivage3 = FraisArrivage()
+        frais_arrivage3.devise_id = self.xof
+        frais_arrivage3.montant = 15.00
+        frais_arrivage3.objet = 'repas'
+        frais_arrivage3.frais_type = self.frais_type_repas
+        frais_arrivage3.save()
+        self.arrivage.fraisarrivage_set.add(frais_arrivage3)
+        self.arrivage.save()
+        self.assertAlmostEqual(Decimal(1320.02), self.arrivage.get_total_frais().amount, 1)
+
 
     def test_ArrivageCreateForm(self):
         """New fields 'nouveau_pays'et 'nouveau_lieu' permettent de rajouter

@@ -6,6 +6,10 @@
 <ul>
    <li>Date: {{arrivage.date}}</li>
    <li>Designation: {{arrivage.designation}}</li>
+   {% if perms.accessories.view_achat %}
+    <li>Total des frais: {{arrivage.get_total_frais}}</li>
+   {% endif %}
+   <li>Date: {{arrivage.get_total_frais}}</li>
    <li>Lieu de provenance: {{arrivage.lieu_provenance}}</li>
    <li>Pays: {{arrivage.pays}}</li>
 </ul>

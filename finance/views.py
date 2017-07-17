@@ -25,16 +25,6 @@ class FraisArrivageListView(PermissionRequiredMixin, FilterView):
     permission_required = 'accessories.view_achat'
     raise_exception = True
 
-    def get_queryset(self):
-        queryset = super(FraisArrivageListView, self).get_queryset()
-        try:
-            arrivage_ref = self.args[0]
-            return FraisArrivage.objects.filter(arrivage_ref=arrivage_ref)
-        except:
-            return super(FraisArrivageListView, self).get_queryset()
-
-
-
 
     def get_context_data(self, **kwargs):
         context = super(FraisArrivageListView, self).get_context_data(**kwargs)
@@ -94,6 +84,7 @@ def add_frais_to_arrivage(request, pk):
                                         fields=['arrivage_ref','devise_id', 'montant', 'objet', 'date_frais'],
                                         #fields=['devise_id', 'montant', 'objet', 'date_frais'],
                                         form=FraisArrivageCreateForm,
+                                        can_delete=True,
                                         extra=extra_rows)
 
     helper = FraisArrivageFormSetHelper()
