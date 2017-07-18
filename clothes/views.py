@@ -32,9 +32,6 @@ class ClothesCreationView(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-    def get_success_url(self):
-        return reverse('clothes:list')
-
 
 @method_decorator(login_required, name='dispatch')
 class ClothesDetailView(DetailView):
@@ -79,8 +76,6 @@ class ClothesUpdateView(UpdateView):
 
         return initial
 
-    def get_success_url(self):
-        return reverse('clothes:list')
 
     def form_valid(self, form):
         form.save()

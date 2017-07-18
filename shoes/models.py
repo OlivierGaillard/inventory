@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import reverse
 from mptt.models import MPTTModel
 from mptt.fields import TreeForeignKey, TreeManyToManyField
 from products.models import Product, Entree, Sortie, Inventory
@@ -28,6 +29,9 @@ class Shoe(Product):
 
     def get_sorties(self):
         return ShoeOutput.objects
+
+    def get_absolute_url(self):
+        return reverse('shoes:detail', kwargs={'pk' : self.pk})
 
 
 

@@ -186,7 +186,6 @@ class Product(models.Model):
     #categories = TreeManyToManyField(Category, verbose_name='Catégories')
     name = models.CharField(max_length=100, verbose_name='Nom du modèle')
     marque_ref = models.ForeignKey(Marque, null=True, blank=True, help_text='Choix des marques')
-    # marque = models.CharField(max_length=100, null=True, blank=True, help_text='Pour entrer une nouvelle marque')
     arrivage = models.ForeignKey(Arrivage, null=True)
     prix_achat = models.OneToOneField(Achat, null=True, blank=True, verbose_name="Prix d'achat unitaire")
 
@@ -226,6 +225,7 @@ class Product(models.Model):
         raise NotImplementedError('Children classes of "Product" can implement get_marque_class')
 
     def update_marque_ref(self, marque, marque_ref):
+        """Update the foreign key to marque, eventually creates a new Marque."""
         try:
             cls_marque = self.get_marque_class()
         except NotImplementedError:
@@ -235,6 +235,7 @@ class Product(models.Model):
                 new_marque = cls_marque.objects.create(nom_marque=marque)
                 self.marque_ref = new_marque
                 self.save()
+#                print("New marque '", new_marque, "' created.")
         else:
              self.marque_ref = cls_marque.objects.get(pk=marque_ref)
              self.save()

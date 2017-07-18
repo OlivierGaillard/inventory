@@ -20,20 +20,21 @@ from coordinates.models import Arrivage
 class TestAccessoryInventory(TestCase):
 
     def setUp(self):
+
         self.start_date = date(year=2017, month=1, day=1)
         cat1 = AccessoryCategory.objects.create(parent=None, title='Valises et sacoches')
         self.cat2 = AccessoryCategory.objects.create(parent=cat1, title='Valises')
         cat3 = AccessoryCategory.objects.create(parent=cat1, title='Sacoches')
 
-        #a1 = Accessory.objects.create(name='Valise-1')
-        #a1.categories.add(self.cat2)
-        #a2 = Accessory.objects.create(name='Sacoche-1')
-        #a2.categories.add(self.cat2)
+        a1 = Accessory.objects.create(name='Valise-1')
+        a1.categories.add(self.cat2)
+        a2 = Accessory.objects.create(name='Sacoche-1')
+        a2.categories.add(self.cat2)
 
-        # self.articles_li = {'a1': a1, 'a2': a2}
-        # for k in self.articles_li.keys():
-        #     a = self.articles_li[k]
-        #     a.save()
+        self.articles_li = {'a1': a1, 'a2': a2}
+        for k in self.articles_li.keys():
+            a = self.articles_li[k]
+            a.save()
 
         # These ones are used to test create and update forms and views.
         self.cat = AccessoryCategory(parent=self.cat2, title='boum')
@@ -45,6 +46,17 @@ class TestAccessoryInventory(TestCase):
         self.chf = Currency.objects.create(currency_code='CHF', rate_usd=0.9981)
         self.hublot = AccessoryMarque.objects.create(nom_marque = 'Hublot')
         self.constant = AccessoryMarque.objects.create(nom_marque = 'Constant')
+
+        content_type = ContentType.objects.get_for_model(Accessory)
+        permission = Permission.objects.get(
+            codename='view_achat',
+            content_type=content_type,
+        )
+
+        self.passwd = 'titi_grognon234'
+        self.user_boss = 'Boss'
+        boss = User.objects.create_user(username=self.user_boss, password=self.passwd)
+        boss.user_permissions.set([permission])
 
     def do_E(self, date_entree, a, qte):
         """ Create one Entry  with the given quantity 'qte'.
@@ -62,7 +74,7 @@ class TestAccessoryInventory(TestCase):
     def get_art(self, art_code):
         return self.articles_li[art_code]
 
-    def btest_case0(self):
+    def test_case0(self):
         """Tester les dates d'entrée et de sortie d'un exemplaire.
         Ce test suggère cette procédure:
         1. on crée un article.
@@ -120,22 +132,28 @@ class TestAccessoryInventory(TestCase):
 
         #
 
-    def btest_view_create_accessory(self):
+    def test_view_create_accessory(self):
         c = Client()
+        c.login(username=self.user_boss, password=self.passwd)
+
         # Create one accessory entry with the help of the view to enter a quantity
         # because only using the model is impossible, as it has not this field 'quantity'.
         cat = AccessoryCategory(parent=self.cat2, title='boum')
         cat.save()
         data = {'type_client': 'F',
                 'categories': (cat.id,),
-                'name': 'Maman', 'marque': 'Babar',
+                'name': 'Maman', 'marque': 'Baba au rhum',
                 'quantity': '5',
                 'arrivage': self.arrivage.id,
                 }
+
         form = AccessoryForm(data)
-        self.assertTrue(form.is_valid())
-        response = c.post(reverse('accessories:create'),
-                                        data, follow=True)
+        self.assertTrue(form.is_valid(), form.errors.as_data())
+#         form.save()
+
+        response = c.post(reverse('accessories:create'), data,
+                                        follow=True)
+        print(response.status_code)
         # Check if entries were created.
         # There is only one because in the tests' Setup we only create Accessory
         # instances of model 'Accessory' without quantity.
@@ -150,7 +168,7 @@ class TestAccessoryInventory(TestCase):
         accessory = Accessory.objects.all().last()
         self.assertEqual(5, accessory.get_quantity(), 'get_quantity of Accessory is invalid.')
 
-    def btest2_view_create(self):
+    def test2_form(self):
         cat = AccessoryCategory(parent=self.cat2, title='boum')
         cat.save()
         data = {'type_client': 'F',
@@ -161,47 +179,45 @@ class TestAccessoryInventory(TestCase):
                 }
         form = AccessoryForm(data)
         self.assertTrue(form.is_valid())
-        request = HttpRequest()
-        #request.POST.a
 
 
 
-    def btest_generate_inventory(self):
+
+    def test_generate_inventory(self):
+        c = Client()
+        c.login(username=self.user_boss, password=self.passwd)
+
         d1 = date(2017, 1, 1)
         self.do_E(d1, 'a1', 4)
-        c = Client()
         creation_date = date(2017, 2, 1)  # Inventory creation date
         data = {'creation_date': creation_date}
-        response = c.post(reverse('accessories:inventory-create'),
+        c.post(reverse('accessories:inventory-create'),
                           data, follow=False)
 
         self.assertTrue(InventoryAccessory.objects.count() == 1)
 
-    def prepare_initial_data(self):
+
+    def test_create_form(self):
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': 'Babar',
                 'quantity': '10',
                 'arrivage': self.arrivage.id}
 
-        return data
-
-    def btest_create_form(self):
-        form = AccessoryForm(self.prepare_initial_data())
+        form = AccessoryForm(data)
         self.assertTrue(form.is_valid())
 
-    def btest_create_marque_empty(self):
+
+    def test_create_marque_empty(self):
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': '',
-                'marque_ref': 0,
                 'quantity': '10',
                 'arrivage': self.arrivage.id}
         form = AccessoryForm(data)
-        #print(form.errors.as_data())
         self.assertFalse(form.is_valid())
 
-    def btest_select_marque_ref(self):
+    def test_select_marque_ref(self):
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': '',
@@ -212,7 +228,7 @@ class TestAccessoryInventory(TestCase):
         print(form.errors.as_data())
         self.assertTrue(form.is_valid())
 
-    def btest_add_new_marque_for_new_accessory(self):
+    def test_add_new_marque_for_new_accessory(self):
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': 'Babar',
@@ -245,8 +261,9 @@ class TestAccessoryInventory(TestCase):
         return data
 
 
-    def btest_update_quantity(self):
+    def test_update_quantity(self):
         c = Client()
+        c.login(username=self.user_boss, password=self.passwd)
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': 'Babar',
@@ -255,9 +272,7 @@ class TestAccessoryInventory(TestCase):
 
         response = c.post(reverse('accessories:create'),
                           data, follow=True)
-        # Check if entries were created.
-        # There is only one because in the tests' Setup we only create Accessory
-        # instances of model 'Accessory' without quantity.
+        # Check if one entry was crated.
         self.assertEqual(1, len(AccessoryEntry.objects.all()))
         self.assertIn('Mama', response.content.decode())
 
@@ -271,6 +286,7 @@ class TestAccessoryInventory(TestCase):
 
         # Now we set a new marque
         c2 = Client()
+        c2.login(username=self.user_boss, password=self.passwd)
         data['montant'] = 20.00
         data['quantite_achetee'] = 5
         data['date_achat'] = date(2017, 1, 20)
@@ -289,13 +305,15 @@ class TestAccessoryInventory(TestCase):
         # Checking new quantity
         accessoryEntry = AccessoryEntry.objects.last()
         accessory = Accessory.objects.all().last()
-        self.assertEqual(15, accessory.prix_achat.quantite)
+
         self.assertEqual(accessoryEntry.article.pk, accessory.pk)
         self.assertEqual(8, accessoryEntry.quantity)
         self.assertEqual(8, accessory.get_quantity())
+        self.assertEqual(15, accessory.prix_achat.quantite)
 
-    def btest_check_new_marque_is_saved(self):
+    def test_check_new_marque_is_saved(self):
         c = Client()
+        c.login(username=self.user_boss, password=self.passwd)
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque_ref': self.hublot.id,
@@ -313,6 +331,7 @@ class TestAccessoryInventory(TestCase):
 
         # Now we set a new marque
         c2 = Client()
+        c2.login(username=self.user_boss, password=self.passwd)
         data['montant'] = 20.00
         data['quantite_achetee'] = 5
         data['date_achat'] = date(2017, 1, 20)
@@ -336,13 +355,13 @@ class TestAccessoryInventory(TestCase):
         self.assertEqual(accessory.marque_ref, self.constant)
 
 
-    def btest_categoryform(self):
+    def test_categoryform(self):
         data = {'parent':'',
                 'title': 'Valise'}
         form = AccessoryCategoryForm(data)
         self.assertTrue(form.is_valid())
 
-    def btest_permission1(self):
+    def test_permission1(self):
         content_type = ContentType.objects.get_for_model(Accessory)
         permission = Permission.objects.create(
             codename='view_achat_test',
@@ -358,12 +377,12 @@ class TestAccessoryInventory(TestCase):
         group_manager = Group.objects.create(name='manager')
         group_manager.permissions.add(permission)
         toto = User.objects.create(username='Toto')
-        boss = User.objects.create(username='Boss')
-        boss.groups.add(group_manager)
+        alpha = User.objects.create(username='AlphaSud')
+        alpha.groups.add(group_manager)
         self.assertFalse(group_manager in toto.groups.all())
-        self.assertTrue(group_manager in boss.groups.all())
+        self.assertTrue(group_manager  in alpha.groups.all())
 
-    def btest_permission2(self):
+    def test_permission2(self):
         """I retain this solution because it is very easy to test in templates."""
         content_type = ContentType.objects.get_for_model(Accessory)
         permission = Permission.objects.get(
@@ -371,29 +390,9 @@ class TestAccessoryInventory(TestCase):
             content_type=content_type,
         )
 
-        boss = User.objects.create(username='Boss')
-        boss.user_permissions.set([permission])
-        self.assertTrue(boss.has_perm('accessories.view_achat'))
-
-    def test_thumbnail(self):
-        print('MEDIA_URL', settings.MEDIA_URL)
-        base_path = settings.MEDIA_URL + 'accessories'
-        print('base_path', base_path)
-
-        img = 'blazer.jpg'
-
-        print('MEDIA_ROOT', settings.MEDIA_ROOT)
-        img_path = settings.MEDIA_ROOT +  base_path + '/' + img
-        #settings.MEDIA_ROOT = settings.MEDIA_ROOT + '/accessories'
-        print('Calling get_thumbnail with img_path:', img_path)
-        a = get_thumbnail(img_path, '300x300', crop='center')
-        # THUMBNAIL_PATH
-        # Default in Django: django.conf.settings.MEDIA_ROOT + '/thumbnails-cache'
-        print('name: ', a.name)
-        print('path: ', a.path)
-        print('url: ',  a.url)
-
-
+        alpha = User.objects.create(username='alpha')
+        alpha.user_permissions.set([permission])
+        self.assertTrue(alpha.has_perm('accessories.view_achat'))
 
 
 

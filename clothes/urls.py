@@ -4,7 +4,6 @@ from . import views
 
 app_name = 'clothes'
 
-# TODO: add UpdateView
 
 urlpatterns = [
     url(r'^clothes_create/$', views.ClothesCreationView.as_view(), name='clothes_create'),

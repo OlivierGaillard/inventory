@@ -1,11 +1,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import TabHolder, Tab
 from crispy_forms.layout import Submit, Layout
-from crispy_forms import layout
-from crispy_forms import bootstrap
 from django import forms
-from django.shortcuts import reverse
-from mptt.forms import TreeNodeChoiceField, TreeNodeMultipleChoiceField
 from finance.models import Currency
 from .models import Category, Inventory
 
@@ -44,14 +40,11 @@ class ProductCreateForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(ProductCreateForm, self).clean()
         marque_ref = cleaned_data.get('marque_ref', '')
-        if marque_ref and len(marque_ref.nom_marque) == 0:
-            print("No marque_ref selected, or none exsits.")
+        if marque_ref is None:
             marque = cleaned_data.get('marque', '')
             if len(marque) == 0:
-                msg = "Vous devez choisir une marque ou en creer une en renseignant le champ 'marque'. "
+                msg = "Vous devez choisir une marque ou en créer une en renseignant le champ 'marque'. "
                 raise forms.ValidationError(msg)
-            else:
-                print("We will create a new marque %s" % marque)
         return cleaned_data
 
 
@@ -78,7 +71,6 @@ class ProductUpdateForm(forms.ModelForm):
         fields = ['categories', 'name', 'type_client', 'marque_ref', 'arrivage', 'devise']
 
     def __init__(self, *args, **kwargs):
-        print("In ProductUpdateForm")
         super(ProductUpdateForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
@@ -104,7 +96,7 @@ class ProductUpdateForm(forms.ModelForm):
                 ),
             )
         )
-        print("End of init method of productUpddateForm")
+
 
 
     def clean(self):
@@ -112,10 +104,11 @@ class ProductUpdateForm(forms.ModelForm):
         into the model with form.save()"""
         cleaned_data = super(ProductUpdateForm, self).clean()
         marque_ref = cleaned_data.get('marque_ref', '')
-        marque = cleaned_data.get('marque', '')
-        if marque_ref:
-            if len(marque_ref.nom_marque) == 0 and len(marque) == 0:
-                raise forms.ValidationError("Entrez une nouvelle marque ou choisissez en une dans marque_ref.")
+        if marque_ref is None:
+            marque = cleaned_data.get('marque', '')
+            if len(marque) == 0:
+                msg = "Vous devez choisir une marque ou en créer une en renseignant le champ 'marque'. "
+                raise forms.ValidationError(msg)
         return cleaned_data
 
 

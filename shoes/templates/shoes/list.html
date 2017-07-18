@@ -3,12 +3,15 @@
 {% block content %}
 <h1>Liste des chaussures</h1>
 <p>
-    <table>
+    <table class="table">
       <thead>
          <tr>
             <th>No</th>
+            <th>ID</th>
+            <th>Arrivage</th>
             <th>Nom</th>
             <th>Catégorie</th>
+            <th>Marque</th>
             <th>Quantité</th>
          </tr>
       </thead>
@@ -16,8 +19,11 @@
       <tfoot>
          <tr>
             <th>No</th>
+            <th>ID</th>
+            <th>Arrivage</th>
             <th>Nom</th>
             <th>Catégorie</th>
+            <th>Marque</th>
             <th>Quantité</th>
          </tr>
       </tfoot>
@@ -25,8 +31,11 @@
       <tbody>
       {% for a in shoes %}
       <tr><td>{{ forloop.counter }}</td>
-          <td>{{ a.name }}</td>
+          <td>{{ a.id }}</td>
+          <td>{{ a.arrivage }}</td>
+          <td> <a title="Cliquer pour voir les détails" href="{% url "shoes:detail" a.pk %}">{{ a.name }}</a>  </td>
           <td>{{ a.categories.last }}</td>
+          <td>{{ a.marque_ref }}</td>
           <td>{{ a.get_quantity }}</td>
       </tr>
       {% endfor %}

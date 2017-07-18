@@ -6,6 +6,7 @@ from django import forms
 from django.shortcuts import reverse
 from mptt.forms import TreeNodeChoiceField, TreeNodeMultipleChoiceField
 from .models import Shoe, InventoryShoe, ShoeCategory
+from products.forms import ProductCreateForm, ProductUpdateForm
 #from products.forms import ProductCreateForm #, InventoryForm
 
 
@@ -24,23 +25,30 @@ class CategoryForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', 'Submit'))
 
 
-class ShoeForm(forms.ModelForm):
-    quantity = forms.IntegerField(min_value=1, required=True, label="Quantité", initial=0)
+
+class ShoeForm(ProductCreateForm):
     categories = TreeNodeMultipleChoiceField(queryset=ShoeCategory.objects.all(), label='Type')
 
-    class Meta:
+    class Meta(ProductCreateForm.Meta):
         model = Shoe
-        fields = ('marque_ref','categories', 'name', 'quantity', 'arrivage', 'type_client')
-        widgets = {'type_client' : forms.RadioSelect,
-        }
 
     def __init__(self, *args, **kwargs):
         super(ShoeForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-inline'
         self.helper.form_action = reverse('shoes:shoe_create')
-        self.helper.form_method = "POST"
-        self.helper.add_input(Submit('Submit', 'submit'))
+
+
+class ShoeUpdateForm(ProductUpdateForm):
+
+    class Meta(ProductUpdateForm.Meta):
+        model = Shoe
+
+    def __init__(self, *args, **kwargs):
+        super(ShoeUpdateForm, self).__init__(*args, **kwargs)
+
+
+class AddPhotoForm(forms.Form):
+    image   = forms.ImageField()
+    legende = forms.CharField(max_length=20)
 
 
 

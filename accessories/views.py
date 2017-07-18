@@ -20,9 +20,8 @@ class AccessoryCreationView(CreateView):
     template_name = 'accessories/create.html'
 
     def form_valid(self, form):
-        print("In AccessoryCreateView form_valid")
+        """This method saves the Accessory instance. """
         self.object = form.save()
-        #response = super(AccessoryCreationView, self).form_valid(form)
         arrivage_id = form['arrivage'].value()
         arrivage = Arrivage.objects.get(pk=arrivage_id)
         AccessoryEntry.objects.create(date=arrivage.date,
@@ -30,12 +29,6 @@ class AccessoryCreationView(CreateView):
             quantity=form['quantity'].value())
         self.object.update_marque_ref(form['marque'].value(), form['marque_ref'].value())
         return HttpResponseRedirect(self.get_success_url())
-
-
-
-    def get_success_url(self):
-        return reverse('accessories:list')
-
 
 class AccessoryListView(ListView):
     model = Accessory
@@ -46,11 +39,8 @@ class AccessoryListView(ListView):
 class AccessoryDetailView(DetailView):
     model = Accessory
     template_name = 'accessories/accessoire.html'
-    #fields = ['arrivage', 'type_client', 'name', 'marque', 'prix_achat']
     fields = ['arrivage', 'type_client', 'name', 'marque']
     context_object_name = 'accessory'
-
-    print('MEDIA_ROOT', settings.MEDIA_ROOT)
 
 
 
@@ -63,17 +53,16 @@ class AccessoryUpdateView(UpdateView):
 
 
     def get_initial(self):
-        print("In get_inital of AccessoryUpdateView")
         previous_quantity = self.object.get_quantity()
         initial = super(AccessoryUpdateView, self).get_initial()
         initial['quantity'] = previous_quantity
         initial['quantite_achetee'] = previous_quantity # updated below if prix_achat exists.
         initial['categories'] = self.object.categories.last()
         if self.object.marque_ref:
-            print("Has a marque_ref")
             initial['marque_ref'] = self.object.marque_ref
         else:
-            print('No marque')
+            pass
+            #print('No marque')
         initial['marque'] = ''
         if self.object.prix_achat:
             initial['montant'] = self.object.prix_achat.montant
@@ -89,12 +78,11 @@ class AccessoryUpdateView(UpdateView):
 
         return initial
 
-    def get_success_url(self):
-        print("In get_success_url of AccessoryUpdateView")
-        return reverse('accessories:list')
+    # def get_success_url(self):
+    #     print("In get_success_url of AccessoryUpdateView")
+    #     return reverse('accessories:list')
 
     def form_valid(self, form):
-        print("In AccessoryUpdateView form_valid")
         form.save()
         if AccessoryEntry.objects.filter(article=form.instance).exists():
             entree = AccessoryEntry.objects.get(article=form.instance)
@@ -114,14 +102,10 @@ class AccessoryUpdateView(UpdateView):
             montant_total = montant
 
         entree.save()
-        print("Entree saved in view")
-        print(entree)
         achat = Achat.objects.create(montant=montant_total,
                                      quantite=form['quantite_achetee'].value(),
                                      date_achat=form['date_achat'].value(),
                                      devise_id=devise)
-        print('Achat:')
-        print(achat)
         self.object.prix_achat = achat
         self.object.update_marque_ref(marque=form['marque'].value(), marque_ref = form['marque_ref'].value())
         return super(AccessoryUpdateView, self).form_valid(form)
