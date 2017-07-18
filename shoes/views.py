@@ -125,10 +125,15 @@ def upload_pic(request, pk):
             shoes = Shoe.objects.get(pk=pk)
             photo = Photo()
             photo.photo = form.cleaned_data['image']
-            photo.legende = form.cleaned_data['legende']
+            legende = form.cleaned_data.get('legende', '')
+            # writing photo.legende = form.cleaned_data.get('legende', '') fails.
+            photo.legende = legende
             photo.article = shoes
             photo.save()
             return HttpResponseRedirect(reverse('shoes:detail', kwargs={'pk':pk}))
+        else:
+            shoe = Shoe.objects.get(pk=pk)
+            return render(request, "shoes/photo_add.html", {'shoe': shoe, 'form': form})
     else:
         shoe = Shoe.objects.get(pk=pk)
         return render(request, "shoes/photo_add.html", {'shoe': shoe})

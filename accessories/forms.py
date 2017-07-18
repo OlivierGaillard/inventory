@@ -43,7 +43,7 @@ class CategoryUpdateForm(forms.ModelForm):
 
 class AddPhotoForm(forms.Form):
     image   = forms.ImageField()
-    legende = forms.CharField(max_length=20)   #models.CharField(max_length=20, blank=True, null=True)
+    legende = forms.CharField(max_length=20, required=False)   #models.CharField(max_length=20, blank=True, null=True)
  #models.ForeignKey(Accessory, blank=True, null=True)
 
 

@@ -47,11 +47,12 @@
 
 
 <div class="pic_container">
+  {# {% comment %} #}
     {% for image in cloth.photo_set.all %}
     {% get_thumbnail image.photo.path  "200x200" crop="center" as thumbnail %}
   <div class="pic">
     <p>
-        <a href="{{ image.photo.url }}" alt="{{image.legende}}">
+        <a href="{{ image.photo.url }}" alt="{{image.legende|default_if_none:''}}">
         <img src="{{ thumbnail.url }}" alt="The thumbnail" style="width: {{ thumbnail.width }}">
         </a>
     </p>
@@ -60,7 +61,8 @@
     </p>
 
   </div>
-{% endfor %}
+    {% endfor %}
+  {# {% endcomment %} #}
 </div>
 
 <p>Ajouter une image en cliquant <a href="{% url "clothes:upload_pic" cloth.pk %}">ici</a>.</p>

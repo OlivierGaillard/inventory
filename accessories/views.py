@@ -177,10 +177,15 @@ def upload_pic(request, pk):
             accessory = Accessory.objects.get(pk=pk)
             photo = Photo()
             photo.photo = form.cleaned_data['image']
-            photo.legende = form.cleaned_data['legende']
+            legende = form.cleaned_data.get('legende', '')
+            photo.legende = legende
             photo.article = accessory
             photo.save()
             return HttpResponseRedirect(reverse('accessories:detail', kwargs={'pk':pk}))
+        else:
+            accessory = Accessory.objects.get(pk=pk)
+            return render(request, "accessories/photo_add.html", {'accessory': accessory, 'form': form})
+
     else:
         accessory = Accessory.objects.get(pk=pk)
         return render(request, "accessories/photo_add.html", {'accessory': accessory})

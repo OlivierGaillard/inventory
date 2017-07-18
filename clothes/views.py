@@ -1,5 +1,5 @@
 from django.shortcuts import reverse, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import ListView, CreateView, FormView, DetailView, UpdateView, DeleteView
 from .models import ClothesCategory, Clothes, ClothesEntry, InventoryClothes, Photo
 from .forms import ClothesCategoryForm, ClothesForm, ClothesUpdateForm, AddPhotoForm, InventoryClothesForm, CategoryUpdateForm
@@ -113,10 +113,16 @@ def upload_pic(request, pk):
             clothes = Clothes.objects.get(pk=pk)
             photo = Photo()
             photo.photo = form.cleaned_data['image']
-            photo.legende = form.cleaned_data['legende']
+            legende = form.cleaned_data.get('legende', '')
+            photo.legende = legende
             photo.article = clothes
             photo.save()
             return HttpResponseRedirect(reverse('clothes:detail', kwargs={'pk':pk}))
+        else:
+#            print(form.errors)
+            clothes = Clothes.objects.get(pk=pk)
+            return render(request, "clothes/photo_add.html", {'cloth': clothes, 'form':form})
+
     else:
         clothes = Clothes.objects.get(pk=pk)
         return render(request, "clothes/photo_add.html", {'cloth': clothes})

@@ -48,7 +48,7 @@ class ShoeUpdateForm(ProductUpdateForm):
 
 class AddPhotoForm(forms.Form):
     image   = forms.ImageField()
-    legende = forms.CharField(max_length=20)
+    legende = forms.CharField(max_length=20, required=False)
 
 
 

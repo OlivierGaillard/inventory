@@ -5,7 +5,7 @@ from crispy_forms import bootstrap
 from django import forms
 from django.shortcuts import reverse
 from mptt.forms import TreeNodeMultipleChoiceField
-from .models import Clothes, ClothesCategory, InventoryClothes
+from .models import Clothes, ClothesCategory, InventoryClothes, Photo
 from products.forms import ProductCreateForm, ProductUpdateForm
 
 
@@ -45,8 +45,9 @@ class ClothesCategoryForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', 'Submit'))
 
 class AddPhotoForm(forms.Form):
-    image   = forms.ImageField()
-    legende = forms.CharField(max_length=20)
+    image   = forms.ImageField(required=True)
+    legende = forms.CharField(max_length=20, required=False)
+
 
 class CategoryUpdateForm(forms.ModelForm):
 
