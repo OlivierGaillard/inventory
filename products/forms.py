@@ -30,7 +30,7 @@ class ProductCreateForm(forms.ModelForm):
                     'name', 'arrivage', 'quantity'
                     ),
                 Tab('Classification',
-                    'type_client', 'categories', 'marque_ref', 'marque', 'photo'
+                    'type_client', 'categories', 'marque_ref', 'marque'
                     ),
             )
         )
