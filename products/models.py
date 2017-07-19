@@ -188,6 +188,7 @@ class Product(models.Model):
     marque_ref = models.ForeignKey(Marque, null=True, blank=True, help_text='Choix des marques')
     arrivage = models.ForeignKey(Arrivage, null=True)
     prix_achat = models.OneToOneField(Achat, null=True, blank=True, verbose_name="Prix d'achat unitaire")
+    date_ajout = models.DateField(auto_created=True, default=timezone.now)
 
     def __str__(self):
         return self.name

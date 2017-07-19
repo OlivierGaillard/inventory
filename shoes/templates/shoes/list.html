@@ -7,36 +7,46 @@
       <thead>
          <tr>
             <th>No</th>
-            <th>ID</th>
             <th>Arrivage</th>
+            <th>Date d'ajout</th>
             <th>Nom</th>
             <th>Catégorie</th>
             <th>Marque</th>
             <th>Quantité</th>
+            {% if perms.accessories.view_achat %}
+                <th>Prix d'achat</th>
+            {% endif %}
          </tr>
       </thead>
 
       <tfoot>
          <tr>
             <th>No</th>
-            <th>ID</th>
             <th>Arrivage</th>
+            <th>Date d'ajout</th>
             <th>Nom</th>
             <th>Catégorie</th>
             <th>Marque</th>
             <th>Quantité</th>
+            {% if perms.accessories.view_achat %}
+                <th>Prix d'achat</th>
+            {% endif %}
          </tr>
       </tfoot>
 
       <tbody>
       {% for a in shoes %}
       <tr><td>{{ forloop.counter }}</td>
-          <td>{{ a.id }}</td>
           <td>{{ a.arrivage }}</td>
+          <td>{{ a.date_ajout }}</td>
           <td> <a title="Cliquer pour voir les détails" href="{% url "shoes:detail" a.pk %}">{{ a.name }}</a>  </td>
           <td>{{ a.categories.last }}</td>
           <td>{{ a.marque_ref }}</td>
           <td>{{ a.get_quantity }}</td>
+          {% if perms.accessories.view_achat %}
+             <td>{{a.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>
+          {% endif %}
+
       </tr>
       {% endfor %}
     </table>
