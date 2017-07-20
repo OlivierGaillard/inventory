@@ -147,6 +147,17 @@ class CategoryUpdateView(UpdateView):
         return(reverse('accessories:detail', kwargs={'pk': self.object.id}))
 
 @method_decorator(login_required, name='dispatch')
+class CategoryDeleteView(DeleteView):
+    model = AccessoryCategory
+    template_name = 'accessories/category-delete.html'
+    #context_object_name = 'accessory'
+    fields = ['parent', 'title']
+
+    def get_success_url(self):
+        return reverse('accessories:category-list')
+
+
+@method_decorator(login_required, name='dispatch')
 class InventoryListView(ListView):
     model = InventoryAccessory
     template_name = 'accessories/inventory.html'

@@ -2,11 +2,14 @@
 {% load mptt_tags %}
 {% block content %}
 <h1>Categories d'accessoires</h1>
-<p>Modifier en cliquant sur le nom de la catégorie</p>
+<p>Modifier, éditer en cliquant sur la lettre <strong>M</strong>.</p>
+<p>Supprimer en cliquant sur la lettre <strong>S</strong>.</p>
 <ul class="root">
     {% recursetree categories %}
     <li>
-        <a href="{% url "accessories:category-update" node.pk %}">{{node.title }}</a>
+        {{node.title }}
+        <a href="{% url "accessories:category-update" node.pk %}" title="modifier">M</a>
+        <a href="{% url "accessories:category-delete" node.pk %}" title="supprimer">S</a>
         {% if not node.is_leafnode %}
            <ul class="children">
                {{ children }}

@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^category-list/$', views.CategoryListView.as_view(), name='category-list'),
     url(r'^category-create/$', views.CategoryCreationView.as_view(), name='category-create'),
     url(r'^category-update/(?P<pk>[0-9]+)$', views.CategoryUpdateView.as_view(), name='category-update'),
+    url(r'^category-delete/(?P<pk>[0-9]+)$', views.CategoryDeleteView.as_view(), name='category-delete'),
+
     url(r'^inventory-list/$', views.InventoryListView.as_view(), name='inventory-list'),
     url(r'^inventory-create/$', views.InventoryCreationView.as_view(), name='inventory-create'),
     url(r'^upload_pic/(?P<pk>[0-9]+)$', views.upload_pic, name='upload_pic'),
