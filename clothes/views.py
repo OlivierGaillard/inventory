@@ -155,8 +155,6 @@ class CategoryCreationView(CreateView):
     form_class = ClothesCategoryForm
     template_name = 'clothes/category-create.html'
 
-    def get_success_url(self):
-        return reverse('clothes:category-list')
 
 class CategoryUpdateView(UpdateView):
     model = ClothesCategory
@@ -164,9 +162,15 @@ class CategoryUpdateView(UpdateView):
     context_object_name = 'category'
     form_class = CategoryUpdateForm
 
+
+@method_decorator(login_required, name='dispatch')
+class CategoryDeleteView(DeleteView):
+    model = ClothesCategory
+    template_name = 'clothes/category-delete.html'
+    fields = ['parent', 'title']
+
     def get_success_url(self):
         return reverse('clothes:category-list')
-
 
 
 class CategoryListView(ListView):

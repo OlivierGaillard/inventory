@@ -17,6 +17,9 @@ class AccessoryCategory(MPTTModel):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('accessories:category-list')
+
 class AccessoryMarque(models.Model):
     nom_marque = models.CharField(max_length=80)
 

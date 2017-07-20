@@ -20,7 +20,9 @@ urlpatterns = [
     url(r'^photo_delete/(?P<pk>[0-9]+)$', views.PhotoDeleteView.as_view(), name='photo_delete'),
 
     url(r'^categorie_create/$', views.CategoryCreationView.as_view(), name='category_create'),
+    url(r'^category-update/(?P<pk>[0-9]+)$', views.CategoryUpdateView.as_view(), name='category-update'),
     url(r'^categories_list/$', views.CategoryListView.as_view(), name='category-list'),
+    url(r'^category-delete/(?P<pk>[0-9]+)$', views.CategoryDeleteView.as_view(), name='category-delete'),
 
     url(r'^inventaire/$', views.InventoryListView.as_view(), name='inventory'),
     url(r'^inventaire_create/$', views.InventoryCreationView.as_view(), name='inventory_create'),

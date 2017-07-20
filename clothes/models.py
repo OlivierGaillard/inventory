@@ -17,6 +17,8 @@ class ClothesCategory(MPTTModel):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('clothes:category-list')
 
 class Clothes(Product):
     categories = TreeManyToManyField(ClothesCategory, verbose_name="Catégorie d'habits")

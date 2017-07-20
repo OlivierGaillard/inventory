@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
 from finance.models import Achat, Currency
 from .models import Shoe, ShoeEntry, ShoeCategory, InventoryShoe, Photo
-from .forms import ShoeForm, CategoryForm, InventoryShoeForm, AddPhotoForm, ShoeUpdateForm
+from .forms import ShoeForm, CategoryForm, CategoryUpdateForm, InventoryShoeForm, AddPhotoForm, ShoeUpdateForm
 from coordinates.models import Arrivage
 
 class ShoeListView(ListView):
@@ -163,6 +163,28 @@ class CategoryListView(ListView):
     model = ShoeCategory
     template_name = 'shoes/category-list.html'
     context_object_name = 'categories'
+
+
+@method_decorator(login_required, name='dispatch')
+class CategoryDeleteView(DeleteView):
+    model = ShoeCategory
+    template_name = 'shoes/category-delete.html'
+    fields = ['parent', 'title']
+
+    def get_success_url(self):
+        return reverse('shoes:category-list')
+
+
+class CategoryUpdateView(UpdateView):
+    model = ShoeCategory
+    template_name = 'shoes/category-update.html'
+    context_object_name = 'category'
+    form_class = CategoryUpdateForm
+
+    def get_success_url(self):
+        return(reverse('accessories:detail', kwargs={'pk': self.object.id}))
+
+
 
 @method_decorator(login_required, name='dispatch')
 class InventoryListView(ListView):

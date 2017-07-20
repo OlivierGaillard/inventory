@@ -25,6 +25,18 @@ class CategoryForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', 'Submit'))
 
 
+class CategoryUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = ShoeCategory
+        fields = ['parent', 'title']
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryUpdateForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.add_input(Submit('submit', 'Submit'))
+
 
 class ShoeForm(ProductCreateForm):
     categories = TreeNodeMultipleChoiceField(queryset=ShoeCategory.objects.all(), label='Type')

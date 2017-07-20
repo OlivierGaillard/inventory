@@ -128,8 +128,6 @@ class CategoryCreationView(CreateView):
     form_class = AccessoryCategoryForm
     template_name = 'accessories/category-create.html'
 
-    def get_success_url(self):
-        return reverse('accessories:category-list')
 
 class CategoryListView(ListView):
     model = AccessoryCategory
@@ -150,7 +148,6 @@ class CategoryUpdateView(UpdateView):
 class CategoryDeleteView(DeleteView):
     model = AccessoryCategory
     template_name = 'accessories/category-delete.html'
-    #context_object_name = 'accessory'
     fields = ['parent', 'title']
 
     def get_success_url(self):

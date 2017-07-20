@@ -1,11 +1,15 @@
 {% extends "inventex.html" %}
 {% load mptt_tags %}
 {% block content %}
-<h1>Categories de chaussures</h1>
+<h1>Catégories de chaussures</h1>
+<p>Modifier, éditer en cliquant sur la lettre <strong>M</strong>.</p>
+<p>Supprimer en cliquant sur la lettre <strong>S</strong>.</p>
 <ul class="root">
     {% recursetree categories %}
     <li>
-        {{ node.title }}
+        {{node.title }}
+        <a href="{% url "shoes:category-update" node.pk %}" title="modifier">M</a>
+        <a href="{% url "shoes:category-delete" node.pk %}" title="supprimer">S</a>
         {% if not node.is_leafnode %}
            <ul class="children">
                {{ children }}
