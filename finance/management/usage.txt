@@ -5,3 +5,9 @@
 
 To update the pickle rates file run:
 python manage.py update_rates
+
+To set which currencies to use:
+python manage.py set_currencies_used CHF EUR
+
+To reset all currencies to False:
+python manage.py set_currencies_used --all_false
