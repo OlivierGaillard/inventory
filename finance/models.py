@@ -69,7 +69,7 @@ class Converter():
         return Decimal(self.rates[currency_code])
 
 
-    def get_all_currencies(self):
+    def get_all_currencies_webservice(self):
         """
         https://openexchangerates.org/api/currencies.json
         Result:

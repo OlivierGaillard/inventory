@@ -38,17 +38,17 @@ class TestFinance(TestCase):
 
     def btest_get_currencies(self):
         "Web service call to get list all currencies."
-        self.converter.get_all_currencies()
+        self.converter.get_all_currencies_webservice()
 
     def test_command_load_currencies(self):
+        """Call the following:
+        converter.get_rates_webservice() # dump to the pickle file finance/rates.txt
+        converter.get_all_currencies_webservice()   # dump to the pickle file finance/currencies.txt
+        total = Currency.load_currencies() # Currency factory to create instances with the pickle files.
+        """
         chf = Currency.objects.create(currency_code='CHF')
         out = StringIO()
         call_command('load_currencies', sdout=out)
-
-    def btest_get_rates_webservice(self):
-        self.converter.get_rates_webservice()
-        self.assertEqual(self.converter.update_status, 'updated')
-
 
         
         

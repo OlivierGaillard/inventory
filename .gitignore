@@ -5,4 +5,6 @@ db.sqlite3
 .DS_Store
 ./boutique/settings.py
 /boutique/settings.py
+*.txt
+migrations/
 
