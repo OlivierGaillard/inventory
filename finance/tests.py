@@ -12,7 +12,7 @@ class TestFinance(TestCase):
     
     def setUp(self):        
         self.converter = Converter()
-        self.arr
+
 
     def test_CHF_EUR(self):
         source = Money(12, 'CHF')
@@ -26,9 +26,14 @@ class TestFinance(TestCase):
         self.assertAlmostEqual(self.converter.convert(source, 'AED').amount,
                                Decimal(73.6), 1)
 
-    def test_update_rates_DB(self):
-        pass
-        
+    def test_set_rate(self):
+        chf = Currency(currency_code='CHF')
+        self.assertEqual(1.0, chf.rate_usd)
+        chf.set_rate()
+        self.assertTrue(1.0 != chf.rate_usd)
+        # Calling save will use the Converter to retrieve the rate from file 'rates.txt'
+
+
     def gtest_get_rates_webservice(self):
         self.converter.get_rates_webservice()
         print (self.converter.last_modified)

@@ -76,7 +76,7 @@ class Currency(models.Model):
         super(Currency, self).save(*args, **kwargs) # Call the "real" save() method.
 
     def __str__(self):
-        return self.currency_code
+        return self.currency_code + ': ' + str(self.rate_usd) + (' (USD)')
 
     class Meta:
         verbose_name_plural = "Currencies"

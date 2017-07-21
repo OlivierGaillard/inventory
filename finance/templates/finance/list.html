@@ -6,7 +6,7 @@
     <label>Choix de la devise pour le total</label>
     <select name="monnaie">
         {% for m in devises %}
-          <option value="{{m}}">{{m}}</option>
+          <option value="{{m.currency_code}}">{{m.currency_code}}</option>
         {% endfor %}
         {% if devise_total %}
           <option value="{{m}}" selected>{{devise_total}}</option>
