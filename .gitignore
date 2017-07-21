@@ -6,5 +6,6 @@ db.sqlite3
 ./boutique/settings.py
 /boutique/settings.py
 *.txt
+*.bak
 migrations/
 

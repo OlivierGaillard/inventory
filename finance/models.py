@@ -18,8 +18,11 @@ class Converter():
     
     def __init__(self):
         self.rates_file = os.path.join(settings.BASE_DIR, settings.CURRENCY_RATES_FILE)
-        with open(self.rates_file, 'rb') as f:
-            self.rates = pickle.load(f)
+        try:
+            with open(self.rates_file, 'rb') as f:
+                self.rates = pickle.load(f)
+        except FileNotFoundError:
+            print('Warning. Probably the first run because rates.txt file does not exist.')
         xrates.install('money.exchange.SimpleBackend')
         self.update_status = 'not updated'
         self.last_modified = ''
@@ -126,7 +129,6 @@ class Currency(models.Model):
                 if Currency.objects.filter(currency_code=code).exists():
                     currency = Currency.objects.get(currency_code=code)
                     currency.currency_name = currency_name
-                    currency.used = True
                     currency.save()
                 else:
                     Currency.objects.create(currency_code=code, currency_name=currency_name)
