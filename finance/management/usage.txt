@@ -1,0 +1,7 @@
+1. run "python manage.py load_currencies" to get all currencies from webservice. The script will call update_rates
+   to download the rates prior to saving the currencies in database.
+2. If they are already currencies used in the database they are updated, otherwise they are created with
+   the attribute 'used' set to false.
+
+To update the pickle rates file run:
+python manage.py update_rates
