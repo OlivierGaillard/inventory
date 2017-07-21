@@ -1,4 +1,6 @@
 from django.test import TestCase
+from django.core.management import call_command
+from django.utils.six import StringIO
 from money import Money, xrates
 from finance.models import Converter
 import pickle
@@ -17,14 +19,14 @@ class TestFinance(TestCase):
     def test_CHF_EUR(self):
         source = Money(12, 'CHF')
         self.assertAlmostEqual(self.converter.convert(source, 'EUR').amount,
-                               Decimal(10.9690), 1)
+                               Decimal(10.84), 1)
 
     def test_CHF_AED(self):
         montant = 20.00
         source = Money(montant, 'CHF')
         rate_usd_of_aed = 3.6729
         self.assertAlmostEqual(self.converter.convert(source, 'AED').amount,
-                               Decimal(73.6), 1)
+                               Decimal(77.25), 1)
 
     def test_set_rate(self):
         chf = Currency(currency_code='CHF')
@@ -34,9 +36,17 @@ class TestFinance(TestCase):
         # Calling save will use the Converter to retrieve the rate from file 'rates.txt'
 
 
-    def gtest_get_rates_webservice(self):
+    def btest_get_currencies(self):
+        "Web service call to get list all currencies."
+        self.converter.get_all_currencies()
+
+    def test_command_load_currencies(self):
+        chf = Currency.objects.create(currency_code='CHF')
+        out = StringIO()
+        call_command('load_currencies', sdout=out)
+
+    def btest_get_rates_webservice(self):
         self.converter.get_rates_webservice()
-        print (self.converter.last_modified)
         self.assertEqual(self.converter.update_status, 'updated')
 
 

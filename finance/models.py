@@ -17,9 +17,8 @@ class Converter():
     """
     
     def __init__(self):
-        rates_file = os.path.join(settings.BASE_DIR, settings.CURRENCY_RATES_FILE)
-#         with open('./finance/rates.txt', 'rb') as f:
-        with open(rates_file, 'rb') as f:
+        self.rates_file = os.path.join(settings.BASE_DIR, settings.CURRENCY_RATES_FILE)
+        with open(self.rates_file, 'rb') as f:
             self.rates = pickle.load(f)
         xrates.install('money.exchange.SimpleBackend')
         self.update_status = 'not updated'
@@ -46,21 +45,58 @@ class Converter():
         if r.status_code == 200:
             self.last_modified = r.headers['Last-Modified']
             rates = r.json()['rates']
-            with open('./finance/rates.txt', 'wb') as outfile:
+            with open(self.rates_file, 'wb') as outfile:
                 pickle.dump(rates, outfile)
                 self.update_status = 'updated'
       
     def get_rate(self, currency_code):
         """ Returns a Decimal for the rate.
+        JSON fomat:
+        {
+    disclaimer: "https://openexchangerates.org/terms/",
+    license: "https://openexchangerates.org/license/",
+    timestamp: 1449877801,
+    base: "USD",
+    rates: {
+        AED: 3.672538,
+        AFN: 66.809999,
+        ALL: 125.716501,
+        AMD: 484.902502,
+         /* ... */
+    }
+}
         """  
-        return Decimal(self.rates[currency_code])  
-    
+        return Decimal(self.rates[currency_code])
+
+
+    def get_all_currencies(self):
+        """
+        https://openexchangerates.org/api/currencies.json
+        Result:
+        {
+        "AED": "United Arab Emirates Dirham",
+         "AFN": "Afghan Afghani",
+         "ALL": "Albanian Lek",
+         /* ... */
+         }
+        """
+        id = settings.CURRENCYSERVICE_ID
+        url = 'https://openexchangerates.org/api/currencies.json'
+        param = {'app_id' : id}
+        r = requests.get(url, params=param)
+        if r.status_code == 200:
+            currencies = r.json()
+            currencies_file = os.path.join(settings.BASE_DIR, settings.CURRENCY_LIST_FILE)
+            with open(currencies_file, 'wb') as outfile:
+                pickle.dump(currencies, outfile)
+
+
         
 class Currency(models.Model):
     currency_code   = models.CharField(max_length=3, unique=True)
-    rate_usd        = models.DecimalField(max_digits=15, decimal_places=4, 
-                                          default=1.0, 
-                                          editable=False)
+    currency_name   = models.CharField(max_length=100, null=True)
+    used            = models.BooleanField(default=False)
+    rate_usd        = models.DecimalField(max_digits=15, decimal_places=4, default=1.0, editable=False)
     last_update     = models.DateField(auto_now=True)
     
     def set_rate(self):
@@ -78,10 +114,30 @@ class Currency(models.Model):
     def __str__(self):
         return self.currency_code + ': ' + str(self.rate_usd) + (' (USD)')
 
+    def load_currencies():
+        """Load all currencies into table Currency."""
+        currencies_file = os.path.join(settings.BASE_DIR, settings.CURRENCY_LIST_FILE)
+        total = 0
+        with open(currencies_file, 'rb') as f:
+            currencies_dic = pickle.load(f)
+            for code in currencies_dic.keys():
+                currency_name = currencies_dic[code]
+                total += 1
+                if Currency.objects.filter(currency_code=code).exists():
+                    currency = Currency.objects.get(currency_code=code)
+                    currency.currency_name = currency_name
+                    currency.used = True
+                    currency.save()
+                else:
+                    Currency.objects.create(currency_code=code, currency_name=currency_name)
+        return total
+
+
     class Meta:
         verbose_name_plural = "Currencies"
-    
-    
+
+
+
 class Achat(models.Model):
     montant     = models.DecimalField(max_digits=10, decimal_places=2  )
     objet       = models.CharField(max_length=80, null=True)

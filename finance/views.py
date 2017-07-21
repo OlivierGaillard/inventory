@@ -29,7 +29,7 @@ class FraisArrivageListView(PermissionRequiredMixin, FilterView):
     def get_context_data(self, **kwargs):
         context = super(FraisArrivageListView, self).get_context_data(**kwargs)
         arrivage = self.request.GET.get('arrivage_ref', '')
-        devises = Currency.objects.all()
+        devises = Currency.objects.filter(used=True)
         monnaie = 'XOF'
         monnaie = self.request.GET.get('monnaie', '')
         if len(monnaie) == 0:
