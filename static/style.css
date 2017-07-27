@@ -22,9 +22,10 @@ h1 {
    width: 160px;
 }
 
+
 header {
-    display: flex;
-    align-items: center;
+    /* display: flex;
+    align-items: center; */
     padding-bottom: 3px;
     background-color: rgb(65, 118, 144);
 }
@@ -61,8 +62,8 @@ header {
 }
 
 #logo {
-   display: flex;
-   align-items: center;
+   /* display: flex;
+   align-items: center; */
    font-family: 'Learning-curve-regular';
 }
 
