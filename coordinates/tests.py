@@ -1,3 +1,5 @@
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import Permission, User
 from django.test import TestCase
 from django.http import HttpRequest
 from django.shortcuts import reverse
@@ -41,6 +43,17 @@ class TestFraisArrivage(TestCase):
 
         self.location_lausanne = Localite.objects.create(nom='Lausanne')
 
+        content_type = ContentType.objects.get_for_model(Accessory)
+        permission = Permission.objects.get(
+            codename='view_achat',
+            content_type=content_type,
+        )
+
+        self.passwd = 'titi_grognon234'
+        self.user_boss = 'Boss'
+        self.boss = User.objects.create_user(username=self.user_boss, password=self.passwd)
+        self.boss.user_permissions.set([permission])
+
     def test_createFraisArrivage(self):
         frais_arrivage = FraisArrivage(arrivage_ref=self.arrivage)
         frais_arrivage.devise_id = self.chf
@@ -70,6 +83,58 @@ class TestFraisArrivage(TestCase):
         self.arrivage.fraisarrivage_set.add(frais_arrivage3)
         frais_count = self.arrivage.fraisarrivage_set.count()
         self.assertEqual(3, frais_count)
+
+    def btest_view_add_frais_to_arrivage(self):
+        frais_arrivage = FraisArrivage(arrivage_ref=self.arrivage)
+        frais_arrivage.devise_id = self.chf
+        frais_arrivage.montant = 1200.00
+        frais_arrivage.objet = 'Vol Yaounde-Zurich'
+        frais_arrivage.frais_type = self.frais_type_transport
+        frais_arrivage.save()
+        frais_arrivage2 = FraisArrivage(arrivage_ref=self.arrivage)
+        frais_arrivage2.devise_id = self.chf
+        frais_arrivage2.montant = 120.00
+        frais_arrivage2.objet = 'train'
+        frais_arrivage2.frais_type = self.frais_type_transport
+        frais_arrivage2.save()
+        # Obtenir les frais d'un arrivage
+        frais_count = self.arrivage.fraisarrivage_set.count()
+        self.assertEqual(2, frais_count)
+        frais_count = FraisArrivage.objects.filter(arrivage_ref=self.arrivage).count()
+        self.assertEqual(2, frais_count)
+
+        # To add Frais to one arrivage
+        c = Client()
+        c.login(username=self.user_boss, password=self.passwd)
+
+        frais_arrivage3 = FraisArrivage()
+        frais_arrivage3.devise_id = self.chf
+        frais_arrivage3.montant = 15.00
+        frais_arrivage3.objet = 'repas'
+        frais_arrivage3.frais_type = self.frais_type_repas
+        frais_arrivage3.save()
+        self.arrivage.fraisarrivage_set.add(frais_arrivage3)
+        frais_count = self.arrivage.fraisarrivage_set.count()
+        self.assertEqual(3, frais_count)
+
+        cat = AccessoryCategory(parent=self.cat2, title='boum')
+        cat.save()
+        data = {'type_client': 'F',
+                'categories': (cat.id,),
+                'name': 'Maman', 'marque': 'Baba au rhum',
+                'quantity': '5',
+                'arrivage': self.arrivage.id,
+                }
+
+        form = AccessoryForm(data)
+        self.assertTrue(form.is_valid(), form.errors.as_data())
+        #         form.save()
+
+        response = c.post(reverse('accessories:create'), data,
+                          follow=True)
+        print(response.status_code)
+        c = Client()
+        self.assertTrue(2 == 4, "TODo")
 
     def test_arrivage_get_total(self):
         '''One arrivage model has its own method get_total().

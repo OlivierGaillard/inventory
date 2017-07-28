@@ -115,7 +115,7 @@ class Currency(models.Model):
         super(Currency, self).save(*args, **kwargs) # Call the "real" save() method.
 
     def __str__(self):
-        return self.currency_code + ': ' + str(self.rate_usd) + (' (USD)')
+        return self.currency_code
 
     def load_currencies():
         """Load all currencies into table Currency."""
