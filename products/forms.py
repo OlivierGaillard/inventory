@@ -3,6 +3,7 @@ from crispy_forms.bootstrap import TabHolder, Tab
 from crispy_forms.layout import Submit, Layout
 from django import forms
 from finance.models import Currency
+from finance.forms import CoolCurrencyChoiceField
 from .models import Category, Inventory
 
 
@@ -60,7 +61,8 @@ class ProductUpdateForm(forms.ModelForm):
     date_achat = forms.DateField(label="Date d'achat", required=True,
                                   widget=forms.TextInput(attrs={'type': 'date'})
                     )
-    devise = forms.ModelChoiceField(queryset=Currency.objects.all())
+    devise = CoolCurrencyChoiceField(queryset=Currency.objects.filter(used=True))
+    #devise = forms.ModelChoiceField(queryset=Currency.objects.filter(used=True))
     quantite_type = forms.ChoiceField(choices=[(1, "à l'unité"), (2, "en gros")],
                                       widget=forms.RadioSelect(), initial=1,
                                       help_text="Si vous choisissez 'à l'unité' le prix d'achat enregistré sera égal au prix d'achat multiplié par la quantité.",

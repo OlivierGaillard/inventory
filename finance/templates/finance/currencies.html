@@ -1,0 +1,30 @@
+{% extends "inventex.html" %}
+{% block content %}
+
+<h1>Devises</h1>
+    <table class="table">
+      <thead>
+         <tr>
+            <th>No</th>
+            <th>Code</th>
+            <th>Modifier</th>
+            <th>Nom</th>
+            <th>en usage?</th>
+         </tr>
+      </thead>
+
+
+
+      <tbody>
+      {% for a in currencies %}
+      <tr><td>{{ forloop.counter }}</td>
+          <td>{{ a.currency_code }}
+          <td title="Modifier"><a href="{% url "finance:update_currency" a.pk %}">M</a></td>
+          <td>{{ a.currency_name }}</td>
+          <td>{{ a.used|yesno:"oui,non,peut-être" }}  </td>
+      </tr>
+      {% endfor %}
+      <tr>
+    </table>
+
+{% endblock %}

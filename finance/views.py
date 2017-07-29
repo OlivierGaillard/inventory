@@ -6,12 +6,12 @@ from django.forms import modelformset_factory
 from crispy_forms.layout import Submit
 from django.shortcuts import reverse, render
 from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, DeleteView, UpdateView
+from django.views.generic import CreateView, DeleteView, UpdateView, ListView, FormView
 from django_filters.views import FilterView
 from money import Money
 from coordinates.models import Arrivage
 from .models import FraisArrivage, Currency, Converter
-from .forms import FraisArrivageCreateForm, FraisArrivageFormSetHelper, FraisArrivageUpdateForm
+from .forms import FraisArrivageCreateForm, FraisArrivageFormSetHelper, FraisArrivageUpdateForm, CurrencyUsageForm
 from .filters import FraisArrivageFilter
 
 
@@ -157,3 +157,24 @@ class FraisArrivageUpdateView(UpdateView):
         params = "?arrivage_ref=%s&monnaie=%s" % (self.object.arrivage_ref.pk, self.object.devise_id)
         url_list = reverse('finance:list') + params
         return url_list
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('accessories.view_achat'), name='dispatch')
+class CurrencyUsageView(UpdateView):
+    template_name = 'finance/update.html'
+    context_object_name = 'currency'
+    model = Currency
+    form_class = CurrencyUsageForm
+
+    def get_success_url(self):
+        return reverse('finance:currencies')
+
+
+class CurrencyListView(ListView):
+    model = Currency
+    template_name = 'finance/currencies.html'
+    context_object_name = 'currencies'
+
+

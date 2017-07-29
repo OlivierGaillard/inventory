@@ -98,7 +98,7 @@ class Converter():
 class Currency(models.Model):
     currency_code   = models.CharField(max_length=3, unique=True)
     currency_name   = models.CharField(max_length=100, null=True)
-    used            = models.BooleanField(default=False)
+    used            = models.BooleanField(default=False, verbose_name="utilisée?")
     rate_usd        = models.DecimalField(max_digits=15, decimal_places=4, default=1.0, editable=False)
     last_update     = models.DateField(auto_now=True)
     
@@ -116,6 +116,7 @@ class Currency(models.Model):
 
     def __str__(self):
         return self.currency_code
+
 
     def load_currencies():
         """Load all currencies into table Currency."""
@@ -137,7 +138,7 @@ class Currency(models.Model):
 
     class Meta:
         verbose_name_plural = "Currencies"
-
+        ordering = ['-used', 'currency_code']
 
 
 class Achat(models.Model):

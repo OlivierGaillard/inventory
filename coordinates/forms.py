@@ -5,6 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import TabHolder, Tab, Accordion, AccordionGroup
 from crispy_forms.layout import Submit, Layout, HTML
 from finance.models import Currency, FraisArrivage
+from finance.forms import CoolCurrencyChoiceField
 from .models import Arrivage, Localite, Pays
 
 class LocaliteCreateForm(forms.ModelForm):
@@ -58,21 +59,20 @@ class ArrivageCreateForm(forms.ModelForm):
         }
 
 
+# class CoolCurrencyChoiceField(forms.ModelChoiceField):
+#
+#     def label_from_instance(self, obj):
+#         return obj.currency_code + ' : ' + obj.currency_name
 
 class ArrivageUpdateForm(ArrivageCreateForm):
     nouveau_pays = forms.CharField(max_length=100, required=False, help_text='Pour entrer un nouveau pays')
     code_pays    = forms.CharField(max_length=4, required=False,
                                    help_text="Pour entrer le code d'un nouveau pays. Valeur par défaut Non Déterminée.",
                                    initial="N.D.")
-    devise = forms.ModelChoiceField(queryset=Currency.objects.filter(used=True), to_field_name="currency_name")
-    nouvelle_devise = forms.CharField(max_length=5, required=False, help_text="Entrez le code (CHF, EUR) de la nouvelle devise.")
+    devise = CoolCurrencyChoiceField(queryset=Currency.objects.filter(used=True))
     nouveau_lieu = forms.CharField(max_length=100, required=False, label="Locatité", help_text='Pour entrer un nouveau lieu')
     nouveau_lieu_npa = forms.CharField(max_length=8, required=False, label="NPA",
                                        help_text="No postal d'acheminement. Laisser vide si inconnu.")
-    # Frais: may be filled afterwards on later stage
-    # frais_objet = forms.CharField(max_length=80, required=False)
-    # frais_montant = forms.DecimalField(max_digits=10, decimal_places=2, required=False)
-    # frais_devise  = forms.ModelChoiceField(queryset=Currency.objects.all(), required=False)
 
     def __init__(self, *args, **kwargs):
         super(ArrivageUpdateForm,self).__init__(*args, **kwargs)
@@ -95,7 +95,7 @@ class ArrivageUpdateForm(ArrivageCreateForm):
                     'pays', 'lieu_provenance',
                 ),
 
-                Tab('Ajouter un pays, un lieu ou une devise',
+                Tab('Ajouter un pays, un lieu',
                     Accordion(
                         AccordionGroup('Ajouter un pays',
                           'nouveau_pays',
@@ -103,9 +103,6 @@ class ArrivageUpdateForm(ArrivageCreateForm):
                         ),
                         AccordionGroup('Ajouter un lieu',
                               'nouveau_lieu', 'nouveau_lieu_npa'
-                        ),
-                        AccordionGroup('Ajouter une devise',
-                          'nouvelle_devise',
                         ),
                     )
                 ),
@@ -163,29 +160,12 @@ class ArrivageUpdateForm(ArrivageCreateForm):
             raise forms.ValidationError("Erreur imprévue: %s" % self.errors.as_data())
         return cleaned_data
 
-    def update_currency(self, cleaned_data):
-        new_code = cleaned_data.get('nouvelle_devise', '')
-        if new_code:
-            if Currency.objects.filter(currency_code=new_code).count() == 0:
-                try:
-                    new_currency = Currency.objects.create(currency_code=new_code)
-                    cleaned_data['devise'] = new_currency
-                except:
-                    msg = "Erreur lors de la création de la devise '%s'." % new_code
-                    msg += "Erreur: %s " % sys.exc_info()[0]
-                    raise forms.ValidationError(msg)
-            else:
-                raise forms.ValidationError("La devise '%s' existe déjà!" % new_code)
-        return cleaned_data
-
 
 
     def clean(self):
         cleaned_data = super(ArrivageUpdateForm, self).clean()
         cleaned_data = self.update_land(cleaned_data)
         cleaned_data = self.update_location(cleaned_data)
-        cleaned_data = self.update_currency(cleaned_data)
-        #cleaned_data = self.update_frais(cleaned_data)
         return cleaned_data
 
 

@@ -85,6 +85,14 @@ class ArrivageUpdateView(UpdateView):
             initial['pays'] = Pays.objects.first()
         return initial
 
+    def form_valid(self, form):
+        devise = form['devise'].value()
+        currency = Currency.objects.get(pk=devise)
+        currency.used = True
+        currency.save()
+        return super(ArrivageUpdateView, self).form_valid(form)
+
+
     def get_success_url(self):
         return reverse('coordinates:arrivage-detail', kwargs={'pk': self.object.pk})
 
