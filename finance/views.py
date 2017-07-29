@@ -82,7 +82,6 @@ def add_frais_to_arrivage(request, pk):
     extra_rows = 1
     FraisFormset = modelformset_factory(FraisArrivage,
                                         fields=['arrivage_ref','devise_id', 'montant', 'objet', 'date_frais'],
-                                        #fields=['devise_id', 'montant', 'objet', 'date_frais'],
                                         form=FraisArrivageCreateForm,
                                         can_delete=True,
                                         extra=extra_rows)
@@ -97,6 +96,7 @@ def add_frais_to_arrivage(request, pk):
         arrivage = Arrivage.objects.get(pk=pk)
         dict_values = {}
         dict_values['arrivage_ref'] = arrivage
+
         if arrivage.devise:
             dict_values['devise_id'] = arrivage.devise
         dict_values['date_frais'] = arrivage.date
@@ -119,11 +119,10 @@ def add_frais_to_arrivage(request, pk):
             instances = formset.save()
             devise=''
             if arrivage.devise:
-                devise = arrivage.devise
+                devise = arrivage.devise.currency_code
             params = "?arrivage_ref=%s&monnaie=%s" % (arrivage.pk, devise)
             url_list = reverse('finance:list') + params
             return HttpResponseRedirect(url_list)
-            #return HttpResponseRedirect(reverse("finance:list"), {'last_arrivage_ref' : arrivage})
         else:
             return render(request, template_name="finance/add_frais.html",
                           context={'formset': formset, 'helper':helper})
@@ -152,6 +151,7 @@ class FraisArrivageUpdateView(UpdateView):
     context_object_name = 'frais'
     #fields = ['montant', 'objet', 'date_frais']
     form_class = FraisArrivageUpdateForm
+
 
     def get_success_url(self):
         params = "?arrivage_ref=%s&monnaie=%s" % (self.object.arrivage_ref.pk, self.object.devise_id)

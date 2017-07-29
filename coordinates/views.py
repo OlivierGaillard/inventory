@@ -77,7 +77,10 @@ class ArrivageUpdateView(UpdateView):
     def get_initial(self):
         initial = super(ArrivageUpdateView, self).get_initial()
         if self.object.devise is None:
-            initial['devise'] = Currency.objects.first()
+            initial['devise'] = Currency.objects.filter(used=True).first()
+        else:
+            initial['devise'] = self.object.devise
+
         if self.object.pays is None:
             initial['pays'] = Pays.objects.first()
         return initial

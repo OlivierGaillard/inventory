@@ -64,6 +64,7 @@ class ArrivageUpdateForm(ArrivageCreateForm):
     code_pays    = forms.CharField(max_length=4, required=False,
                                    help_text="Pour entrer le code d'un nouveau pays. Valeur par défaut Non Déterminée.",
                                    initial="N.D.")
+    devise = forms.ModelChoiceField(queryset=Currency.objects.filter(used=True), to_field_name="currency_name")
     nouvelle_devise = forms.CharField(max_length=5, required=False, help_text="Entrez le code (CHF, EUR) de la nouvelle devise.")
     nouveau_lieu = forms.CharField(max_length=100, required=False, label="Locatité", help_text='Pour entrer un nouveau lieu')
     nouveau_lieu_npa = forms.CharField(max_length=8, required=False, label="NPA",
@@ -129,16 +130,14 @@ class ArrivageUpdateForm(ArrivageCreateForm):
         if not pays_ref and not new_land:
             raise forms.ValidationError("Remplir le champ 'Nouveau_pays' si aucun pays de la liste n'est selectionne.")
         elif new_land:
-            print("We will create a new Land! Cool! : %s" % new_land)
             code_pays = cleaned_data.get('code_pays', 'N.D.')
             if Pays.objects.filter(nom=new_land).count() == 0:
                 pays = Pays.objects.create(nom=new_land, code=code_pays)
-                print("Pays '%s' created." % pays)
                 cleaned_data['pays'] = pays
             else:
                 raise forms.ValidationError("Le pays %s existe déjà." % new_land)
         elif pays_ref:
-            print("Pays '%s' choisi." % pays_ref)
+            pass
         else:
             raise forms.ValidationError("Erreur imprévue: %s" % forms.errors.as_data())
         return cleaned_data
@@ -149,7 +148,6 @@ class ArrivageUpdateForm(ArrivageCreateForm):
         if not lieu_selected and not new_location:
             raise forms.ValidationError("Remplir le champ 'Nouveau_lieu' si aucun lieu de la liste n'est selectionné.")
         elif new_location:
-            print("We will create a new location! Cool! : %s" % new_location)
             pays_ref = cleaned_data.get('pays')
             npa = cleaned_data.get('nouveau_lieu_npa')
             if not pays_ref:
@@ -158,7 +156,6 @@ class ArrivageUpdateForm(ArrivageCreateForm):
                 location = Localite.objects.create(nom=new_location, npa=npa, pays=pays_ref)
             else:
                 location = Localite.objects.create(nom=new_location)
-            print("Location '%s' created." % location)
             cleaned_data['lieu_provenance'] = location
         elif lieu_selected:
             cleaned_data['lieu_provenance'] = lieu_selected
@@ -172,7 +169,6 @@ class ArrivageUpdateForm(ArrivageCreateForm):
             if Currency.objects.filter(currency_code=new_code).count() == 0:
                 try:
                     new_currency = Currency.objects.create(currency_code=new_code)
-                    print("Devise %s créée." % new_currency)
                     cleaned_data['devise'] = new_currency
                 except:
                     msg = "Erreur lors de la création de la devise '%s'." % new_code
@@ -181,34 +177,6 @@ class ArrivageUpdateForm(ArrivageCreateForm):
             else:
                 raise forms.ValidationError("La devise '%s' existe déjà!" % new_code)
         return cleaned_data
-
-
-    # def update_frais(self, cleaned_data):
-    #     try:
-    #         frais_montant = cleaned_data.get('frais_montant', '')
-    #         print("Montant des frais: %s" % frais_montant)
-    #         frais_objet = cleaned_data.get('frais_objet', '')
-    #         print("Objet: %s" % frais_objet)
-    #         frais_devise = cleaned_data.get('frais_devise', ''),
-    #         print("Devise: %s" % frais_devise)
-    #         print("Arrivage: %s" % self.instance)
-    #         if frais_montant:
-    #             frais = FraisArrivage()
-    #             frais.montant = frais_montant
-    #             frais.objet   = frais_objet
-    #             tmp = Currency.objects.filter(currency_code=frais_devise).first()
-    #             frais.devise_id = tmp
-    #             frais.arrivage_ref = self.instance
-    #             frais.save()
-    #             print("Frais ajouté!!!")
-    #         else:
-    #             print("Pas de frais saisis.")
-    #
-    #     except:
-    #         msg = "Erreur lors de l'ajout des frais. "
-    #         msg += "Erreur: %s " % sys.exc_info()[0]
-    #         raise forms.ValidationError(msg)
-    #     return cleaned_data
 
 
 

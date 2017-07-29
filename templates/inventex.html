@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
-{% block header %}Mon super programme d'inventaire avec <strong>Django</strong>
-{% endblock %}
+{% block header %}Inventaires{% endblock %}
 {% block site_wrapper %}
 <div class="container-fluid">
 
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar/brand" href="#"><h3>Inventaires</h3></a>
+                <a class="navbar/brand" href="/"><h3>Inventaires</h3></a>
             </div>
             <ul class="nav navbar-nav">
                 <li class="dropdown">
@@ -68,4 +67,10 @@
         {% block content %}
 
         {% endblock %}
+<footer>
+        <nav id="footernav">
+            {% block footernav %}{% endblock %}
+        </nav>
+        <p>An Open Green Solution: inventaires</p>
+</footer>
 {% endblock %}

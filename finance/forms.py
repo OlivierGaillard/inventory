@@ -2,8 +2,10 @@ from django import forms
 from crispy_forms.helper import FormHelper, Layout
 from crispy_forms.layout import Submit
 from .models import FraisArrivage
+from finance.models import Currency
 
 class FraisArrivageCreateForm(forms.ModelForm):
+    devise_id = forms.ModelChoiceField(queryset=Currency.objects.filter(used=True))
 
     class Meta:
         model = FraisArrivage
@@ -31,14 +33,16 @@ class FraisArrivageFormSetHelper(FormHelper):
         self.render_required_fields = True
 
 class FraisArrivageUpdateForm(forms.ModelForm):
+    devise_id = forms.ModelChoiceField(queryset=Currency.objects.filter(used=True))
+
     class Meta:
         model = FraisArrivage
         fields = ['objet', 'date_frais', 'montant', 'devise_id' ]
 
 
     def __init__(self, *args, **kwargs):
+
         super(FraisArrivageUpdateForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'POST'
-        #self.helper.form_action = reverse('finance:list')
         self.helper.add_input(Submit('submit', 'Submit'))
