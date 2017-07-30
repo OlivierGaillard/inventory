@@ -1,7 +1,63 @@
 {% extends "inventex.html" %}
 {% load static %}
 {% block content %}
-<div id="bienvenue">
-<h1>Bienvenue! Welcome!</h1>
+<div id="bienvenue" class="container">
+<h1>Bienvenue!</h1>
+
+    <h2>Ce qu'offre ce site</h2>
+
+    <p class="alert alert-info">Le but du site est de permettre l'établissement d'inventaires afin d'informer sur
+        la quantité d'articles en stock, de quel arrivage ils proviennent,
+        et leur coût de revient.
+    </p>
+
+    <p>
+        Pour la saisie des coûts il est possible d'utiliser <mark>différentes devises</mark>.
+        Le récapitulatif des frais permet de choisir dans quelle devise on souhaite calculer le total.
+        Pour les articles aussi il est possible de saisir le prix d'achat dans différentes devises.
+    </p>
+
+    <div class="alert alert-warning">
+        Mais c'est cette dernière qui est affichée dans la liste des articles. Il serait
+        sans doute très pratique de permettre de choisir la devise d'affichage.
+    </div>
+
+
+
+    <p>
+        Une fois que tous les articles ont été saisis le site permet de générer un rapport d'inventaire.
+        Il s'agit de la somme de toutes les entrées. On peut générer un rapport pour chaque catégorie
+        d'articles (habits, chausures et accessoires).
+    </p>
+
+    <p>
+        Lorsque des articles sont vendus ils font l'objet de sorties. Lors de la prochaine génération
+        d'inventaire ces sorties seront soustraites aux entrées afin de donner le solde en stock.  Mais
+        dès qu'un article est sorti sa quantité, visible sur sa fiche et dans la liste récapitulative,
+        est mise à jour.
+    </p>
+
+<h2>Comment commencer?</h2>
+    <p>
+        Il faut suivre la procédure ci-dessous:
+    </p>
+
+    <ol>
+      <li>Créer un arrivage. Lors de la création les informations à saisir sont minimales. Il est
+      toujours possible d'y revenir plus tard. Pour créer un arrivage, cliquer
+          <a href="/coordinates/arrivage-create/">ici.</a>
+      </li>
+      <li>
+          Créer les catégories qui vont servir à classifier les articles. Le site propose dès le départ un
+          ensemble de catégories toutes prêtes que vous pourrez adapter à vos besoins.
+      </li>
+      <li>
+          Saisir les articles. Il est possible de saisir le minimum lors de la création, puis de compléter
+          plus tard en ajoutant photos, prix d'achat etc.
+      </li>
+    </ol>
+
+
+
 </div>
 {% endblock %}
