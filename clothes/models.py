@@ -11,7 +11,7 @@ class ClothesCategory(MPTTModel):
 
     class Meta:
         ordering = ['tree_id', 'lft']
-        verbose_name = 'Catégorie accessoire'
+        verbose_name = "Catégorie d'habit"
         verbose_name_plural = 'Catégories'
 
     def __str__(self):
