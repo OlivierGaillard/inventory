@@ -48,7 +48,7 @@ class LocaliteUpdateForm(forms.ModelForm):
 
 
 class ArrivageCreateForm(forms.ModelForm):
-
+    devise = CoolCurrencyChoiceField(queryset=Currency.objects.filter(used=True))
     class Meta:
         model = Arrivage
         fields = ('date', 'designation', 'devise',)
