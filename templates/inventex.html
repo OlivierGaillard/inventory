@@ -53,6 +53,13 @@
                         <li><a href="{% url "accessories:inventory-list" %}" title="Visualiser un inventaire, par défaut le plus récent est affiché.">Afficher un inventaire</a></li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sorties<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" title="saisir une vente">Saisir une vente</a></li>
+                        <li><a href="#" title="afficher les ventes">Afficher les ventes</a></li>
+                    </ul>
+                </li>
                 <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
                     <li><a href="{% url "accounts:logout" %}"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
