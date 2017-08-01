@@ -2,8 +2,12 @@
 {% load static %}
 {% block content %}
 <div id="bienvenue" class="container">
-<h1>Bienvenue!</h1>
-
+    {% if request.user.is_authenticated %}
+    <h1>Bienvenue {{ user.first_name|default:user.username }}!</h1>
+    {% else %}
+    <h1>Bienvenue!</h1>
+    {% endif %}
+    
     <h2>Ce qu'offre ce site</h2>
 
     <p class="alert alert-info">Le but du site est de permettre l'établissement d'inventaires afin d'informer sur
