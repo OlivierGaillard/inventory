@@ -1,8 +1,22 @@
 from django.contrib import admin
 from django_mptt_admin.admin import DjangoMpttAdmin
+from mptt.admin import DraggableMPTTAdmin
 from .models import Accessory, AccessoryEntry, InventoryAccessory, AccessoryCategory, Photo
 
 # Register your models here.
+
+admin.site.register(
+    AccessoryCategory,
+    DraggableMPTTAdmin,
+    list_display=(
+        'tree_actions',
+        'indented_title',
+        # ...more fields if you feel like it...
+    ),
+    list_display_links=(
+        'indented_title',
+    ),
+)
 
 class AcessoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'marque_ref']
@@ -18,7 +32,6 @@ class InventoryAccessoryAdmin(admin.ModelAdmin):
 
 admin.site.register(InventoryAccessory, InventoryAccessoryAdmin)
 
-admin.site.register(AccessoryCategory)
 
 class PhotoAdmin(admin.ModelAdmin):
     list_display = ['legende', 'photo']
