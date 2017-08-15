@@ -3,8 +3,9 @@ from django.utils import timezone
 from django.db.models import Sum
 from coordinates.models import Arrivage
 from mptt.models import MPTTModel
-from mptt.fields import TreeForeignKey, TreeManyToManyField
-from finance.models import Achat
+from mptt.fields import TreeForeignKey
+
+
 
 # Create your models here.
 class Entree(models.Model):
@@ -171,7 +172,9 @@ class Inventory(models.Model):
 
 
 
+
 class Product(models.Model):
+
 
     class Meta:
         abstract = True
@@ -187,8 +190,9 @@ class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nom du modèle')
     marque_ref = models.ForeignKey(Marque, null=True, blank=True, help_text='Choix des marques')
     arrivage = models.ForeignKey(Arrivage, null=True)
-    prix_achat = models.OneToOneField(Achat, null=True, blank=True, verbose_name="Prix d'achat unitaire")
+    prix_achat = models.OneToOneField('finance.Achat', null=True, blank=True, verbose_name="Prix d'achat unitaire")
     date_ajout = models.DateField(auto_created=True, default=timezone.now)
+
 
     def __str__(self):
         return self.name
@@ -225,6 +229,7 @@ class Product(models.Model):
         """Can be implemented by the concrete class if it has its own Marque"""
         raise NotImplementedError('Children classes of "Product" can implement get_marque_class')
 
+
     def update_marque_ref(self, marque, marque_ref):
         """Update the foreign key to marque, eventually creates a new Marque."""
         try:
@@ -240,6 +245,5 @@ class Product(models.Model):
         else:
              self.marque_ref = cls_marque.objects.get(pk=marque_ref)
              self.save()
-
 
 

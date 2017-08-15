@@ -1,0 +1,806 @@
+[
+{
+  "model": "accessories.accessorycategory",
+  "pk": 7,
+  "fields": {
+    "parent": null,
+    "title": "Accessoires femme",
+    "lft": 1,
+    "rght": 104,
+    "tree_id": 1,
+    "level": 0
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 8,
+  "fields": {
+    "parent": null,
+    "title": "Accessoires homme",
+    "lft": 1,
+    "rght": 30,
+    "tree_id": 2,
+    "level": 0
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 9,
+  "fields": {
+    "parent": 7,
+    "title": "Ceintures",
+    "lft": 2,
+    "rght": 11,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 10,
+  "fields": {
+    "parent": 7,
+    "title": "Chapeaux et bonnets",
+    "lft": 12,
+    "rght": 21,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 11,
+  "fields": {
+    "parent": 7,
+    "title": "Foulards & Echarpes",
+    "lft": 22,
+    "rght": 29,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 12,
+  "fields": {
+    "parent": 7,
+    "title": "Gants",
+    "lft": 30,
+    "rght": 31,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 13,
+  "fields": {
+    "parent": 7,
+    "title": "Lunettes de soleil",
+    "lft": 32,
+    "rght": 33,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 14,
+  "fields": {
+    "parent": 7,
+    "title": "Pochettes",
+    "lft": 34,
+    "rght": 35,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 15,
+  "fields": {
+    "parent": 7,
+    "title": "Portefeuilles & Etuis",
+    "lft": 36,
+    "rght": 45,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 17,
+  "fields": {
+    "parent": 44,
+    "title": "Sacs \u00e0 main",
+    "lft": 63,
+    "rght": 64,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 18,
+  "fields": {
+    "parent": 44,
+    "title": "Sacs de voyage",
+    "lft": 65,
+    "rght": 66,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 19,
+  "fields": {
+    "parent": 8,
+    "title": "Bijoux",
+    "lft": 2,
+    "rght": 3,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 20,
+  "fields": {
+    "parent": 8,
+    "title": "Ceintures",
+    "lft": 4,
+    "rght": 5,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 21,
+  "fields": {
+    "parent": 8,
+    "title": "Chapeaux et bonnets",
+    "lft": 6,
+    "rght": 7,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 22,
+  "fields": {
+    "parent": 8,
+    "title": "Cravates",
+    "lft": 8,
+    "rght": 9,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 23,
+  "fields": {
+    "parent": 8,
+    "title": "Foulards & Echarpes",
+    "lft": 10,
+    "rght": 11,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 24,
+  "fields": {
+    "parent": 8,
+    "title": "Gants & Moufles",
+    "lft": 12,
+    "rght": 13,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 25,
+  "fields": {
+    "parent": 8,
+    "title": "Lunettes de soleil",
+    "lft": 14,
+    "rght": 15,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 26,
+  "fields": {
+    "parent": 8,
+    "title": "Montres",
+    "lft": 16,
+    "rght": 17,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 27,
+  "fields": {
+    "parent": 8,
+    "title": "Portefeuilles",
+    "lft": 18,
+    "rght": 19,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 28,
+  "fields": {
+    "parent": 8,
+    "title": "Sacs & Valises",
+    "lft": 20,
+    "rght": 21,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 29,
+  "fields": {
+    "parent": 8,
+    "title": "Casquettes",
+    "lft": 22,
+    "rght": 23,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 30,
+  "fields": {
+    "parent": 8,
+    "title": "Casques & Ecouteurs",
+    "lft": 24,
+    "rght": 25,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 31,
+  "fields": {
+    "parent": 8,
+    "title": "Sacs \u00e0 dos",
+    "lft": 26,
+    "rght": 27,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 32,
+  "fields": {
+    "parent": 8,
+    "title": "Smart Watches",
+    "lft": 28,
+    "rght": 29,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 33,
+  "fields": {
+    "parent": 7,
+    "title": "Bijoux",
+    "lft": 46,
+    "rght": 61,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 34,
+  "fields": {
+    "parent": 33,
+    "title": "Bagues",
+    "lft": 47,
+    "rght": 48,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 35,
+  "fields": {
+    "parent": 33,
+    "title": "Bracelets",
+    "lft": 49,
+    "rght": 50,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 36,
+  "fields": {
+    "parent": 33,
+    "title": "Boucles d'oreilles",
+    "lft": 51,
+    "rght": 52,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 37,
+  "fields": {
+    "parent": 33,
+    "title": "Colliers",
+    "lft": 53,
+    "rght": 54,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 39,
+  "fields": {
+    "parent": 33,
+    "title": "Montres",
+    "lft": 55,
+    "rght": 56,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 40,
+  "fields": {
+    "parent": 9,
+    "title": "Ceintures classiques",
+    "lft": 3,
+    "rght": 4,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 41,
+  "fields": {
+    "parent": 9,
+    "title": "Ceintures d\u00e9tente",
+    "lft": 5,
+    "rght": 6,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 42,
+  "fields": {
+    "parent": 9,
+    "title": "Ceintures taille haute",
+    "lft": 7,
+    "rght": 8,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 43,
+  "fields": {
+    "parent": 9,
+    "title": "Ceintures tress\u00e9es",
+    "lft": 9,
+    "rght": 10,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 44,
+  "fields": {
+    "parent": 7,
+    "title": "Sacs & Valises",
+    "lft": 62,
+    "rght": 95,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 45,
+  "fields": {
+    "parent": 51,
+    "title": "Etuis portable",
+    "lft": 78,
+    "rght": 79,
+    "tree_id": 1,
+    "level": 3
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 46,
+  "fields": {
+    "parent": 44,
+    "title": "Cabas",
+    "lft": 67,
+    "rght": 68,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 47,
+  "fields": {
+    "parent": 44,
+    "title": "Sacs bandouli\u00e8re",
+    "lft": 69,
+    "rght": 70,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 48,
+  "fields": {
+    "parent": 44,
+    "title": "Sacs ordinateur",
+    "lft": 71,
+    "rght": 72,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 49,
+  "fields": {
+    "parent": 44,
+    "title": "Sacs de sport",
+    "lft": 73,
+    "rght": 74,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 50,
+  "fields": {
+    "parent": 44,
+    "title": "Sacs \u00e0 dos",
+    "lft": 75,
+    "rght": 76,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 51,
+  "fields": {
+    "parent": 44,
+    "title": "Pochettes & Etuis",
+    "lft": 77,
+    "rght": 82,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 52,
+  "fields": {
+    "parent": 44,
+    "title": "Sacs de voyage & Valises",
+    "lft": 83,
+    "rght": 94,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 53,
+  "fields": {
+    "parent": 51,
+    "title": "Sacs banane",
+    "lft": 80,
+    "rght": 81,
+    "tree_id": 1,
+    "level": 3
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 54,
+  "fields": {
+    "parent": 52,
+    "title": "Sacs de voyage",
+    "lft": 84,
+    "rght": 85,
+    "tree_id": 1,
+    "level": 3
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 55,
+  "fields": {
+    "parent": 52,
+    "title": "Sacs weekend",
+    "lft": 86,
+    "rght": 87,
+    "tree_id": 1,
+    "level": 3
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 56,
+  "fields": {
+    "parent": 52,
+    "title": "Valises",
+    "lft": 88,
+    "rght": 89,
+    "tree_id": 1,
+    "level": 3
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 57,
+  "fields": {
+    "parent": 52,
+    "title": "Bagages \u00e0 main",
+    "lft": 90,
+    "rght": 91,
+    "tree_id": 1,
+    "level": 3
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 58,
+  "fields": {
+    "parent": 52,
+    "title": "Trousses de toilette",
+    "lft": 92,
+    "rght": 93,
+    "tree_id": 1,
+    "level": 3
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 59,
+  "fields": {
+    "parent": 7,
+    "title": "Montres",
+    "lft": 96,
+    "rght": 103,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 60,
+  "fields": {
+    "parent": 59,
+    "title": "Montres \u00e0 affichage anlalogique",
+    "lft": 97,
+    "rght": 98,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 61,
+  "fields": {
+    "parent": 59,
+    "title": "Montres num\u00e9riques",
+    "lft": 99,
+    "rght": 100,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 62,
+  "fields": {
+    "parent": 59,
+    "title": "Chronographes",
+    "lft": 101,
+    "rght": 102,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 63,
+  "fields": {
+    "parent": 33,
+    "title": "Pendentifs",
+    "lft": 57,
+    "rght": 58,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 64,
+  "fields": {
+    "parent": 33,
+    "title": "Bijoux pour cheveux",
+    "lft": 59,
+    "rght": 60,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 65,
+  "fields": {
+    "parent": 10,
+    "title": "Bonnets",
+    "lft": 13,
+    "rght": 14,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 66,
+  "fields": {
+    "parent": 10,
+    "title": "Casquettes",
+    "lft": 15,
+    "rght": 16,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 67,
+  "fields": {
+    "parent": 10,
+    "title": "Chapeaux",
+    "lft": 17,
+    "rght": 18,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 68,
+  "fields": {
+    "parent": 10,
+    "title": "Cache-oreilles",
+    "lft": 19,
+    "rght": 20,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 69,
+  "fields": {
+    "parent": 11,
+    "title": "Foulards",
+    "lft": 23,
+    "rght": 24,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 70,
+  "fields": {
+    "parent": 11,
+    "title": "Echarpes",
+    "lft": 25,
+    "rght": 26,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 71,
+  "fields": {
+    "parent": 11,
+    "title": "Echarpes rondes",
+    "lft": 27,
+    "rght": 28,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 72,
+  "fields": {
+    "parent": 15,
+    "title": "Portefeuilles",
+    "lft": 37,
+    "rght": 38,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 73,
+  "fields": {
+    "parent": 15,
+    "title": "Portes-clefs & Etuis",
+    "lft": 39,
+    "rght": 40,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 74,
+  "fields": {
+    "parent": 15,
+    "title": "Etuis carte de visite",
+    "lft": 41,
+    "rght": 42,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "accessories.accessorycategory",
+  "pk": 75,
+  "fields": {
+    "parent": 15,
+    "title": "Etuis pour passeport",
+    "lft": 43,
+    "rght": 44,
+    "tree_id": 1,
+    "level": 2
+  }
+}
+]

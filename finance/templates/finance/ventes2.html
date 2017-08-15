@@ -1,0 +1,7 @@
+{% extends "inventex.html" %}
+{% load render_table from django_tables2 %}
+{% block content %}
+
+<h1>Ventes</h1>
+{% render_table table %}
+ {% endblock %}

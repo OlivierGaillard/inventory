@@ -1,9 +1,8 @@
 import datetime
 from django.db import models
 from django.utils import timezone
-from django.templatetags.l10n import localize
 from django.core.validators import RegexValidator
-from finance.models import Currency
+#from finance.models import Currency
 
 # Create your models here.
 class Pays(models.Model):
@@ -46,17 +45,18 @@ class Adresse(models.Model):
 
 class Phone(models.Model):
     phone_types = [
-        (1, 'Mobile'),
-        (2, 'Bureau'),
-        (3, 'Domicile'),
+        ('1', 'Mobile'),
+        ('2', 'Bureau'),
+        ('3', 'Domicile'),
     ]
+    # TODO: adapt the regex to the faker format wich make spaces
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Format: '+999999999'. Maximum 15 chiffres.")
     phone_number = models.CharField(max_length=15, validators=[phone_regex], blank=True)
-    phone_type  = models.CharField(max_length=10, choices=phone_types , default=1,)
+    phone_type  = models.CharField(max_length=10, choices=phone_types, default='1')
 
     def __str__(self):
-        return self.phone_number # + ' (' + self.phone_type
+        return self.get_phone_type_display() + ' ' + self.phone_number
 
 class ContactPhone(Phone):
     contact = models.ForeignKey('Contact')
@@ -66,17 +66,16 @@ class Contact(models.Model):
     prenom    = models.CharField(max_length=80)
     nom       = models.CharField(max_length=80)
     email     = models.EmailField(help_text='Email du contact', null=True, blank=True)
+
+    class Meta:
+        ordering = ['nom']
     
     def __str__(self):
         return self.prenom + ' ' + self.nom
 
     def phones(self):
-        phones_list = []
-        for phone in self.contactphone_set.all():
-            phones_list.append(phone.phone_types[int(phone.phone_type)] [1])
-            phones_list.append(phone.phone_number)
-            phones_list.append(' / ')
-        return phones_list
+        return [p for p in self.contactphone_set.all()]
+
     
 class Fournisseur(models.Model):
     nom_entreprise   = models.CharField(max_length=80)
@@ -101,13 +100,12 @@ class Arrivage(models.Model):
                                     input_formats=['%d/%m/%Y'])
     locations = Localite.objects.all()
     default_location = locations.get(nom='Dubaï')
-    lieu_provenance = forms.ModelChoiceField(locations, initial=default_location)
     """
     date = models.DateField(unique=True, default=timezone.now)
     designation = models.CharField(max_length=30, verbose_name="désignation")
     pays = models.ForeignKey(Pays, blank=True, null=True)
     lieu_provenance = models.ForeignKey(Localite, blank=True, null=True, verbose_name='Localité')
-    devise = models.ForeignKey(Currency, null=True, help_text='Devise principale')
+    devise = models.ForeignKey('finance.Currency', null=True, help_text='Devise principale')
     #fournisseur = models.ForeignKey(Fournisseur, default=Fournisseur.get_first())
 
     class Meta:

@@ -3,3 +3,4 @@ from .models import Marque
 
 # Register your models here.
 admin.site.register(Marque)
+

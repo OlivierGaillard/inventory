@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand, CommandError
 from finance.models import Currency, Converter
 
 class Command(BaseCommand):
+    """ Get currencies from webservice with Converter and load them (updating or creating) in database."""
     help = 'Get currencies from webservice with Converter and load them (updating or creating) in database.'
 
     def handle(self, *args, **options):

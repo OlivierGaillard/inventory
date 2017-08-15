@@ -17,7 +17,9 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ('prenom', 'nom', 'phones', 'email')
 admin.site.register(Contact, ContactAdmin)
 
-admin.site.register(ContactPhone)
+class ContactPhoneAdmin(admin.ModelAdmin):
+    list_display = ('contact', 'phone_number', 'phone_type')
+admin.site.register(ContactPhone, ContactPhoneAdmin)
 
 class FournisseurAdmin(admin.ModelAdmin):
     list_display = ('nom_entreprise', 'contact', 'adresse', 'email')

@@ -42,7 +42,7 @@
           <td> <a title="Cliquer pour voir les détails" href="{% url "accessories:detail" a.pk %}">{{ a.name }}</a>  </td>
           <td>{{ a.categories.last }}</td>
           <td>{{ a.marque_ref }}</td>
-          <td>{{ a.get_quantity }}</td>
+          <td> <a title="Vendre" href="{% url "finance:create_vente" a.pk 'Accessory' %}">{{ a.get_quantity }}</a>   </td>
           {% if perms.accessories.view_achat %}
              <td>{{a.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>
           {% endif %}

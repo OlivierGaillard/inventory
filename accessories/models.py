@@ -29,6 +29,7 @@ class AccessoryMarque(models.Model):
     class Meta:
         ordering = ['nom_marque']
 
+
 class Accessory(Product):
     categories = TreeManyToManyField(AccessoryCategory, verbose_name='Catégorie accessoire')
     marque_ref = models.ForeignKey(AccessoryMarque, null=True, blank=True, help_text='Choix des marques')
@@ -51,6 +52,7 @@ class Accessory(Product):
     def get_marque_class(self):
         """Return the class AccessoryMarque"""
         return AccessoryMarque
+
 
 
 class Photo(models.Model):

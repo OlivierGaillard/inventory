@@ -1,14 +1,17 @@
-from django.db import models
 from django.utils import timezone
-from _locale import CODESET
+from django.db import models
 from money import Money, xrates
 import pickle
 from decimal import Decimal
 import requests
-import json
-from django.utils import timezone  
+from django.utils import timezone
 from django.conf import settings
 import os
+from coordinates.models import Arrivage
+from accessories.models import Accessory, AccessoryOutput
+from clothes.models import Clothes, ClothesOutput
+from shoes.models import Shoe, ShoeOutput
+
 
     
 class Converter():
@@ -152,6 +155,57 @@ class Achat(models.Model):
         return str(self.montant) + ' ' + self.devise_id.currency_code
 
 
+class ProductType(models.Model):
+    """
+    This one is required for selling. The basic fixture with the 3 product types
+    is available under the directory finance/fixtures/ in file 'productTypes.json'.
+    To load the file into database:
+    python manage.py loaddata ./finance/fixtures/productTypes.json
+    """
+    model_class = models.CharField(max_length=50, default='Clothes')
+    label_name  = models.CharField(max_length=50, default='Habits')
+
+    def __str__(self):
+        #return "Class: %s / Label name: %s" % (self.model_class, self.label_name)
+        return self.label_name
+
+    def get_concrete_class(self):
+        return eval(str(self.model_class))
+
+
+
+
+class Vente(models.Model):
+
+    date_vente       = models.DateField(default=timezone.now)
+    quantity         = models.PositiveSmallIntegerField()
+    client_id        = models.ForeignKey('coordinates.Contact')
+    product_id       = models.PositiveSmallIntegerField()
+    product_type     = models.ForeignKey(ProductType, null=True)
+
+    class Meta:
+        ordering = ['-date_vente']
+
+
+    def save(self):
+        output_cls_name = str(self.product_type.model_class) + 'Output'
+        output_cls = eval(output_cls_name)
+        product_cls = self.product_type.get_concrete_class()
+        article = product_cls.objects.get(pk=self.product_id)
+        output_cls.objects.create(article=article, date=self.date_vente, quantity=self.quantity)
+        return super(Vente,self).save()
+
+
+    def __str__(self):
+        s = "Client: %s - article-ID: %s - type de produit: %s - quantité: %s - date: %s"
+        client = 'N.D.'
+        if self.client_id is not None:
+            first_name = self.client_id.prenom
+            last_name  = self.client_id.nom
+            client = first_name + ' ' + last_name
+        s = s % (client, str(self.product_id), self.product_type, str(self.quantity), str(self.date_vente))
+        return s
+
 
 class FraisType(models.Model):
     nom = models.CharField(max_length=80)
@@ -181,7 +235,7 @@ class Frais(models.Model):
         
         
 class FraisArrivage(Frais):
-    arrivage_ref = models.ForeignKey('coordinates.Arrivage', null=True)
+    arrivage_ref = models.ForeignKey(Arrivage, null=True)
 
     class Meta:
         ordering = ['arrivage_ref', '-date_frais']

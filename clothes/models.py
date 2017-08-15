@@ -5,6 +5,7 @@ from mptt.models import TreeManyToManyField, TreeForeignKey
 from products.models import Product, Entree, Sortie, Inventory
 
 
+
 class ClothesCategory(MPTTModel):
     parent = TreeForeignKey('self', blank=True, null=True)
     title  = models.CharField(max_length=200)
@@ -20,6 +21,8 @@ class ClothesCategory(MPTTModel):
     def get_absolute_url(self):
         return reverse('clothes:category-list')
 
+
+
 class Clothes(Product):
     categories = TreeManyToManyField(ClothesCategory, verbose_name="Catégorie d'habits")
 
@@ -34,6 +37,7 @@ class Clothes(Product):
 
     def get_absolute_url(self):
         return reverse('clothes:detail', kwargs={'pk' : self.pk})
+
 
 
 class Photo(models.Model):

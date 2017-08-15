@@ -1,23 +1,34 @@
 import os
-from django.conf.urls.static import static
 from django.contrib.auth.models import Permission, User, Group
 from django.contrib.contenttypes.models import ContentType
-from django.http import HttpRequest
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 from datetime import date
-from thumbnails import get_thumbnail
-from django.conf import settings
+from faker import Factory, Faker
+from faker.providers import BaseProvider
+import random
 from finance.models import Currency
 from products.models import BadCreationDateException, Marque
 from .models import Accessory, AccessoryMarque, AccessoryCategory, AccessoryEntry, AccessoryOutput, InventoryAccessory
 from .forms import AccessoryForm, AccessoryCategoryForm, AccessoryUpdateForm
 from .views import AccessoryCreationView, AccessoryUpdateView
-
+from finance.models import Vente
 
 from coordinates.models import Arrivage
+
+
+class CategoryProvider(BaseProvider):
+    def category(self):
+        ids_L = [a.id for a in AccessoryCategory.objects.all()]
+        return AccessoryCategory.objects.get(id=random.choice(ids_L))
+
+
 # Create your tests here.
 class TestAccessoryInventory(TestCase):
+
+    fixtures = ['accessoryCategories.json']
+
+
 
     def setUp(self):
 
@@ -43,7 +54,7 @@ class TestAccessoryInventory(TestCase):
         self.arrivage.save()
 
 
-        self.chf = Currency.objects.create(currency_code='CHF', rate_usd=0.9981)
+        self.chf = Currency.objects.create(currency_code='CHF', rate_usd=0.9981, used=True)
         self.hublot = AccessoryMarque.objects.create(nom_marque = 'Hublot')
         self.constant = AccessoryMarque.objects.create(nom_marque = 'Constant')
 
@@ -78,7 +89,7 @@ class TestAccessoryInventory(TestCase):
         """Tester les dates d'entrée et de sortie d'un exemplaire.
         Ce test suggère cette procédure:
         1. on crée un article.
-        2. on crée une entrée.
+        2. on crée une entrée
         3. on génère un inventaire pour obtenir une mise à jour des quantités.
         Il est requis de pouvoir interroger sur l'état des stocks sans passer
         par la création d'un inventaire. On peut le faire simplement avec une
@@ -130,7 +141,8 @@ class TestAccessoryInventory(TestCase):
         self.assertEqual(2, inventory.get_quantity(a1, self.start_date, date.today()))
         #
 
-        #
+
+
 
     def test_view_create_accessory(self):
         c = Client()
@@ -153,7 +165,7 @@ class TestAccessoryInventory(TestCase):
 
         response = c.post(reverse('accessories:create'), data,
                                         follow=True)
-        print(response.status_code)
+        #print(response.status_code)
         # Check if entries were created.
         # There is only one because in the tests' Setup we only create Accessory
         # instances of model 'Accessory' without quantity.
@@ -225,7 +237,7 @@ class TestAccessoryInventory(TestCase):
                 'quantity': '10',
                 'arrivage': self.arrivage.id}
         form = AccessoryForm(data)
-        print(form.errors.as_data())
+        #print(form.errors.as_data())
         self.assertTrue(form.is_valid())
 
     def test_add_new_marque_for_new_accessory(self):

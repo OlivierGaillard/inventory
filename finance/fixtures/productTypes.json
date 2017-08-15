@@ -1,0 +1,26 @@
+[
+{
+  "model": "finance.producttype",
+  "pk": 1,
+  "fields": {
+    "model_class": "Clothes",
+    "label_name": "Habits"
+  }
+},
+{
+  "model": "finance.producttype",
+  "pk": 2,
+  "fields": {
+    "model_class": "Shoe",
+    "label_name": "Chaussures"
+  }
+},
+{
+  "model": "finance.producttype",
+  "pk": 3,
+  "fields": {
+    "model_class": "Accessory",
+    "label_name": "Accessoires"
+  }
+}
+]

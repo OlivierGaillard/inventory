@@ -1,0 +1,27 @@
+{% extends "inventex.html" %}
+{% load thumbnails %}
+{% block content %}
+<h1>Ajouter une vente de l'article <em>{{ article.name }}</em></h1>
+<p class="center-block">
+<div class="pic_container">
+    <table class="table">
+        <tr>
+    {% for image in article.photo_set.all %}
+
+    {% get_thumbnail image.photo.path  "100x100" crop="center" as thumbnail %}
+            <td>
+                <div class="pic">
+                    <a href="{{ image.photo.url }}" alt="{{image.legende|default_if_none:''}}">
+                        <img src="{{ thumbnail.url }}" alt="The thumbnail" style="width: {{ thumbnail.width }}">
+                    </a>
+                </div>
+            </td>
+            {% endfor %}
+        </tr>
+    </table>
+</div>
+</p>
+
+{% load crispy_forms_tags %}
+{% crispy form %}
+{% endblock %}

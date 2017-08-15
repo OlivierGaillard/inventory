@@ -1,18 +1,24 @@
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.utils.decorators import method_decorator
-
+from django.http import HttpResponse
 from django.forms import modelformset_factory
 from crispy_forms.layout import Submit
 from django.shortcuts import reverse, render
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, DeleteView, UpdateView, ListView, FormView
+from django.views import View
 from django_filters.views import FilterView
-from money import Money
 from coordinates.models import Arrivage
-from .models import FraisArrivage, Currency, Converter
-from .forms import FraisArrivageCreateForm, FraisArrivageFormSetHelper, FraisArrivageUpdateForm, CurrencyUsageForm
+from .models import FraisArrivage, Currency, Converter, Vente, ProductType
+from .forms import FraisArrivageCreateForm, FraisArrivageFormSetHelper, FraisArrivageUpdateForm, CurrencyUsageForm, VenteCreateForm
 from .filters import FraisArrivageFilter
+from .models import Vente
+from .tables import VenteTable
+from django_tables2 import RequestConfig
+
+from crispy_forms.bootstrap import PrependedText
+from crispy_forms.layout import  Hidden
 
 
 @method_decorator(login_required, name='dispatch')
@@ -176,5 +182,126 @@ class CurrencyListView(ListView):
     model = Currency
     template_name = 'finance/currencies.html'
     context_object_name = 'currencies'
+
+# class VenteListView(ListView):
+#     model = Vente
+#     template_name = 'finance/ventes.html'
+#     context_object_name = 'sellings'
+
+def ventes(request):
+    table = VenteTable(Vente.objects.all())
+    RequestConfig(request).configure(table)
+    return render(request, 'finance/ventes.html', {'table' : table})
+
+
+# class VenteCreateView(CreateView):
+#     template_name = 'finance/create_vente.html'
+#     context_object_name = 'selling'
+#     model = Vente
+#     form_class = VenteCreateForm
+#
+#
+#     def get_success_url(self):
+#         return reverse('finance/ventes.html')
+#
+#     def get_initial(self):
+#
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(VenteCreateView, self).get_context_data(**kwargs)
+#         product_id = self.request.GET.get('pk', '')
+#         context['product_id'] = product_id
+#         return context
+
+def make_selling(request, product_id, product_type):
+    """
+    This view allows the user to enter quantity and client for a selling.
+
+    Keyword arguments:
+
+    product_id   -- the primary key of one article of type product_type.
+
+    product_type -- one instance of the model finance.ProductType. The three used
+    in this application are:
+
+    1. Clothes
+
+    2. Shoe
+
+    3. Accessory
+
+    The field 'client_id' is a foreign key to the model coordinates.Contact. It
+    has a drop-down list to choose from.
+    """
+
+    def get_concrete_article_and_product_type(product_type, product_id):
+        product_type = ProductType.objects.get(model_class=product_type)
+        product_cls = product_type.get_concrete_class()
+        article = product_cls.objects.get(pk=product_id)
+        remaining = article.get_quantity()
+        return (article, product_type, remaining)
+
+    if request.method == 'GET':
+        article, product_type, remaining = get_concrete_article_and_product_type(product_type, product_id)
+        data = {'product_id' : product_id,
+                'product_type' : product_type.pk,
+                'quantity' : '1'}
+
+        form = VenteCreateForm(data)
+        form.helper.layout.append(PrependedText('quantity', 'Max: ' + str(remaining)))
+        return render(request, "finance/create_vente.html", {'form': form, 'article' : article})
+
+    else:
+        form = VenteCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('finance:ventes'))
+        else:
+            article, product_type, remaining = get_concrete_article_and_product_type(product_type, product_id)
+            form.helper.layout.append(PrependedText('quantity', 'Max: ' + str(remaining)))
+            return render(request, "finance/create_vente.html", {'form': form, 'article': article})
+
+
+class SellingView(FormView):
+
+    form_class = VenteCreateForm
+    template_name = "finance/create_vente.html"
+
+    def get_concrete_article_and_product_type(self, product_type, product_id):
+        product_type = ProductType.objects.get(model_class=product_type)
+        product_cls = product_type.get_concrete_class()
+        article = product_cls.objects.get(pk=product_id)
+        remaining = article.get_quantity()
+        return (article, product_type, remaining)
+
+
+    def get(self, request, *args, **kwargs):
+        product_id   = kwargs['product_id']
+        product_type = kwargs['product_type']
+        article, product_type, remaining = self.get_concrete_article_and_product_type(product_type, product_id)
+
+        data = {'product_id': product_id,
+                'product_type': product_type.pk}
+
+        print(data)
+        form = self.form_class(initial=data)
+        # form.helper.layout.append(Hidden('product_type', product_type.pk))
+        # form.helper.layout.append(Hidden('product_id',   str(product_id)))
+
+        form.helper.layout.append(PrependedText('quantity', 'Max: ' + str(remaining)))
+        return render(request, self.template_name, {'form': form, 'article': article, 'remaining' : remaining})
+
+    def post(self, request, *args, **kwargs):
+        form = VenteCreateForm(request.POST)
+        print(form.is_bound)
+        print(form.cleaned_data())
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('finance:ventes'))
+        else:
+            product_id   = kwargs['product_id']
+            product_type = kwargs['product_type']
+            article, product_type, remaining = self.get_concrete_article_and_product_type(product_type, product_id)
+            return render(request, self.template_name, {'form': form, 'article': article, 'remaining': remaining})
 
 
