@@ -50,9 +50,9 @@ class Phone(models.Model):
         ('3', 'Domicile'),
     ]
     # TODO: adapt the regex to the faker format wich make spaces
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
-                                 message="Format: '+999999999'. Maximum 15 chiffres.")
-    phone_number = models.CharField(max_length=15, validators=[phone_regex], blank=True)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,20}$',
+                                 message="Format: '+999999999'. Maximum 20 chiffres.")
+    phone_number = models.CharField(max_length=20, validators=[phone_regex], blank=True)
     phone_type  = models.CharField(max_length=10, choices=phone_types, default='1')
 
     def __str__(self):
