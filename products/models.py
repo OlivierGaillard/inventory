@@ -224,6 +224,14 @@ class Employee(models.Model):
             employee = Employee.objects.get(user=user)
             return employee.enterprise
 
+    def is_current_user_employee(user):
+        if Employee.objects.filter(user=user).exists():
+            employee = Employee.objects.get(user=user)
+            return employee.enterprise != None
+        else:
+            return False
+
+
     def __str__(self):
         if self.enterprise is not None:
             return self.user.username + ': ' + str(self.enterprise)

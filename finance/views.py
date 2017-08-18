@@ -187,6 +187,7 @@ class CurrencyListView(ListView):
 #     template_name = 'finance/ventes.html'
 #     context_object_name = 'sellings'
 
+@login_required
 def ventes(request):
     table = VenteTable(Vente.objects.all())
     RequestConfig(request).configure(table)
@@ -212,6 +213,7 @@ def ventes(request):
 #         context['product_id'] = product_id
 #         return context
 
+@login_required
 def make_selling(request, product_id, product_type):
     """
     This view allows the user to enter quantity and client for a selling.

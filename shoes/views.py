@@ -8,14 +8,20 @@ from .models import Shoe, ShoeEntry, ShoeCategory, InventoryShoe, Photo
 from .forms import ShoeForm, CategoryForm, CategoryUpdateForm, InventoryShoeForm, AddPhotoForm, ShoeUpdateForm
 from coordinates.models import Arrivage
 from products.models import Employee
+from django.contrib.auth.mixins import UserPassesTestMixin
 
-class ShoeListView(ListView):
+@method_decorator(login_required, name='dispatch')
+class ShoeListView(UserPassesTestMixin, ListView):
     model = Shoe
     template_name = 'shoes/list.html'
     context_object_name = 'shoes'
 
     def get_queryset(self):
         return Shoe.objects.filter(product_owner=Employee.get_enterprise_of_current_user(self.request.user).pk)
+
+    def test_func(self):
+        return  Employee.is_current_user_employee(self.request.user)
+
 
 
 

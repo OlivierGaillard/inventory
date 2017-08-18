@@ -8,15 +8,20 @@ from finance.models import Achat, Currency
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
 from products.models import Employee
+from django.contrib.auth.mixins import UserPassesTestMixin
 
-# Create your views here.
-class ClothesListView(ListView):
+@method_decorator(login_required, name='dispatch')
+class ClothesListView(UserPassesTestMixin, ListView):
     model = Clothes
     template_name = 'clothes/list.html'
     context_object_name = 'clothes'
 
     def get_queryset(self):
         return Clothes.objects.filter(product_owner=Employee.get_enterprise_of_current_user(self.request.user).pk)
+
+    def test_func(self):
+        return  Employee.is_current_user_employee(self.request.user)
+
 
 
 @method_decorator(login_required, name='dispatch')

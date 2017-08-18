@@ -16,17 +16,6 @@ from .forms import AddPhotoForm, CategoryUpdateForm
 from products.models import Employee, Enterprise
 
 
-def get_enterprise_of_current_user(user):
-    """
-    Try to get the enterprise of the user.
-
-    Note: should be checked after the login.
-    """
-    if Employee.objects.filter(user=user).exists():
-        employee = Employee.objects.get(user=user)
-        return employee.enterprise
-
-
 @method_decorator(login_required, name='dispatch')
 class AccessoryCreationView(CreateView):
     """
@@ -71,22 +60,10 @@ class AccessoryListView(UserPassesTestMixin, ListView):
     template_name = 'accessories/list.html'
     context_object_name = 'accessoires'
 
-    def get_enterprise_of_current_user(self, user):
-        """
-        Try to get the enterprise of the user.
-
-        Note: should be checked after the login.
-        """
-        if Employee.objects.filter(user=user).exists():
-            employee = Employee.objects.get(user=user)
-            return employee.enterprise
-        else:
-            return """<p>Vous n'êtes enregistré comme employé/e d'aucune entreprise de ce site. Contactez votre 
-                          administrateur/trice svp.</p>"""
 
     def get_queryset(self):
         """If the enterprise of the user has no data it returns an empty list."""
-        enterprise_of_current_user = self.get_enterprise_of_current_user(self.request.user)
+        enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
         q = Accessory.objects.filter(product_owner=enterprise_of_current_user)
         if q.exists():
             return q
@@ -94,7 +71,7 @@ class AccessoryListView(UserPassesTestMixin, ListView):
             return []
 
     def get_context_data(self, **kwargs):
-        enterprise = self.get_enterprise_of_current_user(self.request.user)
+        enterprise = Employee.get_enterprise_of_current_user(self.request.user)
         accessories_list = self.get_queryset()
         context = {}
         if len(accessories_list) == 0:
@@ -105,11 +82,7 @@ class AccessoryListView(UserPassesTestMixin, ListView):
 
 
     def test_func(self):
-        if Employee.objects.filter(user=self.request.user).exists():
-            employee = Employee.objects.get(user=self.request.user)
-            return employee.enterprise != None
-        else:
-            return False
+        return  Employee.is_current_user_employee(self.request.user)
 
 
 @method_decorator(login_required, name='dispatch')
