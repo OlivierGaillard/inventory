@@ -15,6 +15,7 @@ from .forms import FraisArrivageCreateForm, FraisArrivageFormSetHelper, FraisArr
 from .filters import FraisArrivageFilter
 from .models import Vente
 from .tables import VenteTable
+from products.models import Employee
 from django_tables2 import RequestConfig
 
 from crispy_forms.bootstrap import PrependedText
@@ -22,7 +23,6 @@ from crispy_forms.layout import  Hidden
 
 
 @method_decorator(login_required, name='dispatch')
-#@method_decorator(permission_required('accessories.view_achat', raise_exception=True), name='dispatch')
 class FraisArrivageListView(PermissionRequiredMixin, FilterView):
     #model = FraisArrivage
     template_name = "finance/list.html"
@@ -31,6 +31,9 @@ class FraisArrivageListView(PermissionRequiredMixin, FilterView):
     permission_required = 'accessories.view_achat'
     raise_exception = True
 
+    def get_queryset(self):
+        enterprise = Employee.get_enterprise_of_current_user(self.request.user)
+        return FraisArrivage.objects.filter(arrivage_ref__enterprise=enterprise)
 
     def get_context_data(self, **kwargs):
         context = super(FraisArrivageListView, self).get_context_data(**kwargs)
@@ -56,10 +59,6 @@ class FraisArrivageListView(PermissionRequiredMixin, FilterView):
         context['devise_total'] = devise_total
         context['total_target'] = total
         context['devises'] = devises
-        if self.filterset.qs:
-            context['last_arrivage_ref'] = self.filterset.qs.last().arrivage_ref
-        else:
-            context['arrivageID'] = arrivage
         return context
 
 @method_decorator(login_required, name='dispatch')

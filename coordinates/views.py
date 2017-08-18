@@ -1,16 +1,14 @@
-
-from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, ListView
-from django.shortcuts import render
 from django.urls import reverse
-from django import forms
 from django.contrib.auth.decorators import permission_required, login_required
 from django.utils.decorators import method_decorator
-
+from products.models import Enterprise, Employee
 from finance.models import Currency, FraisArrivage
 from coordinates.models import Pays
 from .models import Arrivage, Fournisseur, Contact, Localite
 from .forms import ArrivageCreateForm, ArrivageUpdateForm, LocaliteCreateForm, LocaliteUpdateForm
+
+
 
 class LocationListView(ListView):
     model = Localite
@@ -42,16 +40,33 @@ class LocationDeleteView(DeleteView):
     def get_success_url(self):
         return reverse('coordinates:locations')
 
+
+
+
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('accessories.view_achat', raise_exception=True), name='dispatch')
 class ArrivageCreationView(CreateView):
+    """
+    One arrival is bounded to the enterprise of the current logged employee.
+    This information is displayed as a disabled select drop-down list.
+
+    Only users granted may create arrivals. If one user is granted but still not an
+    employee he is redirected to the part of the login page explaining this case.
+    **TODO: add the UserPassesTestMixin.**
+
+
+
+    """
     model = Arrivage
     template_name = 'coordinates/arrivage-create.html'
     form_class = ArrivageCreateForm
 
+
     def get_initial(self):
         initial = super(ArrivageCreationView, self).get_initial()
         initial['devise'] = Currency.objects.first()
+        enterprise = Employee.get_enterprise_of_current_user(self.request.user)
+        initial['enterprise'] = enterprise.pk
         return initial
 
     def get_success_url(self):
@@ -101,6 +116,10 @@ class ArrivageListView(ListView):
     model = Arrivage
     template_name = 'coordinates/arrivages.html'
     context_object_name = 'liste'
+
+    def get_queryset(self):
+        enterprise = Employee.get_enterprise_of_current_user(self.request.user)
+        return Arrivage.objects.filter(enterprise=enterprise)
 
 
 @method_decorator(login_required, name='dispatch')

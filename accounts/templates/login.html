@@ -1,5 +1,28 @@
 {% extends "inventex.html" %}
 {% block content %}
+
+{% if request.user.is_authenticated %}
+       {% if employee %}
+       <p>Votre employeur: {{employee.enterprise}}</p>
+       {% else %}
+       <div class="container">
+         <div class="jumbotron">
+
+         <h2>Pas un employé/e? Alors pas de contenu visible!</h2>
+           <p>
+             Le compte que vous utilisez n'est pas relié à un employé. Vous n'avez donc pas accès
+             au contenu de ce site. Mais peut-être avez-vous un autre compte?
+           </p>
+
+           <p>Dans ce cas veuillez vous <a href="{% url "accounts:logout" %}">déconnecter</a> puis vous
+             annoncez avec un autre nom d'utilisateur/trice, ou
+           adressez vous à votre administrateur/trice pour qu'il vous enregistre comme employé/e.
+           </p>
+
+         </div>
+       </div>
+       {% endif %}
+{% else %}
 <h1>Login</h1>
 <form action="{% url "accounts:login" %}" method="post">
   {% csrf_token %}
@@ -7,4 +30,5 @@
   <input type="hidden" name="next" value="{{ next }}"/>
   <input type="submit" value="Soumettre"/>
 </form>
+{% endif %}
 {% endblock %}

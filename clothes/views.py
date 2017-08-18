@@ -7,13 +7,17 @@ from coordinates.models import Arrivage
 from finance.models import Achat, Currency
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
-
+from products.models import Employee
 
 # Create your views here.
 class ClothesListView(ListView):
     model = Clothes
     template_name = 'clothes/list.html'
     context_object_name = 'clothes'
+
+    def get_queryset(self):
+        return Clothes.objects.filter(product_owner=Employee.get_enterprise_of_current_user(self.request.user).pk)
+
 
 @method_decorator(login_required, name='dispatch')
 class ClothesCreationView(CreateView):
@@ -30,6 +34,12 @@ class ClothesCreationView(CreateView):
             quantity=form['quantity'].value())
         self.object.update_marque_ref(form['marque'].value(), form['marque_ref'].value())
         return HttpResponseRedirect(self.get_success_url())
+
+    def get_form_kwargs(self):
+        kwargs = super(ClothesCreationView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
 
 
 

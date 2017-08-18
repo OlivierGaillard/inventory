@@ -1,5 +1,6 @@
 import os
 from django.contrib.auth.models import Permission, User, Group
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
@@ -8,12 +9,11 @@ from faker import Factory, Faker
 from faker.providers import BaseProvider
 import random
 from finance.models import Currency
-from products.models import BadCreationDateException, Marque
+from products.models import Enterprise, Employee
 from .models import Accessory, AccessoryMarque, AccessoryCategory, AccessoryEntry, AccessoryOutput, InventoryAccessory
 from .forms import AccessoryForm, AccessoryCategoryForm, AccessoryUpdateForm
-from .views import AccessoryCreationView, AccessoryUpdateView
-from finance.models import Vente
-
+from .views import AccessoryCreationView, AccessoryUpdateView, AccessoryListView
+from finance.models import Vente, Achat
 from coordinates.models import Arrivage
 
 
@@ -28,7 +28,15 @@ class TestAccessoryInventory(TestCase):
 
     fixtures = ['accessoryCategories.json']
 
+    def user_is_employee_of_enterprise(self, user, enterprise):
+        """Once the user has made her login we can filter the views.
 
+        As a consequence do we actually need to check if the user is
+        one employee? Not so sure.
+        """
+
+        employee = Employee.objects.get(user=user)
+        return employee.enterprise == enterprise
 
     def setUp(self):
 
@@ -36,15 +44,15 @@ class TestAccessoryInventory(TestCase):
         cat1 = AccessoryCategory.objects.create(parent=None, title='Valises et sacoches')
         self.cat2 = AccessoryCategory.objects.create(parent=cat1, title='Valises')
         cat3 = AccessoryCategory.objects.create(parent=cat1, title='Sacoches')
-
-        a1 = Accessory.objects.create(name='Valise-1')
+        self.enterprise_arvo = Enterprise.objects.create(name='Tabula Rasa')
+        a1 = Accessory.objects.create(name='Valise-1', product_owner=self.enterprise_arvo)
         a1.categories.add(self.cat2)
-        a2 = Accessory.objects.create(name='Sacoche-1')
+        a2 = Accessory.objects.create(name='Sacoche-1', product_owner=self.enterprise_arvo)
         a2.categories.add(self.cat2)
 
-        self.articles_li = {'a1': a1, 'a2': a2}
-        for k in self.articles_li.keys():
-            a = self.articles_li[k]
+        self.accessories_li = {'a1': a1, 'a2': a2}
+        for k in self.accessories_li.keys():
+            a = self.accessories_li[k]
             a.save()
 
         # These ones are used to test create and update forms and views.
@@ -68,22 +76,47 @@ class TestAccessoryInventory(TestCase):
         self.user_boss = 'Boss'
         boss = User.objects.create_user(username=self.user_boss, password=self.passwd)
         boss.user_permissions.set([permission])
+        grognon = Enterprise(name='grognon')
+        grognon.save()
+        employee = Employee.objects.create(user=boss, enterprise=grognon)
+
 
     def do_E(self, date_entree, a, qte):
         """ Create one Entry  with the given quantity 'qte'.
         """
-        a = self.articles_li[a]
+        a = self.accessories_li[a]
         AccessoryEntry.objects.create(article=a, date=date_entree, quantity=qte)
 
     def do_S(self, date, a, qte):
         """ Update as many 'Exemplaire' instances' date_sortie as 'qte'.
         """
-        a = self.articles_li[a]
+        a = self.accessories_li[a]
         date_sortie = date
         AccessoryOutput.objects.create(date=date, article=a, quantity=qte)
 
     def get_art(self, art_code):
-        return self.articles_li[art_code]
+        return self.accessories_li[art_code]
+
+    def test_faker(self):
+        """Make instances of Accessory using faker."""
+        fake = Factory.create('fr_FR')
+        arrivage = Arrivage(date=date(2017, 3, 1), designation=fake.region())
+        arrivage.save()
+        mnt = random.randint(20,200)
+        qte = random.randint(1,10)
+        achat = Achat(montant=mnt, quantite=qte, date_achat=fake.date_time_this_month().date(),
+                      devise_id=self.chf)
+        achat.save()
+        a = Accessory(name=fake.company(), type_client='F', arrivage=arrivage,
+                    prix_achat=achat)
+        a.save()
+        catfake = Faker()
+        catfake.add_provider(CategoryProvider)
+        cat = catfake.category()
+        a.categories.add(cat)
+        self.assertEqual(3, Accessory.objects.count())
+
+
 
     def test_case0(self):
         """Tester les dates d'entrée et de sortie d'un exemplaire.
@@ -406,11 +439,66 @@ class TestAccessoryInventory(TestCase):
         alpha.user_permissions.set([permission])
         self.assertTrue(alpha.has_perm('accessories.view_achat'))
 
+    def test_employee_partnership_to_enterprise(self):
+        """Test that employee may access only the data of her enterprise."""
+
+        arvo  = Enterprise.objects.create(name='Tabula Rasa')
+        alpha = User.objects.create(username='alpha')
+        employee_alpha = Employee.objects.create(user=alpha, enterprise=arvo)
+        self.assertTrue(self.user_is_employee_of_enterprise(user=alpha, enterprise=arvo))
 
 
+    def test_employee_cannot_access_other_enterprise(self):
+        """Setup set accessories to the enterprise 'Tabula Rasa.
+
+        As the user 'boss' is employee of the enterprise 'grognon'
+        and because this enterprise has no articles in the inventory,
+        the user receives an empty list. It should be cool to inform
+        the user that his/her enterprise has no data.
+        """
+        c = Client()
+        c.login(username=self.user_boss, password=self.passwd)
+        response = c.get(reverse('accessories:list'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_employee_can_access_its_enterprise(self):
+        c = Client()
+        passwd = 'titi_grognon234'
+        user1 = User.objects.create_user(username='Titi', password=passwd)
+        employee = Employee.objects.create(user=user1, enterprise=self.enterprise_arvo)
+        c.login(username=user1, password=passwd)
+        response = c.get(reverse('accessories:list'))
+        self.assertEqual(response.status_code, 200, "Titi can access tabula rasa data")
+        c.logout()
+        user2 = User.objects.create_user(username='Toto', password=passwd)
+        entreprise2 = Enterprise.objects.create(name='Mikafashion')
+        # entreprise2 has no content but entreprise_arvo do have.
+        employee2 = Employee.objects.create(user=user2, enterprise=entreprise2)
+        c.login(username=user2, password=passwd)
+        response = c.get(reverse('accessories:list'))
+        self.assertIn('vide', response.content.decode(), "Not find 'vide'.")
 
 
+    def btest_inventory_per_enterprise(self):
+        """Test inventory generated per enterprise.
 
+        The inventory should contain only articles belonging to the
+        enterprise. This is filtered by the field 'product_owner'.
+        """
+        fake = Factory.create('fr_FR')
 
-
-
+        arrivage = Arrivage(date=date(2017, 3, 1), designation=fake.region())
+        arrivage.save()
+        mnt = random.randint(20,200)
+        qte = random.randint(1,10)
+        achat = Achat(montant=mnt, quantite=qte, date_achat=fake.date_time_this_month().date(),
+                      devise_id=self.chf)
+        achat.save()
+        a = Accessory(name=fake.company(), type_client='F', arrivage=arrivage,
+                    prix_achat=achat)
+        a.save()
+        catfake = Faker()
+        catfake.add_provider(CategoryProvider)
+        cat = catfake.category()
+        a.categories.add(cat)
+        self.assertEqual(3, Accessory.objects.count())

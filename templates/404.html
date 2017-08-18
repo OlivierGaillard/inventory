@@ -1,0 +1,16 @@
+{% extends "inventex.html" %}
+{% block content %}
+
+<div id="permission_denied">
+    <p id="permission_paragraph">
+    <strong>Oooops!</strong> Désolé
+        <em>{{ user.first_name|default:user.username}}</em>
+        mais tu n'as pas l'autorisation d'accéder à cette page.</p>
+
+        <p>Regarde avec ton administrateur/trice si
+            tu es bien enregistré comme <strong>employé</strong> de ton entreprise.
+    </p>
+</div>
+{% endblock %}
+
+

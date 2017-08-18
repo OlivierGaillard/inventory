@@ -221,7 +221,7 @@ class Frais(models.Model):
     devise_id   = models.ForeignKey(Currency, null=True)
     
     def __str__(self):
-        return str(self.date_frais) + ' / ' +  self.objet + ' ' + str(self.montant)
+        return str(self.date_frais) + ' / ' +  self.objet + ' ' + str(self.montant) + ' ' + str(self.devise_id)
 
     class Meta:
         verbose_name_plural = "Frais"

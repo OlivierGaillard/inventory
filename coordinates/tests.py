@@ -11,6 +11,7 @@ from finance.models import Currency, FraisArrivage, FraisType
 from accessories.models import Accessory, AccessoryMarque, AccessoryCategory, AccessoryEntry, AccessoryOutput, InventoryAccessory
 from coordinates.models import Arrivage, Pays, Localite
 from coordinates.forms import ArrivageCreateForm, ArrivageUpdateForm
+from products.models import Enterprise
 
 
 
@@ -30,7 +31,8 @@ class TestFraisArrivage(TestCase):
 
 
         self.ch = Pays.objects.create(nom='Suisse', code='CH')
-        self.chf = Currency.objects.create(currency_code='CHF', rate_usd=0.9981)
+        self.chf = Currency.objects.create(currency_code='CHF', currency_name = 'Swiss Franc',
+                                           used=True, rate_usd=0.9981)
         self.arrivage.devise = self.chf
         self.arrivage.save()
 
@@ -42,6 +44,8 @@ class TestFraisArrivage(TestCase):
         self.frais_type_repas = FraisType.objects.create(nom='repas')
 
         self.location_lausanne = Localite.objects.create(nom='Lausanne')
+
+        self.enterprise_hublot = Enterprise(name='Hublot')
 
         content_type = ContentType.objects.get_for_model(Accessory)
         permission = Permission.objects.get(
@@ -188,10 +192,12 @@ class TestFraisArrivage(TestCase):
 
     def test_ArrivageCreateForm(self):
         """New fields 'nouveau_pays'et 'nouveau_lieu' permettent de rajouter
-          ces instances de coordinates.Pays et coordinates.Localite"""
+          ces instances de coordinates.Pays et coordinates.Localite
+          """
         data = {'date' : date(2017, 3, 1),
                 'designation' :'Arrivage-1',
-                'devise' : self.chf.id}
+                'devise' : self.chf.id,
+                'enterprise' : '1'}
         form = ArrivageCreateForm(data)
         self.assertTrue(form.is_valid(), form.errors.as_data())
 
@@ -210,6 +216,7 @@ class TestFraisArrivage(TestCase):
         data = {'date': date(2017, 3, 1),
                 'designation': 'Arrivage-1',
                 'devise': self.chf.id,
+                'enterprise' : self.enterprise_hublot,
                 'nouveau_pays' : 'France',
                 'code_pays' : 'FR',
                 'lieu_provenance': self.location_lausanne.id}

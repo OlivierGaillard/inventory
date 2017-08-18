@@ -7,11 +7,16 @@ from finance.models import Achat, Currency
 from .models import Shoe, ShoeEntry, ShoeCategory, InventoryShoe, Photo
 from .forms import ShoeForm, CategoryForm, CategoryUpdateForm, InventoryShoeForm, AddPhotoForm, ShoeUpdateForm
 from coordinates.models import Arrivage
+from products.models import Employee
 
 class ShoeListView(ListView):
     model = Shoe
     template_name = 'shoes/list.html'
     context_object_name = 'shoes'
+
+    def get_queryset(self):
+        return Shoe.objects.filter(product_owner=Employee.get_enterprise_of_current_user(self.request.user).pk)
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -41,6 +46,12 @@ class ShoeCreationView(CreateView):
             quantity=form['quantity'].value())
         self.object.update_marque_ref(form['marque'].value(), form['marque_ref'].value())
         return HttpResponseRedirect(self.get_success_url())
+
+    def get_form_kwargs(self):
+        kwargs = super(ShoeCreationView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
 
 
 

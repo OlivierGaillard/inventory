@@ -26,5 +26,5 @@ class FournisseurAdmin(admin.ModelAdmin):
 admin.site.register(Fournisseur, FournisseurAdmin)
 
 class ArrivageAdmin(admin.ModelAdmin):
-    list_display = ('date', 'lieu_provenance')
+    list_display = ('date', 'lieu_provenance', 'enterprise')
 admin.site.register(Arrivage, ArrivageAdmin)

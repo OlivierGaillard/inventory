@@ -18,9 +18,9 @@ admin.site.register(
     ),
 )
 
-class AcessoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'marque_ref']
-admin.site.register(Accessory, AcessoryAdmin)
+class AccessoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'marque_ref', 'product_owner']
+admin.site.register(Accessory, AccessoryAdmin)
 
 class AccessoryEntryAdmin(admin.ModelAdmin):
     list_display = ['article', 'date', 'creation_date', 'quantity']

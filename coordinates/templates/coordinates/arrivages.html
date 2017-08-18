@@ -1,7 +1,7 @@
 {% extends "inventex.html" %}
 {% load static %}
 {% block content %}
-  <h1>Arrivages</h1>
+  <h1>Arrivages de l'entreprise {{ liste.0.enterprise|default_if_none:"entreprise inconnue" }}.</h1>
   
   <p>
     <table class="table">
@@ -33,7 +33,7 @@
       
       <tbody>
       {% for i in liste %}
-          <tr>  <td>{{i.date}}</td>
+          <tr>  <td>{{i.date}} / {{i.enterprise}}</td>
                 <td>{{i.designation}}</td>
                 <td>
                 <a href="{% url "coordinates:arrivage-update" pk=i.pk %}">Modifier</a>

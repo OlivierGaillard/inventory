@@ -192,3 +192,23 @@
 1498826661562	Marionette	INFO	Listening on port 38617
 1498826661614	Marionette	WARN	TLS certificate errors will be ignored for this session
 1498826672306	Marionette	INFO	New connections will no longer be accepted
+1503015861319	geckodriver	INFO	Listening on 127.0.0.1:52827
+1503015862573	geckodriver::marionette	INFO	Starting browser /usr/bin/firefox with args ["-marionette"]
+1503015863170	Marionette	INFO	Enabled via --marionette
+1503015864165	Marionette	INFO	Listening on port 36503
+1503015864262	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: chrome://marionette/content/server.js, line 337: NS_ERROR_SOCKET_ADDRESS_IN_USE: Component returned failure code: 0x804b0036 (NS_ERROR_SOCKET_ADDRESS_IN_USE) [nsIServerSocket.initSpecialConnection]
+1503015864293	Marionette	DEBUG	loaded listener.js
+1503015864312	Marionette	DEBUG	Received DOM event "beforeunload" for "about:blank"
+1503015864327	Marionette	DEBUG	Received DOM event "pagehide" for "about:blank"
+1503015864327	Marionette	DEBUG	Received DOM event "unload" for "about:blank"
+1503015864698	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://localhost:50473/"
+1503015864730	Marionette	DEBUG	Received DOM event "pageshow" for "http://localhost:50473/"
+1503015864781	Marionette	DEBUG	Received DOM event "beforeunload" for "http://localhost:50473/"
+1503015864796	Marionette	DEBUG	Received DOM event "pagehide" for "http://localhost:50473/"
+1503015864796	Marionette	DEBUG	Received DOM event "unload" for "http://localhost:50473/"
+1503015864867	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://localhost:50473/accounts/login/?next=/coordinates/arrivage-create/"
+1503015864869	Marionette	DEBUG	Received DOM event "pageshow" for "http://localhost:50473/accounts/login/?next=/coordinates/arrivage-create/"
+1503015864883	Marionette	INFO	New connections will no longer be accepted
+[Child 2459] WARNING: pipe error (20): Connexion ré-initialisée par le correspondant: file /builddir/build/BUILD/firefox-55.0.1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+[Child 2459] WARNING: pipe error (3): Connexion ré-initialisée par le correspondant: file /builddir/build/BUILD/firefox-55.0.1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353

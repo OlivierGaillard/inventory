@@ -1,13 +1,21 @@
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.views import login
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
-from django.core.urlresolvers import reverse
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 
 
 # Create your views here.
+
+class MyLoginView(LoginView):
+    template_name = 'login.html'
+
+class ThanksView(TemplateView):
+    template_name = 'thanks.html'
+
+
 class UserRegistrationView(CreateView):
+    """
+    TODO: add the enterprise.
+    """
     form_class = UserCreationForm
     template_name = 'accounts/user_registration.html'
     

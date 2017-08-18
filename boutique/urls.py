@@ -19,13 +19,15 @@ from django.contrib import admin
 from django.conf.urls import include
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from .views import IndexView
 
 urlpatterns = [
     # url(r'^inventex/', include('inventex.urls', namespace="inventex")),
     url(r'^accessories/', include('accessories.urls', namespace="accessories")),
     url(r'^shoes/', include('shoes.urls', namespace="shoes")),
     url(r'^clothes/', include('clothes.urls', namespace="clothes")),
-    url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
+    #url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
+    url(r'^$', IndexView.as_view(), name='home'),
     url(r'^coordinates/', include('coordinates.urls', namespace="coordinates")),
     url(r'^accounts/', include('accounts.urls', namespace="accounts")),
     url(r'^finance/', include('finance.urls', namespace="finance")),

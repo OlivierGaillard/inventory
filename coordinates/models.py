@@ -2,9 +2,9 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
-#from finance.models import Currency
 
-# Create your models here.
+
+
 class Pays(models.Model):
     nom  = models.CharField(max_length=80, default='Cameroun')
     code = models.CharField(max_length=4, default='N.D.')
@@ -91,21 +91,27 @@ class Fournisseur(models.Model):
             return Fournisseur.objects.first()
     
 class Arrivage(models.Model):
-    """ Tout article n'est pas nécessairement lié à une date
+    """
+    Tout article n'est pas nécessairement lié à une date
     d'arrivage, par exemple s'il a été confectionné à l'atelier, mais 
     on peut imaginer que néanmoins il soit renseigné.
 
-    # Partie 'Arrivage'
-    date_arrivage = forms.DateField(initial=Arrivage.objects.last().date, localize=True,
-                                    input_formats=['%d/%m/%Y'])
-    locations = Localite.objects.all()
-    default_location = locations.get(nom='Dubaï')
+
+    The model does not inherit from "Product" which implies it does
+    not have a reference to an enterprise. It should! But it is not cool
+    that the user has to choose among a drop-down list of enterprises.
+
+    How can we make this more user-friendly? Simply by filtering the list of
+    Arrivage instance with the enterprise the user belongs to, but the user
+    will never see the enterprise list.
+
     """
     date = models.DateField(unique=True, default=timezone.now)
     designation = models.CharField(max_length=30, verbose_name="désignation")
     pays = models.ForeignKey(Pays, blank=True, null=True)
     lieu_provenance = models.ForeignKey(Localite, blank=True, null=True, verbose_name='Localité')
     devise = models.ForeignKey('finance.Currency', null=True, help_text='Devise principale')
+    enterprise = models.ForeignKey('products.Enterprise', null=True)
     #fournisseur = models.ForeignKey(Fournisseur, default=Fournisseur.get_first())
 
     class Meta:

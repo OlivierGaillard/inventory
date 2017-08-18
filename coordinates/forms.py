@@ -7,6 +7,7 @@ from crispy_forms.layout import Submit, Layout, HTML
 from finance.models import Currency, FraisArrivage
 from finance.forms import CoolCurrencyChoiceField
 from .models import Arrivage, Localite, Pays
+from products.models import Enterprise
 
 class LocaliteCreateForm(forms.ModelForm):
 
@@ -47,11 +48,19 @@ class LocaliteUpdateForm(forms.ModelForm):
         )
 
 
+class CoolEnterpriseChoiceField(forms.ModelChoiceField):
+
+    def label_from_instance(self, obj):
+        return obj.name
+
+
 class ArrivageCreateForm(forms.ModelForm):
     devise = CoolCurrencyChoiceField(queryset=Currency.objects.filter(used=True))
+    enterprise = CoolEnterpriseChoiceField(queryset=Enterprise.objects.all(), disabled=True)
+
     class Meta:
         model = Arrivage
-        fields = ('date', 'designation', 'devise',)
+        fields = ('date', 'designation', 'devise', 'enterprise')
         widgets = {
             'date': forms.TextInput(
                 attrs={'type': 'date'}
@@ -73,6 +82,7 @@ class ArrivageUpdateForm(ArrivageCreateForm):
     nouveau_lieu = forms.CharField(max_length=100, required=False, label="Locatité", help_text='Pour entrer un nouveau lieu')
     nouveau_lieu_npa = forms.CharField(max_length=8, required=False, label="NPA",
                                        help_text="No postal d'acheminement. Laisser vide si inconnu.")
+    #devise = forms.ModelChoiceField(queryset=)
 
     def __init__(self, *args, **kwargs):
         super(ArrivageUpdateForm,self).__init__(*args, **kwargs)
@@ -89,7 +99,7 @@ class ArrivageUpdateForm(ArrivageCreateForm):
         self.helper.layout = Layout(
             TabHolder(
                 Tab('Date, désignation et devise',
-                    'date', 'designation', 'devise'
+                    'date', 'designation', 'devise',
                 ),
                 Tab('Provenance',
                     'pays', 'lieu_provenance',
@@ -118,7 +128,7 @@ class ArrivageUpdateForm(ArrivageCreateForm):
 
 
     class Meta(ArrivageCreateForm.Meta):
-        fields = ('date', 'designation', 'devise', 'pays', 'lieu_provenance',)
+        fields = ('date', 'designation', 'devise', 'enterprise', 'pays', 'lieu_provenance',)
 
     def update_land(self, cleaned_data):
         pays_ref = cleaned_data.get('pays', '')

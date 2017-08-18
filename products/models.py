@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.db.models import Sum
@@ -170,7 +171,64 @@ class Inventory(models.Model):
             # print('Article %s does not exist.' % article)
             return 0
 
+class Enterprise(models.Model):
+    """
+    Owner of the products.
 
+    This will allow multiple enterprise to use the application.
+
+    Possible implementations are:
+
+    1. the users will belong to an enterprise and have a corresponding
+    foreign key.
+
+    2. the enterprise is bound to a group whose name is the one of the user.
+    (Seems too complicated and too magic).
+    """
+    name = models.CharField(max_length=80)
+
+
+    def __str__(self):
+        return self.name
+
+class Employee(models.Model):
+    """
+    Every user is an employee of one enterprise.
+
+    The articles tables (derived from Product: Accessory, Clothes and Shoe)
+     are bound to one enterprise with the help of the foreign key 'Product.product_owner'
+
+    One user may work only with the articles belonging to his/her enterprise.
+
+    The belonging of this user to the enterprise is expressed with the
+    foreign key 'Employee.enterprise'.
+
+    Conclusion: the employee has access permission only to the articles of her enterprise.
+
+    Process to create one employee:
+
+    a) create one user
+    b) create one enterprise
+    c) create one Employee with foreign keys to user and enterprise
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    enterprise = models.ForeignKey(Enterprise, null=True) # To allow smooth migration.
+
+    def get_enterprise_of_current_user(user):
+        """
+        A class helper method used by the abstract products.forms.ProductCreateForm.
+        :param user: the request.user used to retrieve one Employee instance.
+        :return: the Enterprise instance of the Employee instance.
+        """
+        if Employee.objects.filter(user=user).exists():
+            employee = Employee.objects.get(user=user)
+            return employee.enterprise
+
+    def __str__(self):
+        if self.enterprise is not None:
+            return self.user.username + ': ' + str(self.enterprise)
+        else:
+            return self.user.username
 
 
 class Product(models.Model):
@@ -186,7 +244,7 @@ class Product(models.Model):
         ('E', 'Enfant'),
     )
     type_client = models.CharField(max_length=1, choices=clients_choices, default='F', )
-    #categories = TreeManyToManyField(Category, verbose_name='Catégories')
+    product_owner = models.ForeignKey(Enterprise, default=1)
     name = models.CharField(max_length=100, verbose_name='Nom du modèle')
     marque_ref = models.ForeignKey(Marque, null=True, blank=True, help_text='Choix des marques')
     arrivage = models.ForeignKey(Arrivage, null=True)

@@ -8,9 +8,11 @@ from finance.models import Currency
 from .models import Accessory, InventoryAccessory, AccessoryCategory
 from products.forms import ProductCreateForm, ProductUpdateForm
 
+from products.models import Employee
+
+
 
 class AccessoryForm(ProductCreateForm):
-    #categories = TreeNodeMultipleChoiceField(queryset=AccessoryCategory.objects.all(), label='Type')
     quantity = forms.IntegerField(min_value=1, required=True, label="Quantité", initial=0)
 
     class Meta(ProductCreateForm.Meta):
@@ -19,6 +21,7 @@ class AccessoryForm(ProductCreateForm):
     def __init__(self, *args, **kwargs):
         super(AccessoryForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse('accessories:create')
+
 
 class AccessoryUpdateForm(ProductUpdateForm):
 

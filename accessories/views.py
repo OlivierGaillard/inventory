@@ -1,9 +1,11 @@
+from django.http import Http404
 from django.conf import settings
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import reverse, render, redirect
+from django.shortcuts import reverse, render, redirect, get_object_or_404, get_list_or_404
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import reverse
 from django.views.generic import CreateView, ListView, FormView, DetailView, UpdateView, DeleteView
 from .models import Accessory, AccessoryCategory, InventoryAccessory, AccessoryEntry, Photo
@@ -11,13 +13,33 @@ from coordinates.models import Arrivage
 from finance.models import Achat, Currency
 from .forms import AccessoryForm, AccessoryUpdateForm, InventoryAccessoryForm, AccessoryCategoryForm
 from .forms import AddPhotoForm, CategoryUpdateForm
+from products.models import Employee, Enterprise
+
+
+def get_enterprise_of_current_user(user):
+    """
+    Try to get the enterprise of the user.
+
+    Note: should be checked after the login.
+    """
+    if Employee.objects.filter(user=user).exists():
+        employee = Employee.objects.get(user=user)
+        return employee.enterprise
 
 
 @method_decorator(login_required, name='dispatch')
 class AccessoryCreationView(CreateView):
+    """
+    Create one accessory instance with these initial values:
+
+    * product_owner is set to the user's enterprise.
+    * the list of arrivals (Arrivage instances) is filtered according to user's enterprise too.
+
+    """
     model = Accessory
     form_class = AccessoryForm
     template_name = 'accessories/create.html'
+
 
     def form_valid(self, form):
         """This method saves the Accessory instance. """
@@ -30,10 +52,65 @@ class AccessoryCreationView(CreateView):
         self.object.update_marque_ref(form['marque'].value(), form['marque_ref'].value())
         return HttpResponseRedirect(self.get_success_url())
 
-class AccessoryListView(ListView):
+
+    def get_form_kwargs(self):
+        kwargs = super(AccessoryCreationView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+
+@method_decorator(login_required, name='dispatch')
+class AccessoryListView(UserPassesTestMixin, ListView):
+    """
+    If the user is bounded to an enterprise it passes the test.
+
+    Otherwise the user is redirected to the login page which will
+    explain the situation.
+    """
     model = Accessory
     template_name = 'accessories/list.html'
     context_object_name = 'accessoires'
+
+    def get_enterprise_of_current_user(self, user):
+        """
+        Try to get the enterprise of the user.
+
+        Note: should be checked after the login.
+        """
+        if Employee.objects.filter(user=user).exists():
+            employee = Employee.objects.get(user=user)
+            return employee.enterprise
+        else:
+            return """<p>Vous n'êtes enregistré comme employé/e d'aucune entreprise de ce site. Contactez votre 
+                          administrateur/trice svp.</p>"""
+
+    def get_queryset(self):
+        """If the enterprise of the user has no data it returns an empty list."""
+        enterprise_of_current_user = self.get_enterprise_of_current_user(self.request.user)
+        q = Accessory.objects.filter(product_owner=enterprise_of_current_user)
+        if q.exists():
+            return q
+        else:
+            return []
+
+    def get_context_data(self, **kwargs):
+        enterprise = self.get_enterprise_of_current_user(self.request.user)
+        accessories_list = self.get_queryset()
+        context = {}
+        if len(accessories_list) == 0:
+            context['empty'] = 'vide'
+        context['enterprise'] = enterprise
+        context['accessoires'] = accessories_list
+        return context
+
+
+    def test_func(self):
+        if Employee.objects.filter(user=self.request.user).exists():
+            employee = Employee.objects.get(user=self.request.user)
+            return employee.enterprise != None
+        else:
+            return False
+
 
 @method_decorator(login_required, name='dispatch')
 class AccessoryDetailView(DetailView):
