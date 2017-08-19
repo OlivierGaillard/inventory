@@ -1,10 +1,7 @@
-from django.http import Http404
-from django.conf import settings
-from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import reverse, render, redirect, get_object_or_404, get_list_or_404
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import reverse
 from django.views.generic import CreateView, ListView, FormView, DetailView, UpdateView, DeleteView

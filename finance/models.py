@@ -11,6 +11,7 @@ from coordinates.models import Arrivage
 from accessories.models import Accessory, AccessoryOutput
 from clothes.models import Clothes, ClothesOutput
 from shoes.models import Shoe, ShoeOutput
+from products.models import Enterprise
 
 
     
@@ -176,24 +177,59 @@ class ProductType(models.Model):
 
 
 class Vente(models.Model):
+    """
+    Generic class used to store selling of aritcles (Clothes, Accessory or
+    Shoe). The core of the class are the fields *product_type* and
+    *product_id*. They allow to retrieve the concrete class (Clothes,
+    Accessory or Shoe) for creating and saving the *Output* instance.
+
+    It is required to filter the display of the sellings by enterprise
+    (aka product_owner). *product_owner* is a foreign key to Enterprise
+    belonging to abstract model Product.
+
+    As the value of product_owner is not a field of Vente it cannot be
+    used for filtering. It's the reason why I choose to redundantly define
+    this field within Vente. The field will be set during the saving
+    process.
+
+    """
 
     date_vente       = models.DateField(default=timezone.now)
     quantity         = models.PositiveSmallIntegerField()
     client_id        = models.ForeignKey('coordinates.Contact')
     product_id       = models.PositiveSmallIntegerField()
     product_type     = models.ForeignKey(ProductType, null=True)
+    product_owner    = models.ForeignKey(Enterprise, null=True)
 
     class Meta:
         ordering = ['-date_vente']
 
 
+    def _get_concrete_article(self):
+        product_cls = self.product_type.get_concrete_class()
+        article = product_cls.objects.get(pk=self.product_id)
+        return article
+
     def save(self):
         output_cls_name = str(self.product_type.model_class) + 'Output'
         output_cls = eval(output_cls_name)
+        article = self._get_concrete_article()
+        output_cls.objects.create(article=article, date=self.date_vente, quantity=self.quantity)
+        self._set_product_owner()
+        return super(Vente,self).save()
+
+    @property
+    def article(self):
+        return self._get_concrete_article()
+
+    @property
+    def article_id(self):
+        return self._get_concrete_article().id
+
+    def _set_product_owner(self):
         product_cls = self.product_type.get_concrete_class()
         article = product_cls.objects.get(pk=self.product_id)
-        output_cls.objects.create(article=article, date=self.date_vente, quantity=self.quantity)
-        return super(Vente,self).save()
+        self.product_owner = article.product_owner
 
 
     def __str__(self):

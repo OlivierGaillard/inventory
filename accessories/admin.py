@@ -19,7 +19,7 @@ admin.site.register(
 )
 
 class AccessoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'marque_ref', 'product_owner']
+    list_display = ['pk', 'name', 'marque_ref', 'product_owner']
 admin.site.register(Accessory, AccessoryAdmin)
 
 class AccessoryEntryAdmin(admin.ModelAdmin):

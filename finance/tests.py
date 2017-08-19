@@ -22,6 +22,7 @@ from coordinates.models import Contact
 from finance.models import Vente, ProductType
 from finance.forms import VenteCreateForm
 from finance.views import make_selling
+from products.models import Enterprise
 
 
 
@@ -49,20 +50,20 @@ class TestFinance(TestCase):
         # Creating a fake client
         fake = Factory.create('fr_FR')
         self.client = Contact.objects.create(prenom=fake.first_name(), nom=fake.last_name(), email=fake.email())
-
-        self.a1 = Accessory.objects.create(name=fake.company())
+        enterprise = Enterprise.objects.create(name=fake.company())
+        self.a1 = Accessory.objects.create(name=fake.first_name_female(), product_owner=enterprise)
         catfake = Faker()
         catfake.add_provider(AccessoryCategoryProvider)
         cat = catfake.category()
         self.a1.categories.add(cat)
 
-        self.c1 = Clothes.objects.create(name=fake.company())
+        self.c1 = Clothes.objects.create(name=fake.company(), product_owner=enterprise)
         clothesfake = Faker()
         clothesfake.add_provider(ClothesCategoryProvider)
         clothcat = clothesfake.category()
         self.c1.categories.add(clothcat)
 
-        self.s1 = Shoe.objects.create(name=fake.company())
+        self.s1 = Shoe.objects.create(name=fake.company(), product_owner=enterprise)
         shoesfake = Faker()
         shoesfake.add_provider(ShoeCategoryProvider)
         shoecat = shoesfake.category()
@@ -85,32 +86,6 @@ class TestFinance(TestCase):
         boss.user_permissions.set([permission])
 
 
-    # def test_CHF_EUR(self):
-    #     """
-    #     1 EUR = 0.85 USD
-    #     1 CHF = 0.96 USD
-    #     How much EUR makes 12 CHF?
-    #
-    #     :return:
-    #     """
-    #     source = Money(12, 'CHF')
-    #     rate_EUR = Decimal(self.converter.rates['EUR']) # 1 USD in EUR
-    #     rate_CHF = Decimal(self.converter.rates['CHF']) # 1 USD in CHF
-    #     # 12 CHF in USD
-    #     chf12inUsd = 12 * rate_CHF
-    #     print('12 CHF makes %s USD' % chf12inUsd)
-    #     # How much EUR for chf12inUsd?
-    #     chf12inEUR  = rate_EUR * chf12inUsd
-    #     print('%s USD makes %s EUR' % (chf12inUsd, chf12inEUR))
-    #     self.assertAlmostEqual(self.converter.convert(source, 'EUR').amount,
-    #                            Decimal(chf12inEUR), 1)
-    #
-    # def btest_CHF_AED(self):
-    #     montant = 20.00
-    #     source = Money(montant, 'CHF')
-    #     rate_usd_of_aed = 3.6729
-    #     self.assertAlmostEqual(self.converter.convert(source, 'AED').amount,
-    #                            Decimal(75.8), 1)
 
     def test_set_rate(self):
         chf = Currency(currency_code='CHF')
@@ -258,7 +233,7 @@ class TestFinance(TestCase):
         vente = Vente(product_id=self.a1.id, quantity=sell_accessory_quantity, client_id=self.client,
                       product_type=self.product_type_accessory, date_vente=sell_date)
         vente.save()  # Accessory/Clothes/Shoe-Output is created during saving.
-
+        self.assertEqual(vente.product_owner, self.a1.product_owner)
 
 
         vente = Vente(product_id=self.c1.id, quantity=sell_cloth_quantity, client_id=self.client,

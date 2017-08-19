@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
@@ -182,36 +183,23 @@ class CurrencyListView(ListView):
     template_name = 'finance/currencies.html'
     context_object_name = 'currencies'
 
-# class VenteListView(ListView):
-#     model = Vente
-#     template_name = 'finance/ventes.html'
-#     context_object_name = 'sellings'
 
 @login_required
+@user_passes_test(Employee.is_current_user_employee)
 def ventes(request):
-    table = VenteTable(Vente.objects.all())
+    """If the enterprise of the user has no data it returns an empty list."""
+    enterprise_of_current_user = Employee.get_enterprise_of_current_user(request.user)
+
+    q = Vente.objects.filter(product_owner=enterprise_of_current_user)
+    table = None
+    if q.exists():
+        table = VenteTable(q)
+    else:
+        table = VenteTable([])
     RequestConfig(request).configure(table)
     return render(request, 'finance/ventes.html', {'table' : table})
 
 
-# class VenteCreateView(CreateView):
-#     template_name = 'finance/create_vente.html'
-#     context_object_name = 'selling'
-#     model = Vente
-#     form_class = VenteCreateForm
-#
-#
-#     def get_success_url(self):
-#         return reverse('finance/ventes.html')
-#
-#     def get_initial(self):
-#
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(VenteCreateView, self).get_context_data(**kwargs)
-#         product_id = self.request.GET.get('pk', '')
-#         context['product_id'] = product_id
-#         return context
 
 @login_required
 def make_selling(request, product_id, product_type):
