@@ -57,9 +57,41 @@ class BadCreationDateException(Exception):
     pass
 
 class Inventory(models.Model):
+    """
+    Abstract model to generate inventories returning the stock quantity of each article.
+
+    Explanation:
+      One inventory is dated. It is generated at a given date entered by the user, but this
+      date is not taken into account for the inventory because all entries and outputs are
+      used.
+
+      There is one inventory per article's type (accessory, clothes or shoes).
+
+      TODO: filter the inventories by a given date in order to display only a range or only
+      one inventory.
+
+    Implementation:
+      The concrete models (InventoryAccessory, InventoryClothes, InventoryShoe) must provide
+      the implementation of get_objects, get_entrees and get_sorties.
+
+
+    """
     date = models.DateField(default=timezone.now)
     # article = models.ForeignKey(Product)
-    quantity = models.PositiveSmallIntegerField(default=0)
+    quantity = models.PositiveSmallIntegerField(default=0) # Total of entries
+    enterprise_of_current_user = None  # Will be set when instanciated by the form's method generate_inventory
+
+    def set_enterprise_of_current_user(self, enterprise):
+        """
+        This method is used by the concrete inventory class (e.g. InventoryAccessory).
+        The view (e.g. InventoryCreationView) calls the form's method 'generate_inventory'
+        with the param enterprise. And the form (e.g. 'InventoryAccessoryForm') instanciate
+        e.g. InventoryAccessory and set the enterprise before calling the 'sum_entries'
+        method which will generate the inventory.
+        :param enterprise:
+        """
+        self.enterprise_of_current_user = enterprise
+
 
     class Meta:
         abstract = True
@@ -90,21 +122,16 @@ class Inventory(models.Model):
 
 
     def sum_entries(self, creation_date):
-        """ Generate Inventory's entries.
-        Get all instances of 'Entree' and aggregate
-        them and substract the sum of all 'Sortie' to get the current quantity.
+        """
+        Generate Inventory's entries.
+
+        Get all instances of 'Entree' and aggregate them and substracts
+        the sum of all 'Sortie' to get the current quantity.
+
         The result is one inventory entry pro article, with the creation's date and quantity.
         """
-        # Getting the first Entree if any.
-        #print('In products-app Inventory-sum_entries')
-        if self.get_entrees().all().exists():
-            #print('Il y a des entrées.')
-            #entree = self.get_entrees().latest('date')
-            # if creation_date <= entree.date:
-            #     raise BadCreationDateException(
-            #         'Des entrées existent plus récentes ou égales à la date de création. Probablement la date du jour. ')
-            for a in self.get_article().all():
-                #print ('Handling article %s ...' % a)
+        if self.get_entrees().all().exists(): # all articles of all enterprises
+            for a in self.get_article().all(): # Concrete class returns only articles of user's enterprise.
                 balance = 0
                 if self.get_entrees().filter(article=a).exists():
                     e_sum = self.get_entrees().filter(article=a).aggregate(Sum('quantity'))
@@ -120,17 +147,9 @@ class Inventory(models.Model):
                         inv = self.get_objects().filter(article=a)[0]
                         inv.quantity = balance
                         inv.save()
-                        #print('Updated with value %s' % balance)
-                        #print (inv)
                     else:
                         inv = self.get_objects().create(date=creation_date, article=a, quantity=balance)
-                        #print('Created new entry with value %s' % balance)
-                        #print (inv)
-        else:
-            pass
-            #print("Il n'y a pas d'entrées.")
-            #pass
-        #print('End of Inventory sum_entries job.')
+
 
     def get_entries(self, start_date, end_date):
         """ Return all entries between start and end_date inclusive
@@ -261,7 +280,7 @@ class Product(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return self.name + ' / ' + str(self.product_owner)
 
     def get_entrees(self):
         raise NotImplementedError('Children classes of "Product" have to implement a method returning Entree objects!')

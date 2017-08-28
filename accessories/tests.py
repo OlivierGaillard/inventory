@@ -1,9 +1,11 @@
-import os
+import pdb
 from django.contrib.auth.models import Permission, User, Group
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import TestCase, Client
+#from django.shortcuts import reverse
+from django.urls import reverse
+from django.test import TestCase, Client, RequestFactory
+
 from datetime import date
 from faker import Factory, Faker
 from faker.providers import BaseProvider
@@ -45,21 +47,10 @@ class TestAccessoryInventory(TestCase):
         self.cat2 = AccessoryCategory.objects.create(parent=cat1, title='Valises')
         cat3 = AccessoryCategory.objects.create(parent=cat1, title='Sacoches')
         self.enterprise_arvo = Enterprise.objects.create(name='Tabula Rasa')
-        a1 = Accessory.objects.create(name='Valise-1', product_owner=self.enterprise_arvo)
-        a1.categories.add(self.cat2)
-        a2 = Accessory.objects.create(name='Sacoche-1', product_owner=self.enterprise_arvo)
-        a2.categories.add(self.cat2)
-
-        self.accessories_li = {'a1': a1, 'a2': a2}
-        for k in self.accessories_li.keys():
-            a = self.accessories_li[k]
-            a.save()
 
         # These ones are used to test create and update forms and views.
         self.cat = AccessoryCategory(parent=self.cat2, title='boum')
         self.cat.save()
-        self.arrivage = Arrivage(date=date(2017, 2, 1), designation='Arrivage-1')
-        self.arrivage.save()
 
 
         self.chf = Currency.objects.create(currency_code='CHF', rate_usd=0.9981, used=True)
@@ -72,14 +63,28 @@ class TestAccessoryInventory(TestCase):
             content_type=content_type,
         )
 
-        self.passwd = 'titi_grognon234'
-        self.user_boss = 'Boss'
-        boss = User.objects.create_user(username=self.user_boss, password=self.passwd)
-        boss.user_permissions.set([permission])
-        grognon = Enterprise(name='grognon')
-        grognon.save()
-        employee = Employee.objects.create(user=boss, enterprise=grognon)
 
+
+        self.passwd = 'titi_grognon234'
+        user_boss = 'Boss'
+        self.boss = User.objects.create_user(username=user_boss, password=self.passwd)
+        self.boss.user_permissions.set([permission])
+        self.enterprise_grognon = Enterprise(name='grognon')
+        self.enterprise_grognon.save()
+        Employee.objects.create(user=self.boss, enterprise=self.enterprise_grognon)
+        self.arrivage_boss = Arrivage(date=date(2017, 2, 1), designation='Arrivage-1',
+                                      enterprise=self.enterprise_grognon)
+        self.arrivage_boss.save()
+
+
+        self.arvoe_passwd = 'part'
+        self.arvoe = User.objects.create_user(username='arvoe', password=self.arvoe_passwd)
+        self.arvoe.user_permissions.set([permission])
+        Employee.objects.create(user=self.arvoe, enterprise=self.enterprise_arvo)
+
+        self.arrivage_arvo = Arrivage(date=date(2017, 5, 1), designation='Arrivage-Part',
+                                      enterprise=self.enterprise_arvo)
+        self.arrivage_arvo.save()
 
     def do_E(self, date_entree, a, qte):
         """ Create one Entry  with the given quantity 'qte'.
@@ -97,7 +102,7 @@ class TestAccessoryInventory(TestCase):
     def get_art(self, art_code):
         return self.accessories_li[art_code]
 
-    def test_faker(self):
+    def btest_faker(self):
         """Make instances of Accessory using faker."""
         fake = Factory.create('fr_FR')
         arrivage = Arrivage(date=date(2017, 3, 1), designation=fake.region())
@@ -128,12 +133,25 @@ class TestAccessoryInventory(TestCase):
         par la création d'un inventaire. On peut le faire simplement avec une
         méthode définie sur le type entité 'Article': get_quantity()
         """
+
+        a1 = Accessory.objects.create(name='Valise-1', product_owner=self.enterprise_arvo)
+        a1.categories.add(self.cat2)
+        a2 = Accessory.objects.create(name='Sacoche-1', product_owner=self.enterprise_arvo)
+        a2.categories.add(self.cat2)
+
+        self.accessories_li = {'a1': a1, 'a2': a2}
+        for k in self.accessories_li.keys():
+            a = self.accessories_li[k]
+            a.save()
+
+
         d1 = date(2017, 1, 1)
         d2 = date(2017, 1, 10)
         creation_date = date(2017, 2, 1)  # Inventory creation date
         self.do_E(d1, 'a1', 4)
         a1 = self.get_art('a1')  # getting the 'Article' instance with key 'a1'.
         inventory = InventoryAccessory()
+        inventory.set_enterprise_of_current_user(self.enterprise_arvo)
         a1_count = inventory.get_quantity(a1, self.start_date, end_date=d2)
         # The inventory is not yet created then no entry in
         # inventory exist.
@@ -172,46 +190,7 @@ class TestAccessoryInventory(TestCase):
         self.assertEqual(0, a1.get_quantity())
         # # But the quantity of Inventory is still the old one:
         self.assertEqual(2, inventory.get_quantity(a1, self.start_date, date.today()))
-        #
 
-
-
-
-    def test_view_create_accessory(self):
-        c = Client()
-        c.login(username=self.user_boss, password=self.passwd)
-
-        # Create one accessory entry with the help of the view to enter a quantity
-        # because only using the model is impossible, as it has not this field 'quantity'.
-        cat = AccessoryCategory(parent=self.cat2, title='boum')
-        cat.save()
-        data = {'type_client': 'F',
-                'categories': (cat.id,),
-                'name': 'Maman', 'marque': 'Baba au rhum',
-                'quantity': '5',
-                'arrivage': self.arrivage.id,
-                }
-
-        form = AccessoryForm(data)
-        self.assertTrue(form.is_valid(), form.errors.as_data())
-#         form.save()
-
-        response = c.post(reverse('accessories:create'), data,
-                                        follow=True)
-        #print(response.status_code)
-        # Check if entries were created.
-        # There is only one because in the tests' Setup we only create Accessory
-        # instances of model 'Accessory' without quantity.
-        self.assertEqual(1, len(AccessoryEntry.objects.all()))
-        self.assertIn('Mama', response.content.decode())
-
-        # Check if the Input's date is equal to the Arrivage's one
-        accessoryEntry = AccessoryEntry.objects.last()
-        self.assertEqual(self.arrivage.date, accessoryEntry.date)
-        # Check quantity of Entry created
-        self.assertEqual(5, accessoryEntry.quantity)
-        accessory = Accessory.objects.all().last()
-        self.assertEqual(5, accessory.get_quantity(), 'get_quantity of Accessory is invalid.')
 
     def test2_form(self):
         cat = AccessoryCategory(parent=self.cat2, title='boum')
@@ -220,34 +199,104 @@ class TestAccessoryInventory(TestCase):
                 'categories': (cat.id,),
                 'name': 'Maman', 'marque': 'Babar',
                 'quantity': '5',
-                'arrivage': self.arrivage.id,
+                'arrivage': self.arrivage_boss.id,
+                'product_owner': self.enterprise_grognon.id,
                 }
         form = AccessoryForm(data)
         self.assertTrue(form.is_valid())
 
 
-
-
     def test_generate_inventory(self):
+        """
+        The inventory will be generated for the articles of the enterprise to which the employee
+        belongs to.
+        :return: The result of sum (entries) substracted from sum (outputs)
+        """
         c = Client()
-        c.login(username=self.user_boss, password=self.passwd)
+        c.login(username=self.boss, password=self.passwd)
 
-        d1 = date(2017, 1, 1)
-        self.do_E(d1, 'a1', 4)
-        creation_date = date(2017, 2, 1)  # Inventory creation date
+        # Creating 2 accessories and adding the category cat2
+        a1 = Accessory.objects.create(name='Valise-1', product_owner=self.enterprise_grognon)
+        a1.categories.add(self.cat2)
+        sacoche = Accessory.objects.create(name='Sacoche-1', product_owner=self.enterprise_grognon)
+        sacoche.categories.add(self.cat2)
+
+        # Creating 2 entries (the view AccessoryCreationView does it during the 'form_valid' call.
+        AccessoryEntry.objects.create(article=a1, date=date(2017, 1, 1), quantity=2)
+        AccessoryEntry.objects.create(article=sacoche, date=date(2017, 1, 1), quantity=4)
+
+        # We add one Accessory belonging to **another** enterprise.
+        sac_a_main = Accessory.objects.create(name='Sac à main', product_owner=self.enterprise_arvo)
+        AccessoryEntry.objects.create(article=sac_a_main, date=date(2017, 1, 3), quantity=5)
+
+        # Simulating 1 selling
+        AccessoryOutput.objects.create(article=sacoche, date=date(2017, 1, 2), quantity=1)
+
+        # Generating the inventory with the view only for the enterprise of the user
+        creation_date = date(2017, 2, 1)
         data = {'creation_date': creation_date}
         c.post(reverse('accessories:inventory-create'),
                           data, follow=False)
 
-        self.assertTrue(InventoryAccessory.objects.count() == 1)
+        count = InventoryAccessory.objects.count()
+        self.assertTrue(count == 2, "Not 2 inventory entries but %s" % count)
+
+        # Checking the quantity of sacoche
+        inventory_sacoche = InventoryAccessory.objects.filter(article=sacoche)
+        quantity_sacoche = inventory_sacoche[0].quantity
+        self.assertEqual(3, quantity_sacoche, ("Not 3 sacoches but %s", str(quantity_sacoche)))
+
+    def test_generate_inventory_2(self):
+        """
+        Two inventoriew will be generated, one per logged user.
+        :return: The result of sum (entries) substracted from sum (outputs)
+        """
+        c = Client()
+        c.login(username=self.boss, password=self.passwd)
+
+        # Creating 2 accessories and adding the category cat2
+        a1 = Accessory.objects.create(name='Valise-1', product_owner=self.enterprise_grognon)
+        a1.categories.add(self.cat2)
+        sacoche = Accessory.objects.create(name='Sacoche-1', product_owner=self.enterprise_grognon)
+        sacoche.categories.add(self.cat2)
+
+        # Creating 2 entries (the view AccessoryCreationView does it during the 'form_valid' call.
+        AccessoryEntry.objects.create(article=a1, date=date(2017, 1, 1), quantity=2)
+        AccessoryEntry.objects.create(article=sacoche, date=date(2017, 1, 1), quantity=4)
+
+        # We add one Accessory belonging to **another** enterprise.
+        sac_a_main = Accessory.objects.create(name='Sac à main', product_owner=self.enterprise_arvo)
+        AccessoryEntry.objects.create(article=sac_a_main, date=date(2017, 1, 3), quantity=5)
+
+        # Simulating 1 selling
+        AccessoryOutput.objects.create(article=sacoche, date=date(2017, 1, 2), quantity=1)
+
+        # Generating the inventory with the view only for the enterprise of the user
+        creation_date = date(2017, 2, 1)
+        data = {'creation_date': creation_date}
+        c.post(reverse('accessories:inventory-create'),
+                          data, follow=False)
+
+        c.logout()
+
+        c2 = Client()
+        c2.login(username=self.arvoe, password=self.arvoe_passwd)
+        creation_date = date(2017, 2, 10)
+        data = {'creation_date': creation_date}
+        c2.post(reverse('accessories:inventory-create'),
+               data, follow=False)
+
+        response = c2.get(reverse('accessories:inventory-list'))
+        self.assertNotIn('Sacoche', response.content.decode(), "Found article 'Sacoche' of another enterprise than arvoe's Tabula Rasa.")
+
 
 
     def test_create_form(self):
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': 'Babar',
-                'quantity': '10',
-                'arrivage': self.arrivage.id}
+                'quantity': '10', 'product_owner': self.enterprise_arvo.id,
+                'arrivage': self.arrivage_arvo.id}
 
         form = AccessoryForm(data)
         self.assertTrue(form.is_valid())
@@ -258,7 +307,7 @@ class TestAccessoryInventory(TestCase):
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': '',
                 'quantity': '10',
-                'arrivage': self.arrivage.id}
+                'arrivage': self.arrivage_boss.id}
         form = AccessoryForm(data)
         self.assertFalse(form.is_valid())
 
@@ -267,25 +316,26 @@ class TestAccessoryInventory(TestCase):
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': '',
                 'marque_ref': self.hublot.id,
-                'quantity': '10',
-                'arrivage': self.arrivage.id}
+                'quantity': '10', 'product_owner': self.enterprise_arvo.id,
+                'arrivage': self.arrivage_arvo.id}
         form = AccessoryForm(data)
         #print(form.errors.as_data())
         self.assertTrue(form.is_valid())
 
-    def test_add_new_marque_for_new_accessory(self):
+    def test_forms_to_add_new_marque_for_new_accessory(self):
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': 'Babar',
                 'quantity': '10',
-                'arrivage': self.arrivage.id}
+                'arrivage': self.arrivage_arvo.id,
+                'product_owner': self.enterprise_arvo.id}
         form = AccessoryForm(data)
         self.assertTrue(form.is_valid(), form.errors.as_data())
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque': 'Babar',
                 'quantity': '10',
-                'arrivage': self.arrivage.id}
+                'arrivage': self.arrivage_arvo.id}
         data['montant'] = 20.00
         data['quantite_achetee'] = 5
         data['date_achat'] = date(2017, 1, 20)
@@ -305,19 +355,53 @@ class TestAccessoryInventory(TestCase):
         data['marque_ref'] = None
         return data
 
+    def test_view_create_accessory(self):
+        c = Client()
+        c.login(username=self.arvoe, password=self.arvoe_passwd)
+
+        # Create one accessory entry with the help of the view to enter a quantity
+        # because only using the model is impossible, as it has not this field 'quantity'.
+        cat = AccessoryCategory(parent=self.cat2, title='boum')
+        cat.save()
+        data = {'type_client': 'F',
+                'categories': (cat.id,),
+                'name': 'Maman', 'marque': 'Baba au rhum',
+                'quantity': '5', 'product_owner': self.enterprise_arvo.id,
+                'arrivage': self.arrivage_arvo.id,
+                }
+
+        form = AccessoryForm(data)
+        self.assertTrue(form.is_valid(), form.errors.as_data())
+
+        response = c.post(reverse('accessories:create'), data,
+                          follow=True)
+        # Check if entries were created.
+        # There is only one because in the tests' Setup we only create Accessory
+        # instances of model 'Accessory' without quantity.
+        self.assertEqual(1, len(AccessoryEntry.objects.all()))
+        self.assertIn('Mama', response.content.decode())
+
+        # Check if the Input's date is equal to the Arrivage's one
+        accessoryEntry = AccessoryEntry.objects.last()
+        self.assertEqual(self.arrivage_arvo.date, accessoryEntry.date)
+        # Check quantity of Entry created
+        self.assertEqual(5, accessoryEntry.quantity)
+        accessory = Accessory.objects.all().last()
+        self.assertEqual(5, accessory.get_quantity(), 'get_quantity of Accessory is invalid.')
 
     def test_update_quantity(self):
         c = Client()
-        c.login(username=self.user_boss, password=self.passwd)
+        self.assertTrue(c.login(username=self.boss.username, password=self.passwd))
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
-                'name': 'Maman', 'marque': 'Babar',
-                'quantity': '10',
-                'arrivage': self.arrivage.id}
-
+                'name': 'Maman234', 'marque': 'Babar',
+                'quantity': '10', 'product_owner': self.enterprise_grognon.id,
+                'arrivage': self.arrivage_boss.id}
         response = c.post(reverse('accessories:create'),
                           data, follow=True)
+
         # Check if one entry was crated.
+        self.assertEqual(1, len(Accessory.objects.all()))
         self.assertEqual(1, len(AccessoryEntry.objects.all()))
         self.assertIn('Mama', response.content.decode())
 
@@ -328,10 +412,11 @@ class TestAccessoryInventory(TestCase):
         accessory = Accessory.objects.all().last()
 
         self.assertEqual(10, accessory.get_quantity())
+        c.logout()
 
         # Now we set a new marque
         c2 = Client()
-        c2.login(username=self.user_boss, password=self.passwd)
+        c2.login(username=self.boss.username, password=self.passwd)
         data['montant'] = 20.00
         data['quantite_achetee'] = 5
         data['date_achat'] = date(2017, 1, 20)
@@ -358,15 +443,16 @@ class TestAccessoryInventory(TestCase):
 
     def test_check_new_marque_is_saved(self):
         c = Client()
-        c.login(username=self.user_boss, password=self.passwd)
+        c.login(username=self.boss.username, password=self.passwd)
         data = {'type_client': 'F',
                 'categories': (self.cat.id,),
                 'name': 'Maman', 'marque_ref': self.hublot.id,
-                'quantity': '10',
-                'arrivage': self.arrivage.id}
+                'quantity': '10', 'product_owner': self.enterprise_grognon.id,
+                'arrivage': self.arrivage_boss.id}
 
         response = c.post(reverse('accessories:create'),
                                         data, follow=True)
+        self.assertEqual(200, response.status_code)
         # Check if entries were created.
         # There is only one because in the tests' Setup we only create Accessory
         # instances of model 'Accessory' without quantity.
@@ -376,7 +462,7 @@ class TestAccessoryInventory(TestCase):
 
         # Now we set a new marque
         c2 = Client()
-        c2.login(username=self.user_boss, password=self.passwd)
+        c2.login(username=self.boss.username, password=self.passwd)
         data['montant'] = 20.00
         data['quantite_achetee'] = 5
         data['date_achat'] = date(2017, 1, 20)
@@ -457,7 +543,7 @@ class TestAccessoryInventory(TestCase):
         the user that his/her enterprise has no data.
         """
         c = Client()
-        c.login(username=self.user_boss, password=self.passwd)
+        c.login(username=self.boss, password=self.passwd)
         response = c.get(reverse('accessories:list'))
         self.assertEqual(response.status_code, 200)
 

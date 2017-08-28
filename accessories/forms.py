@@ -52,7 +52,7 @@ class AddPhotoForm(forms.Form):
 
 
 class AccessoryCategoryForm(forms.ModelForm):
-    #quantity = forms.IntegerField(min_value=1, required=True, label="Quantité", initial=0)
+
     class Meta:
         model = AccessoryCategory
         fields = ['parent', 'title', ]
@@ -68,10 +68,6 @@ class AccessoryCategoryForm(forms.ModelForm):
 
 class InventoryAccessoryForm(forms.Form):
 
-    # class Meta(InventoryForm.Meta):
-    #      fields = ['date']
-
-    #creation_date = forms.TextInput(attrs={'type' : 'date'}, label='Date de création')
     creation_date = forms.DateField(label='Date de création',
                                     widget=forms.TextInput( attrs={ 'type' : 'date' } )
                                     )
@@ -84,8 +80,10 @@ class InventoryAccessoryForm(forms.Form):
         self.helper.form_method = "POST"
         self.helper.add_input(Submit('Submit', 'submit'))
 
-    def generate_inventory(self):
+    def generate_inventory(self, enterprise_of_current_user):
         creation_date = self.cleaned_data['creation_date']
         inventory = InventoryAccessory()
+        inventory.set_enterprise_of_current_user(enterprise_of_current_user)
         inventory.sum_entries(creation_date)
+
 

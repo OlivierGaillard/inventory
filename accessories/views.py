@@ -1,3 +1,4 @@
+import pdb
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -32,7 +33,7 @@ class AccessoryCreationView(CreateView):
         self.object = form.save()
         arrivage_id = form['arrivage'].value()
         arrivage = Arrivage.objects.get(pk=arrivage_id)
-        AccessoryEntry.objects.create(date=arrivage.date,
+        a = AccessoryEntry.objects.create(date=arrivage.date,
             article=form.instance,
             quantity=form['quantity'].value())
         self.object.update_marque_ref(form['marque'].value(), form['marque_ref'].value())
@@ -207,6 +208,10 @@ class InventoryListView(ListView):
     template_name = 'accessories/inventory.html'
     context_object_name = 'entries'
 
+    def get_queryset(self):
+        enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
+        return InventoryAccessory.objects.filter(article__product_owner=enterprise_of_current_user)
+
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('accessories.view_achat', raise_exception=True), name='get')
@@ -215,9 +220,9 @@ class InventoryCreationView(FormView):
     template_name = 'accessories/inventory-create.html'
 
     def form_valid(self, form):
-        form.generate_inventory()
+        enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
+        form.generate_inventory(enterprise_of_current_user)
         return super(InventoryCreationView, self).form_valid(form)
-
 
     def get_success_url(self):
         return reverse('accessories:inventory-list')

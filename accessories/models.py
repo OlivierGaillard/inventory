@@ -80,18 +80,22 @@ class AccessoryOutput(Sortie):
 
 class InventoryAccessory(Inventory):
     article = models.ForeignKey(Accessory)
+    #enterprise_of_current_user = None # Will be set when instanciated by the form's method generate_inventory
 
     def get_objects(self):
         return InventoryAccessory.objects
 
     def get_article(self):
-        return Accessory.objects
+        if self.enterprise_of_current_user:
+            return Accessory.objects.filter(product_owner=self.enterprise_of_current_user)
+        else:
+            raise Exception('No enterprise defined in models.InventoryAccessory')
 
     def get_entrees(self):
         return AccessoryEntry.objects
 
     def get_sorties(self):
-        return AccessoryOutput.objects
+        return AccessoryOutput.objects # todo: add filter by enterprise
 
     class Meta(Inventory.Meta):
         unique_together = (('date', 'article'))

@@ -212,3 +212,41 @@ JavaScript error: chrome://marionette/content/server.js, line 337: NS_ERROR_SOCK
 1503015864883	Marionette	INFO	New connections will no longer be accepted
 [Child 2459] WARNING: pipe error (20): Connexion ré-initialisée par le correspondant: file /builddir/build/BUILD/firefox-55.0.1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
 [Child 2459] WARNING: pipe error (3): Connexion ré-initialisée par le correspondant: file /builddir/build/BUILD/firefox-55.0.1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+1503904951583	geckodriver	INFO	Listening on 127.0.0.1:54753
+1503904952841	geckodriver::marionette	INFO	Starting browser /usr/bin/firefox with args ["-marionette"]
+1503904953399	Marionette	INFO	Enabled via --marionette
+1503904954330	Marionette	INFO	Listening on port 37291
+JavaScript error: chrome://marionette/content/server.js, line 337: NS_ERROR_SOCKET_ADDRESS_IN_USE: Component returned failure code: 0x804b0036 (NS_ERROR_SOCKET_ADDRESS_IN_USE) [nsIServerSocket.initSpecialConnection]
+1503904954433	Marionette	WARN	TLS certificate errors will be ignored for this session
+1503904954463	Marionette	DEBUG	loaded listener.js
+1503904954480	Marionette	DEBUG	Received DOM event "beforeunload" for "about:blank"
+1503904954494	Marionette	DEBUG	Received DOM event "pagehide" for "about:blank"
+1503904954494	Marionette	DEBUG	Received DOM event "unload" for "about:blank"
+1503904954798	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://localhost:43337/"
+1503904954865	Marionette	DEBUG	Received DOM event "pageshow" for "http://localhost:43337/"
+1503904954923	Marionette	DEBUG	Received DOM event "beforeunload" for "http://localhost:43337/"
+1503904954939	Marionette	DEBUG	Received DOM event "pagehide" for "http://localhost:43337/"
+1503904954939	Marionette	DEBUG	Received DOM event "unload" for "http://localhost:43337/"
+1503904955017	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://localhost:43337/accounts/login/?next=/coordinates/arrivage-create/"
+1503904955019	Marionette	DEBUG	Received DOM event "pageshow" for "http://localhost:43337/accounts/login/?next=/coordinates/arrivage-create/"
+1503904955031	Marionette	INFO	New connections will no longer be accepted
+[Child 4061] WARNING: pipe error (20): Connexion ré-initialisée par le correspondant: file /builddir/build/BUILD/firefox-55.0.2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+1503928813563	geckodriver	INFO	Listening on 127.0.0.1:43329
+1503928814703	geckodriver::marionette	INFO	Starting browser /usr/bin/firefox with args ["-marionette"]
+1503928815109	Marionette	INFO	Enabled via --marionette
+1503928815971	Marionette	INFO	Listening on port 39489
+JavaScript error: chrome://marionette/content/server.js, line 337: NS_ERROR_SOCKET_ADDRESS_IN_USE: Component returned failure code: 0x804b0036 (NS_ERROR_SOCKET_ADDRESS_IN_USE) [nsIServerSocket.initSpecialConnection]
+1503928816059	Marionette	WARN	TLS certificate errors will be ignored for this session
+1503928816093	Marionette	DEBUG	loaded listener.js
+1503928816112	Marionette	DEBUG	Received DOM event "beforeunload" for "about:blank"
+1503928816127	Marionette	DEBUG	Received DOM event "pagehide" for "about:blank"
+1503928816127	Marionette	DEBUG	Received DOM event "unload" for "about:blank"
+1503928816435	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://localhost:45851/"
+1503928816487	Marionette	DEBUG	Received DOM event "pageshow" for "http://localhost:45851/"
+1503928816532	Marionette	DEBUG	Received DOM event "beforeunload" for "http://localhost:45851/"
+1503928816548	Marionette	DEBUG	Received DOM event "pagehide" for "http://localhost:45851/"
+1503928816548	Marionette	DEBUG	Received DOM event "unload" for "http://localhost:45851/"
+1503928816619	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://localhost:45851/accounts/login/?next=/coordinates/arrivage-create/"
+1503928816621	Marionette	DEBUG	Received DOM event "pageshow" for "http://localhost:45851/accounts/login/?next=/coordinates/arrivage-create/"
+1503928816631	Marionette	INFO	New connections will no longer be accepted
+[Child 9671] WARNING: pipe error (19): Connexion ré-initialisée par le correspondant: file /builddir/build/BUILD/firefox-55.0.2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
