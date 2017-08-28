@@ -67,6 +67,12 @@ class AccessoryCategoryForm(forms.ModelForm):
 
 
 class InventoryAccessoryForm(forms.Form):
+    """
+    The method generate_inventory instantiates InventoryAccessory
+    and call 'set_enterprise_of_current_user'. This attribute
+    will be used by the parent class Inventory during the writing
+    of the inventory with method 'sum_entries'.
+    """
 
     creation_date = forms.DateField(label='Date de création',
                                     widget=forms.TextInput( attrs={ 'type' : 'date' } )

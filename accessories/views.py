@@ -216,6 +216,15 @@ class InventoryListView(ListView):
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('accessories.view_achat', raise_exception=True), name='get')
 class InventoryCreationView(FormView):
+    """
+    The method form_valid starts the generation of the inventory.
+
+    It calls the form's method 'generate_inventory' with the parameter
+    enterprise_of_current_user. This parameter will be used to filter by
+    enterprise.
+
+    See InventoryAccessoryForm, method 'generate_inventory'.
+    """
     form_class = InventoryAccessoryForm
     template_name = 'accessories/inventory-create.html'
 
