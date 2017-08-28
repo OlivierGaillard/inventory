@@ -78,8 +78,9 @@ class InventoryShoeForm(forms.Form):
         self.helper.form_method = "POST"
         self.helper.add_input(Submit('Submit', 'submit'))
 
-    def generate_inventory(self):
+    def generate_inventory(self, enterprise_of_current_user):
         creation_date = self.cleaned_data['creation_date']
         inventory = InventoryShoe()
+        inventory.set_enterprise_of_current_user(enterprise_of_current_user)
         inventory.sum_entries(creation_date)
 

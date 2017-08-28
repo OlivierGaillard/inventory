@@ -209,13 +209,19 @@ class InventoryListView(ListView):
     template_name = 'shoes/inventory.html'
     context_object_name = 'entries'
 
+    def get_queryset(self):
+        enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
+        return InventoryShoe.objects.filter(article__product_owner=enterprise_of_current_user)
+
+
 @method_decorator(login_required, name='dispatch')
 class InventoryCreationView(FormView):
     form_class = InventoryShoeForm
     template_name = 'shoes/inventory-create.html'
 
     def form_valid(self, form):
-        form.generate_inventory()
+        enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
+        form.generate_inventory(enterprise_of_current_user)
         return super(InventoryCreationView, self).form_valid(form)
 
 
