@@ -1,4 +1,4 @@
-Processus to create enter one article
+Processus to create one article
 =====================================
 
 Prerequisites
@@ -14,22 +14,45 @@ Prerequisites
 
 3) One instance of Arrivage is created with a foreign key to the enterprise.
 
+Description of the fields
+-------------------------
 
-4) With the previous points in place it possible to create one article with the attributes:
 
-   a) type_client
+With the previous points in place it possible to create one article with the minimal
+following attributes. It is the tab *Fiche article* :
 
-   b) categories
+   a) name
 
-   c) name
+   b) select one arrival
 
-   d) marque
+   c) product owner is a information readonly field taken from employee
 
-   e) quantity
+   d) quantity
 
-   f) product_owner: it is the enterprise of the employee
+   The *classification* tab allows to enter:
 
-   e) arrivage
+   a) type_client: for man, woman or children.
+
+   b) to select one category e.g. *t-shirt* or *chaussettes*.
+
+   d) to select an existing *marque* or enter a new one
+
+
+Once the above is done you can enter the purchase amount (in french *prix d'achat*) and add pictures.
+
+Edit one article
+----------------
+
+purchase type
+  Did you pay per unit or did you pay for the set? If you select *per unit* the price will be
+  multiplied by the quantity.
+
+devise
+  The currency used for the purchase. In the articles listing, contrary to the arrivals' costs, it is not
+  possible to change the currency. Due to rate changes it is not clear if this possibility is
+  good or not.
+
+
 
 
 

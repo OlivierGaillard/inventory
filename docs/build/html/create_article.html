@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Processus to create enter one article &#8212; documentation boutique 0.1</title>
+    <title>Processus to create one article &#8212; documentation boutique 0.1</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
     <link rel="next" title="How to start" href="deployment.html" />
-    <link rel="prev" title="Inventory" href="README.html" />
+    <link rel="prev" title="README" href="README.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -44,35 +44,53 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="processus-to-create-enter-one-article">
-<h1>Processus to create enter one article<a class="headerlink" href="#processus-to-create-enter-one-article" title="Lien permanent vers ce titre">¶</a></h1>
+  <div class="section" id="processus-to-create-one-article">
+<h1>Processus to create one article<a class="headerlink" href="#processus-to-create-one-article" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Lien permanent vers ce titre">¶</a></h2>
-<ol class="arabic">
-<li><p class="first">The user is created</p>
-</li>
-<li><p class="first">She is an employee of one enterprise</p>
-<ol class="loweralpha simple">
+<ol class="arabic simple">
+<li>The user is created</li>
+<li>She is an employee of one enterprise<ol class="loweralpha">
 <li>One instance of Enterprise is created.</li>
 <li>One instance of Employee is created.</li>
 </ol>
 </li>
-<li><p class="first">One instance of Arrivage is created with a foreign key to the enterprise.</p>
-</li>
-<li><p class="first">With the previous points in place it possible to create one article with the attributes:</p>
-<ol class="loweralpha simple">
-<li>type_client</li>
-<li>categories</li>
+<li>One instance of Arrivage is created with a foreign key to the enterprise.</li>
+</ol>
+</div>
+<div class="section" id="description-of-the-fields">
+<h2>Description of the fields<a class="headerlink" href="#description-of-the-fields" title="Lien permanent vers ce titre">¶</a></h2>
+<p>With the previous points in place it possible to create one article with the minimal
+following attributes. It is the tab <em>Fiche article</em> :</p>
+<blockquote>
+<div><ol class="loweralpha simple">
 <li>name</li>
-<li>marque</li>
+<li>select one arrival</li>
+<li>product owner is a information readonly field taken from employee</li>
 <li>quantity</li>
-<li>product_owner: it is the enterprise of the employee</li>
 </ol>
-<ol class="loweralpha simple" start="5">
-<li>arrivage</li>
+<p>The <em>classification</em> tab allows to enter:</p>
+<ol class="loweralpha simple">
+<li>type_client: for man, woman or children.</li>
+<li>to select one category e.g. <em>t-shirt</em> or <em>chaussettes</em>.</li>
 </ol>
-</li>
+<ol class="loweralpha simple" start="4">
+<li>to select an existing <em>marque</em> or enter a new one</li>
 </ol>
+</div></blockquote>
+<p>Once the above is done you can enter the purchase amount (in french <em>prix d&#8217;achat</em>) and add pictures.</p>
+</div>
+<div class="section" id="edit-one-article">
+<h2>Edit one article<a class="headerlink" href="#edit-one-article" title="Lien permanent vers ce titre">¶</a></h2>
+<dl class="docutils">
+<dt>purchase type</dt>
+<dd>Did you pay per unit or did you pay for the set? If you select <em>per unit</em> the price will be
+multiplied by the quantity.</dd>
+<dt>devise</dt>
+<dd>The currency used for the purchase. In the articles listing, contrary to the arrivals&#8217; costs, it is not
+possible to change the currency. Due to rate changes it is not clear if this possibility is
+good or not.</dd>
+</dl>
 </div>
 </div>
 
@@ -94,9 +112,11 @@
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="README.html">Inventory</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Processus to create enter one article</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Processus to create one article</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description-of-the-fields">Description of the fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#edit-one-article">Edit one article</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="deployment.html">How to start</a></li>
@@ -106,7 +126,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="README.html" title="Chapitre précédent">Inventory</a></li>
+      <li>Previous: <a href="README.html" title="Chapitre précédent">README</a></li>
       <li>Next: <a href="deployment.html" title="Chapitre suivant">How to start</a></li>
   </ul></li>
 </ul>

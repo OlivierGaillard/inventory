@@ -13,6 +13,7 @@ Welcome to boutique's documentation! Eh oui
    README
    create_article
    deployment
+   mise_au_point
 
 
 
