@@ -12,6 +12,7 @@ Welcome to boutique's documentation! Eh oui
 
    README
    create_article
+   thumbnails_setup
    deployment
    mise_au_point
 

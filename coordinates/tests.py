@@ -17,6 +17,8 @@ from products.models import Enterprise
 
 class TestFraisArrivage(TestCase):
 
+    #fixtures = ['countries.json', 'locations.json']
+
     def setUp(self):
         self.start_date = date(year=2017, month=1, day=1)
         cat1 = AccessoryCategory.objects.create(parent=None, title='Valises et sacoches')
@@ -45,7 +47,7 @@ class TestFraisArrivage(TestCase):
 
         self.location_lausanne = Localite.objects.create(nom='Lausanne')
 
-        self.enterprise_hublot = Enterprise(name='Hublot')
+        self.enterprise_hublot = Enterprise.objects.create(name='Hublot')
 
         content_type = ContentType.objects.get_for_model(Accessory)
         permission = Permission.objects.get(
@@ -196,8 +198,8 @@ class TestFraisArrivage(TestCase):
           """
         data = {'date' : date(2017, 3, 1),
                 'designation' :'Arrivage-1',
-                'devise' : self.chf.id,
-                'enterprise' : '1'}
+                'devise' : self.chf.id,}
+                #'enterprise' : self.enterprise_hublot.id,}
         form = ArrivageCreateForm(data)
         self.assertTrue(form.is_valid(), form.errors.as_data())
 
@@ -239,5 +241,12 @@ class TestFraisArrivage(TestCase):
         form = ArrivageUpdateForm(data)
         form.instance = self.arrivage
         self.assertTrue(form.is_valid(), form.errors.as_data())
+
+
+    def test_anonymous_user_cannot_reach_location_update_page(self):
+        c = Client()
+        localites = Localite.objects.all()
+        self.assertTrue(len(localites) > 0)
+        update_url = 'http://127.0.0.1:8000/coordinates/location-update/1'
 
 

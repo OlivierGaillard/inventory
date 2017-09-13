@@ -7,5 +7,6 @@ db.sqlite3
 /boutique/settings.py
 *.txt
 *.bak
+*.log
 migrations/
 

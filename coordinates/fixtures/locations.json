@@ -1,0 +1,65 @@
+[
+{
+    "model": "coordinates.localite",
+    "pk": 1,
+    "fields": {
+        "nom": "Yaound\u00e9",
+        "npa": null,
+        "pays": 1
+    }
+},
+{
+    "model": "coordinates.localite",
+    "pk": 2,
+    "fields": {
+        "nom": "Zurich",
+        "npa": "8031",
+        "pays": 2
+    }
+},
+{
+    "model": "coordinates.localite",
+    "pk": 3,
+    "fields": {
+        "nom": "Paris",
+        "npa": null,
+        "pays": 3
+    }
+},
+{
+    "model": "coordinates.localite",
+    "pk": 4,
+    "fields": {
+        "nom": "Duba\u00ef",
+        "npa": null,
+        "pays": null
+    }
+},
+{
+    "model": "coordinates.localite",
+    "pk": 5,
+    "fields": {
+        "nom": "Douala",
+        "npa": null,
+        "pays": null
+    }
+},
+{
+    "model": "coordinates.localite",
+    "pk": 8,
+    "fields": {
+        "nom": "Montr\u00e9al",
+        "npa": null,
+        "pays": null
+    }
+},
+{
+    "model": "coordinates.localite",
+    "pk": 9,
+    "fields": {
+        "nom": "Spiegel b. Bern",
+        "npa": "3095",
+        "pays": 2
+    }
+}
+]

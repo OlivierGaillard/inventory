@@ -15,6 +15,8 @@ class LocationListView(ListView):
     template_name = 'coordinates/locations.html'
     context_object_name = 'locations'
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('accessories.view_achat', raise_exception=True), name='dispatch')
 class LocationCreationView(CreateView):
     model = Localite
     form_class = LocaliteCreateForm
@@ -23,6 +25,8 @@ class LocationCreationView(CreateView):
     def get_success_url(self):
         return reverse('coordinates:locations')
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('accessories.view_achat', raise_exception=True), name='dispatch')
 class LocationUpdateView(UpdateView):
     model = Localite
     form_class = LocaliteUpdateForm
@@ -32,6 +36,8 @@ class LocationUpdateView(UpdateView):
     def get_success_url(self):
         return reverse('coordinates:locations')
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('accessories.view_achat', raise_exception=True), name='dispatch')
 class LocationDeleteView(DeleteView):
     model = Localite
     template_name = 'coordinates/location-delete.html'

@@ -1,0 +1,42 @@
+[
+{
+    "model": "coordinates.pays",
+    "pk": 1,
+    "fields": {
+        "nom": "Cameroun",
+        "code": "CAM"
+    }
+},
+{
+    "model": "coordinates.pays",
+    "pk": 2,
+    "fields": {
+        "nom": "Suisse",
+        "code": "CH"
+    }
+},
+{
+    "model": "coordinates.pays",
+    "pk": 3,
+    "fields": {
+        "nom": "France",
+        "code": "FR"
+    }
+},
+{
+    "model": "coordinates.pays",
+    "pk": 5,
+    "fields": {
+        "nom": "Emirats Arabes Unis",
+        "code": "ARE"
+    }
+},
+{
+    "model": "coordinates.pays",
+    "pk": 6,
+    "fields": {
+        "nom": "Canada",
+        "code": "N.D."
+    }
+}
+]

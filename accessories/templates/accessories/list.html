@@ -4,11 +4,6 @@
 <h1>Liste des accessoires</h1>
 
 <p>Entreprise de l'employé: {{ enterprise }}</p>
-{% if empty %}
-<p>Il n'y a pas encore d'accessoires saisis. La liste est donc {{ empty }}.</p>
-{% else %}
-<h3>Entreprise propriétaire des accessoires: {{ accessoires.0.product_owner }}</h3>
-{% endif %}
 
     <table class="table">
       <thead>

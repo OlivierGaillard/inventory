@@ -1,4 +1,4 @@
-import pdb
+import logging
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -12,6 +12,8 @@ from finance.models import Achat, Currency
 from .forms import AccessoryForm, AccessoryUpdateForm, InventoryAccessoryForm, AccessoryCategoryForm
 from .forms import AddPhotoForm, CategoryUpdateForm
 from products.models import Employee, Enterprise
+
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -54,6 +56,11 @@ class AccessoryListView(UserPassesTestMixin, ListView):
     Otherwise the user is redirected to the login page which will
     explain the situation.
     """
+    # logging.basicConfig(filename="accessories.log", level=logging.DEBUG,
+    #                     format='%(asctime)s %(levelname)s:%(message)s')
+
+#    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s')
+    logger = logging.getLogger('django')
     model = Accessory
     template_name = 'accessories/list.html'
     context_object_name = 'accessoires'
