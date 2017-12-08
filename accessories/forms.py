@@ -13,7 +13,8 @@ from products.models import Employee
 
 
 class AccessoryForm(ProductCreateForm):
-    quantity = forms.IntegerField(min_value=1, required=True, label="Quantité", initial=0)
+    quantity = forms.IntegerField(min_value=1, required=True, label="Quantité", initial=0,
+                                  help_text="Quantité achetée (sera repris dans le formulaire d'achat)")
 
     class Meta(ProductCreateForm.Meta):
         model = Accessory

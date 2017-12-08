@@ -89,8 +89,7 @@ class VenteCreateForm(forms.ModelForm):
 
     class Meta:
         model = Vente
-        fields = ['product_type', 'product_id', 'quantity', 'client_id', ]
-        #fields = ['product_id', 'quantity', 'client_id'],
+        fields = ['product_type', 'product_id', 'quantity', 'montant', 'client_id', ]
 
     def __init__(self, *args, **kwargs):
         super(VenteCreateForm, self).__init__(*args, **kwargs)
@@ -138,5 +137,17 @@ class VenteCreateForm(forms.ModelForm):
                 raise forms.ValidationError(msg)
         return cleaned_data
 
+class VenteUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Vente
+        fields = ['quantity', 'montant']
 
+    def __init__(self, *args, **kwargs):
+        super(VenteUpdateForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-sm-2'
+        self.helper.field_class = 'col-sm-3'
+        self.helper.form_method = 'POST'
+        self.helper.add_input(Submit('submit', 'Submit'))
 

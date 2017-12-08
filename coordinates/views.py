@@ -1,9 +1,11 @@
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, ListView
 from django.urls import reverse
 from django.contrib.auth.decorators import permission_required, login_required
+from django.conf import settings
 from django.utils.decorators import method_decorator
+from django.db.models import Sum
 from products.models import Enterprise, Employee
-from finance.models import Currency, FraisArrivage
+from finance.models import Currency, FraisArrivage, Vente
 from coordinates.models import Pays
 from .models import Arrivage, Fournisseur, Contact, Localite
 from .forms import ArrivageCreateForm, ArrivageUpdateForm, LocaliteCreateForm, LocaliteUpdateForm
@@ -59,9 +61,6 @@ class ArrivageCreationView(CreateView):
     Only users granted may create arrivals. If one user is granted but still not an
     employee he is redirected to the part of the login page explaining this case.
     **TODO: add the UserPassesTestMixin.**
-
-
-
     """
     model = Arrivage
     template_name = 'coordinates/arrivage-create.html'
@@ -126,6 +125,41 @@ class ArrivageListView(ListView):
     def get_queryset(self):
         enterprise = Employee.get_enterprise_of_current_user(self.request.user)
         return Arrivage.objects.filter(enterprise=enterprise)
+
+
+    def get_context_data(self, **kwargs):
+        """To calculate the total of frais and achats."""
+        context = super(ArrivageListView, self).get_context_data(**kwargs)
+        arrivages = self.get_queryset()
+        total_frais = 0
+        total_frais_all_inventories = 0
+        total_achats = 0
+        total_achats_all_inventories = 0
+        target_currency = settings.DEFAULT_CURRENCY
+
+        for a in arrivages:
+            total_achats += a.get_total_achats()
+            total_achats_all_inventories += total_achats
+            total_frais  += a.get_total_frais()
+            total_frais_all_inventories += total_frais
+        context['total_achats'] = total_achats
+        context['total_frais']  = total_frais
+        context['target_currency'] = target_currency
+        context['total_frais_all_inventories']  = total_frais_all_inventories
+        context['total_achats_all_inventories'] = total_achats_all_inventories
+        context['total_cout_revient'] = total_achats_all_inventories + total_frais_all_inventories
+        enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
+        q = Vente.objects.filter(product_owner=enterprise_of_current_user)
+
+        #        q = Vente.objects.filter(product_owner=enterprise_of_current_user[0].product_owner)
+        if q.exists():
+            e_sum = q.aggregate(Sum('montant'))
+            e_sum = e_sum['montant__sum']
+            context['total_ventes'] = e_sum
+
+        solde = e_sum - (total_frais_all_inventories + total_achats_all_inventories)
+        context['solde'] = solde
+        return context
 
 
 @method_decorator(login_required, name='dispatch')

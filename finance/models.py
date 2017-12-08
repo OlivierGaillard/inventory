@@ -155,6 +155,11 @@ class Achat(models.Model):
     def __str__(self):
         return str(self.montant) + ' ' + self.devise_id.currency_code
 
+    def convert(self, target_currency_code):
+        converter = Converter()
+        montant_source = Money(self.montant, self.devise_id.currency_code)
+        return converter.convert(montant_source, target_currency_code )
+
 
 class ProductType(models.Model):
     """
@@ -200,6 +205,7 @@ class Vente(models.Model):
     product_id       = models.PositiveSmallIntegerField()
     product_type     = models.ForeignKey(ProductType, null=True)
     product_owner    = models.ForeignKey(Enterprise, null=True)
+    montant          = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False)
 
     class Meta:
         ordering = ['-date_vente']

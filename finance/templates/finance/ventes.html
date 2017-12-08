@@ -4,4 +4,22 @@
 
 <h1>Ventes</h1>
 {% render_table table %}
- {% endblock %}
+
+<table class="table">
+      <thead>
+         <tr>
+            <th>Total des ventes</th>
+         </tr>
+      </thead>
+
+      <tfoot>
+
+      </tfoot>
+
+      <tbody>
+      <tr>
+       <td>{{total}}</td>
+      </tr>
+      </tbody>
+</table>
+{% endblock %}

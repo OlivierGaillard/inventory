@@ -32,6 +32,7 @@ class AccessoryCreationView(CreateView):
 
     def form_valid(self, form):
         """This method saves the Accessory instance. """
+        print("form valid")
         self.object = form.save()
         arrivage_id = form['arrivage'].value()
         arrivage = Arrivage.objects.get(pk=arrivage_id)

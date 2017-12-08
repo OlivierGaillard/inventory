@@ -29,7 +29,7 @@ admin.site.register(FraisArrivage)
 
 
 class VenteAdmin(admin.ModelAdmin):
-    list_display = ('date_vente', 'quantity', 'client_id', 'product_id', 'product_type', 'article', 'article_id',
+    list_display = ('date_vente', 'quantity', 'montant', 'client_id', 'product_id', 'product_type', 'article', 'article_id',
                     'product_owner' )
 
 admin.site.register(Vente, VenteAdmin)

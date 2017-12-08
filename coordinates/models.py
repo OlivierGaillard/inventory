@@ -2,6 +2,8 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
+from django.conf import settings
+#from clothes.models import Clothes
 
 
 
@@ -123,11 +125,33 @@ class Arrivage(models.Model):
     def __str__(self):
         return self.designation
 
+
+
     def get_total_frais(self):
         """Return the total as a Money instance.
         Using montant.amount would return the number only."""
+        target_currency = settings.DEFAULT_CURRENCY
         total = 0
         for frais in self.fraisarrivage_set.all():
-            montant = frais.convert(self.devise.currency_code)
-            total += montant
+            total += frais.convert(target_currency).amount
         return total
+
+    def get_total_achats(self):
+        """Return the total for this arrivage.
+        This is used in the arrivages' table beneath total des frais.
+        Les achats concernent tous les types d'articles confondus
+        (habits, chaussures et accessoires). """
+        target_currency = settings.DEFAULT_CURRENCY
+        montant = 0
+        for c in self.clothes_set.all():
+            if c.prix_achat:
+                montant += c.prix_achat.convert(target_currency).amount
+        for c in self.shoe_set.all():
+            if c.prix_achat:
+                montant += c.prix_achat.convert(target_currency).amount
+        for c in self.accessory_set.all():
+            if c.prix_achat:
+                montant += c.prix_achat.convert(target_currency).amount
+        return montant
+
+

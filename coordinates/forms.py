@@ -56,7 +56,7 @@ class CoolEnterpriseChoiceField(forms.ModelChoiceField):
 
 class ArrivageCreateForm(forms.ModelForm):
     devise = CoolCurrencyChoiceField(queryset=Currency.objects.filter(used=True))
-    enterprise = CoolEnterpriseChoiceField(queryset=Enterprise.objects.all(), disabled=True)
+    enterprise = CoolEnterpriseChoiceField(queryset=Enterprise.objects.all(), disabled=True, required=False)
 
     class Meta:
         model = Arrivage

@@ -10,9 +10,10 @@ from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, DeleteView, UpdateView, ListView, FormView
 from django.views import View
 from django_filters.views import FilterView
+from django.db.models import Sum
 from coordinates.models import Arrivage
 from .models import FraisArrivage, Currency, Converter, Vente, ProductType
-from .forms import FraisArrivageCreateForm, FraisArrivageFormSetHelper, FraisArrivageUpdateForm, CurrencyUsageForm, VenteCreateForm
+from .forms import FraisArrivageCreateForm, FraisArrivageFormSetHelper, FraisArrivageUpdateForm, CurrencyUsageForm, VenteCreateForm, VenteUpdateForm
 from .filters import FraisArrivageFilter
 from .models import Vente
 from .tables import VenteTable
@@ -155,7 +156,6 @@ class FraisArrivageUpdateView(UpdateView):
     model = FraisArrivage
     template_name = "finance/update.html"
     context_object_name = 'frais'
-    #fields = ['montant', 'objet', 'date_frais']
     form_class = FraisArrivageUpdateForm
 
 
@@ -184,20 +184,29 @@ class CurrencyListView(ListView):
     context_object_name = 'currencies'
 
 
+class VenteUpdateView(UpdateView):
+    model = Vente
+    template_name = 'finance/vente-update.html'
+    context_object_name = 'ventes'
+    form_class = VenteUpdateForm
+
+
 @login_required
 @user_passes_test(Employee.is_current_user_employee)
 def ventes(request):
     """If the enterprise of the user has no data it returns an empty list."""
     enterprise_of_current_user = Employee.get_enterprise_of_current_user(request.user)
-
     q = Vente.objects.filter(product_owner=enterprise_of_current_user)
+
     table = None
     if q.exists():
         table = VenteTable(q)
+        e_sum = q.aggregate(Sum('montant'))
+        e_sum = e_sum['montant__sum']
     else:
         table = VenteTable([])
     RequestConfig(request).configure(table)
-    return render(request, 'finance/ventes.html', {'table' : table})
+    return render(request, 'finance/ventes.html', {'table' : table, 'total': e_sum,})
 
 
 
@@ -272,7 +281,6 @@ class SellingView(FormView):
         data = {'product_id': product_id,
                 'product_type': product_type.pk}
 
-        print(data)
         form = self.form_class(initial=data)
         # form.helper.layout.append(Hidden('product_type', product_type.pk))
         # form.helper.layout.append(Hidden('product_id',   str(product_id)))

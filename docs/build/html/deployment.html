@@ -27,7 +27,8 @@
     <script type="text/javascript" src="_static/translations.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
-    <link rel="prev" title="Processus to create one article" href="create_article.html" />
+    <link rel="next" title="Where we are?" href="mise_au_point.html" />
+    <link rel="prev" title="Thumbnails Setup" href="thumbnails_setup.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -51,6 +52,34 @@
 <li>Create the permission <em>view_achat</em> and set it to this user.</li>
 <li>Create one <em>Employee</em> instance by selecting this user and this enterprise.</li>
 </ul>
+<div class="section" id="dump-and-load-of-data">
+<h2>Dump and load of data<a class="headerlink" href="#dump-and-load-of-data" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Per default format is JSON. We can add <cite>&#8211;indent 4</cite>. For sample:
+<cite>python manage.py dumpdata coordinates.Localite &#8211;indent 4 &gt; locations.json</cite></p>
+<p>En revanche utiliser <cite>django-admin</cite> (like the documentation write) generates
+one error.</p>
+<dl class="docutils">
+<dt>::</dt>
+<dd>django-admin dumpdata [app_label[.ModelName] [app_label[.ModelName] ...]]</dd>
+</dl>
+</div>
+<div class="section" id="usage-for-testing">
+<h2>Usage for testing<a class="headerlink" href="#usage-for-testing" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Following the documentation it suffices to create a <cite>fixtures</cite> directory
+in the app and declare this in the test class:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestFraisArrivage</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+  <span class="n">fixtures</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;locations.json&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Then every unittest benefits will load these data in the temporary database
+which is set for the test. Writing a simple test to count the
+locations failed because countries were referenced. Okay I dumped the
+countries and added them to fixtures:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fixtures</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;countries.json&#39;</span><span class="p">,</span> <span class="s1">&#39;locations.json&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="todo">
 <h1>TODO<a class="headerlink" href="#todo" title="Lien permanent vers ce titre">¶</a></h1>
@@ -82,15 +111,23 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_article.html">Processus to create one article</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">How to start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="thumbnails_setup.html">Thumbnails Setup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dump-and-load-of-data">Dump and load of data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-for-testing">Usage for testing</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#todo">TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mise_au_point.html">Where we are?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userstories.html">User Stories</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="create_article.html" title="Chapitre précédent">Processus to create one article</a></li>
+      <li>Previous: <a href="thumbnails_setup.html" title="Chapitre précédent">Thumbnails Setup</a></li>
+      <li>Next: <a href="mise_au_point.html" title="Chapitre suivant">Where we are?</a></li>
   </ul></li>
 </ul>
 </div>

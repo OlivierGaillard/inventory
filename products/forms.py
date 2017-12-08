@@ -20,7 +20,8 @@ class ProductCreateForm(forms.ModelForm):
     to which the user belongs to (if it is an employee, which she should be).
 
     """
-    quantity = forms.IntegerField(min_value=1, required=True, label="Quantité", initial=0)
+    quantity = forms.IntegerField(min_value=1, required=True, label="Quantité", initial=0,
+                                  help_text="Quantité en stock (peut différer de la quantité achetée)")
     marque = forms.CharField(max_length=100, required=False, help_text='Pour entrer une nouvelle marque')
 
     class Meta:

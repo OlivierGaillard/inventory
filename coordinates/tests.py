@@ -9,15 +9,16 @@ from decimal import Decimal
 from money import Money
 from finance.models import Currency, FraisArrivage, FraisType
 from accessories.models import Accessory, AccessoryMarque, AccessoryCategory, AccessoryEntry, AccessoryOutput, InventoryAccessory
+from accessories.forms import AccessoryForm
 from coordinates.models import Arrivage, Pays, Localite
 from coordinates.forms import ArrivageCreateForm, ArrivageUpdateForm
-from products.models import Enterprise
+from products.models import Enterprise, Employee
 
 
 
 class TestFraisArrivage(TestCase):
 
-    #fixtures = ['countries.json', 'locations.json']
+    fixtures = ['countries.json', 'locations.json']
 
     def setUp(self):
         self.start_date = date(year=2017, month=1, day=1)
@@ -32,7 +33,7 @@ class TestFraisArrivage(TestCase):
         self.arrivage = Arrivage(date=date(2017, 2, 1), designation='Arrivage-1')
 
 
-        self.ch = Pays.objects.create(nom='Suisse', code='CH')
+        self.ch = Pays.objects.get(nom='Suisse')
         self.chf = Currency.objects.create(currency_code='CHF', currency_name = 'Swiss Franc',
                                            used=True, rate_usd=0.9981)
         self.arrivage.devise = self.chf
@@ -59,6 +60,7 @@ class TestFraisArrivage(TestCase):
         self.user_boss = 'Boss'
         self.boss = User.objects.create_user(username=self.user_boss, password=self.passwd)
         self.boss.user_permissions.set([permission])
+        self.employee_boss = Employee.objects.create(user=self.boss, enterprise=self.enterprise_hublot)
 
     def test_createFraisArrivage(self):
         frais_arrivage = FraisArrivage(arrivage_ref=self.arrivage)
@@ -90,7 +92,7 @@ class TestFraisArrivage(TestCase):
         frais_count = self.arrivage.fraisarrivage_set.count()
         self.assertEqual(3, frais_count)
 
-    def btest_view_add_frais_to_arrivage(self):
+    def test_view_add_frais_to_arrivage(self):
         frais_arrivage = FraisArrivage(arrivage_ref=self.arrivage)
         frais_arrivage.devise_id = self.chf
         frais_arrivage.montant = 1200.00
@@ -130,17 +132,17 @@ class TestFraisArrivage(TestCase):
                 'name': 'Maman', 'marque': 'Baba au rhum',
                 'quantity': '5',
                 'arrivage': self.arrivage.id,
+                'product_owner' : self.enterprise_hublot.id,
                 }
 
         form = AccessoryForm(data)
         self.assertTrue(form.is_valid(), form.errors.as_data())
-        #         form.save()
 
         response = c.post(reverse('accessories:create'), data,
                           follow=True)
-        print(response.status_code)
-        c = Client()
-        self.assertTrue(2 == 4, "TODo")
+        #print(response.content.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(1, Accessory.objects.count())
 
     def test_arrivage_get_total(self):
         '''One arrivage model has its own method get_total().
@@ -219,14 +221,14 @@ class TestFraisArrivage(TestCase):
                 'designation': 'Arrivage-1',
                 'devise': self.chf.id,
                 'enterprise' : self.enterprise_hublot,
-                'nouveau_pays' : 'France',
-                'code_pays' : 'FR',
+                'nouveau_pays' : 'Gabon',
+                'code_pays' : 'GAB',
                 'lieu_provenance': self.location_lausanne.id}
         form = ArrivageUpdateForm(data)
         self.assertTrue(form.is_valid(), form.errors.as_data())
-        self.assertEqual(Pays.objects.filter(nom='France').count(), 1, "France not created.")
-        france = Pays.objects.filter(nom='France').first()
-        self.assertEqual('FR', france.code)
+        self.assertEqual(Pays.objects.filter(nom='Gabon').count(), 1, "Gabon not created.")
+        gabon = Pays.objects.filter(nom='Gabon').first()
+        self.assertEqual('GAB', gabon.code)
 
     def test_ArrivageUpdateForm_new_frais(self):
         data = {'date': date(2017, 3, 1),
@@ -244,9 +246,12 @@ class TestFraisArrivage(TestCase):
 
 
     def test_anonymous_user_cannot_reach_location_update_page(self):
+        '''Test that anonymous user is redirected to the login page.'''
         c = Client()
         localites = Localite.objects.all()
         self.assertTrue(len(localites) > 0)
         update_url = 'http://127.0.0.1:8000/coordinates/location-update/1'
+        response = c.get(update_url, follow=True)
+        self.assertIn('passe', response.content.decode(), "Login page not found")
 
 

@@ -1,0 +1,28 @@
+User Stories
+============
+
+Idéalement
+----------
+
+L'utilisateur peut utiliser le site web comme eCommerce avec une
+fonction de vente cash: le site devient sa caisse enregistreuse, sert
+à imprimer ses tickets de caisses (reçus), factures, enregistrer ses
+ventes, voire à quel client, les avances aussi éventuellement. Il peut
+aussi générer des rapports de vente. Surtout il doit d'abord pouvoir
+entrer ses marchandises: quantité, article, photo, prix d'achat et
+prix de vente projeté et effectuer une vente (avec au minimum ce qui a
+été vendu (combien d'articles, d'exemplaires, à quel prix, y-a-t-il eu
+une remise).
+
+Le prix de vente affiché ne correspond pas nécessairement au prix de
+vente final dans le cas d'une vente cash car le client
+marchande. C'est spécifique d'une vente en boutique en Afrique. On
+affiche un prix toujours supérieur au prix de vente attendu pour
+démarrer le marchandage assez haut. Le prix de vente cash n'est donc
+pas fixe. Mais les étiquettes des articles exposés en boutique
+correspondent au prix pour marchandage; elles ont des valeurs
+différentes que celles du site.
+
+Situation début décembre 2017
+-----------------------------
+

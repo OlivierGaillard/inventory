@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>User Stories &#8212; documentation boutique 0.1</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="prev" title="Where we are?" href="mise_au_point.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="user-stories">
+<h1>User Stories<a class="headerlink" href="#user-stories" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="idealement">
+<h2>Idéalement<a class="headerlink" href="#idealement" title="Lien permanent vers ce titre">¶</a></h2>
+<p>L&#8217;utilisateur peut utiliser le site web comme eCommerce avec une
+fonction de vente cash: le site devient sa caisse enregistreuse, sert
+à imprimer ses tickets de caisses (reçus), factures, enregistrer ses
+ventes, voire à quel client, les avances aussi éventuellement. Il peut
+aussi générer des rapports de vente. Surtout il doit d&#8217;abord pouvoir
+entrer ses marchandises: quantité, article, photo, prix d&#8217;achat et
+prix de vente projeté et effectuer une vente (avec au minimum ce qui a
+été vendu (combien d&#8217;articles, d&#8217;exemplaires, à quel prix, y-a-t-il eu
+une remise).</p>
+<p>Le prix de vente affiché ne correspond pas nécessairement au prix de
+vente final dans le cas d&#8217;une vente cash car le client
+marchande. C&#8217;est spécifique d&#8217;une vente en boutique en Afrique. On
+affiche un prix toujours supérieur au prix de vente attendu pour
+démarrer le marchandage assez haut. Le prix de vente cash n&#8217;est donc
+pas fixe. Mais les étiquettes des articles exposés en boutique
+correspondent au prix pour marchandage; elles ont des valeurs
+différentes que celles du site.</p>
+</div>
+<div class="section" id="situation-debut-decembre-2017">
+<h2>Situation début décembre 2017<a class="headerlink" href="#situation-debut-decembre-2017" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Il est possible de:</p>
+<ul class="simple">
+<li>créer un arrivage et de lui associer des frais. Le total des frais
+est affiché sur la ligne du tableau listant les arrivages.</li>
+<li>créer des catégories pour 3 types d&#8217;articles: des habits, des
+chaussures ou d&#8217;accessoires.</li>
+<li>d&#8217;afficher et de modifier les catégories.</li>
+<li>de créer un article en spécifiant:<ul>
+<li>son arrivage</li>
+<li>son nom</li>
+<li>sa marque (on sélectionne ou on en crée une nouvelle)</li>
+<li>la quantité achetée</li>
+<li>le prix payé (en gros ou par article)</li>
+</ul>
+</li>
+<li>de générer un inventaire pour les trois types d&#8217;articles.</li>
+</ul>
+</div>
+<div class="section" id="a-faire">
+<h2>A faire<a class="headerlink" href="#a-faire" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>afficher le total des achats et des frais pour un
+arrivage. Simplement ajouter le total des achats dans le tableau des
+arrivages.</li>
+<li>afficher et calculer le solde d&#8217;un arrivage en fonction des ventes
+et des achats avec les frais.</li>
+<li>afficher la prévision du chiffre de ventes requis pour couvrir un
+arrivage selon le bénéfice prévu en pourcentage.</li>
+</ul>
+</div>
+<div class="section" id="lister-les-achats-d-un-arrivage">
+<h2>Lister les achats d&#8217;un arrivage<a class="headerlink" href="#lister-les-achats-d-un-arrivage" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Un arrivage est lié à des frais par le moyen de <cite>FraisArrivage</cite> qui
+possède une clé étrangère sur un arrivage. Pour accéder aux frais d&#8217;un
+arrivage depuis une instance d&#8217;arrivage on utilise la syntaxe
+<cite>arrivage.fraisarrivage_set.all()</cite>.</p>
+<p>Comment accéder au total des prix d&#8217;achats d&#8217;un arrivage concernant
+les articles? Tout article possède une référence à la classe
+<cite>finance.Achat</cite>. Mais comment savoir si l&#8217;achat est à l&#8217;unité ou
+global? C&#8217;est sans importance à ce stade mais pas lors de la
+saisie. Dans ce cas le formulaire demande de choisir si le coût est à
+l&#8217;unité ou global, et le total est calculé en fonction du choix. A
+l&#8217;unité? Alors le prix est multiplié par la quantité. Global? Quelle
+que soit la quantité le prix enregistré est celui qui a été saisi.</p>
+<p>Tout article possède une référence à un arrivage. Donc à partir d&#8217;un
+arrivage on peut retrouver tous les articles. Ce qui se traduit par
+<cite>ar.clothes_set.all()</cite> pour une instance <cite>ar</cite> d&#8217;arrivage.</p>
+<p>Ensuite on peut faire, si <cite>zue</cite> est une instance de l&#8217;arrivage <cite>Zuerich</cite>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">zue</span><span class="o">.</span><span class="n">clothes_set</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="o">&lt;</span><span class="n">QuerySet</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Clothes</span><span class="p">:</span> <span class="n">Minitruc</span> <span class="o">/</span> <span class="n">Mikafashion</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Clothes</span><span class="p">:</span> <span class="n">Mango</span> <span class="o">/</span> <span class="n">Mikafashion</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">zue</span><span class="o">.</span><span class="n">clothes_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+<span class="o">...</span>     <span class="nb">print</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">prix_achat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">boutique</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_article.html">Processus to create one article</a></li>
+<li class="toctree-l1"><a class="reference internal" href="thumbnails_setup.html">Thumbnails Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">How to start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html#todo">TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mise_au_point.html">Where we are?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User Stories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#idealement">Idéalement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#situation-debut-decembre-2017">Situation début décembre 2017</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-faire">A faire</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lister-les-achats-d-un-arrivage">Lister les achats d&#8217;un arrivage</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="mise_au_point.html" title="Chapitre précédent">Where we are?</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Olivier Gaillard.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/userstories.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

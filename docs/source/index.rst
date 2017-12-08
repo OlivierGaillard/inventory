@@ -15,6 +15,7 @@ Welcome to boutique's documentation! Eh oui
    thumbnails_setup
    deployment
    mise_au_point
+   userstories
 
 
 
