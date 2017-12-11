@@ -103,6 +103,8 @@ class Currency(models.Model):
     currency_code   = models.CharField(max_length=3, unique=True)
     currency_name   = models.CharField(max_length=100, null=True)
     used            = models.BooleanField(default=False, verbose_name="utilisée?")
+    default         = models.BooleanField(default=False, verbose_name="monnaie par défaut",
+                                          help_text="Cette valeur est utilisée sur les pages de résumé des arrivages.")
     rate_usd        = models.DecimalField(max_digits=15, decimal_places=4, default=1.0, editable=False)
     last_update     = models.DateField(auto_now=True)
     
@@ -201,7 +203,8 @@ class Vente(models.Model):
 
     date_vente       = models.DateField(default=timezone.now)
     quantity         = models.PositiveSmallIntegerField()
-    client_id        = models.ForeignKey('coordinates.Contact')
+    client_id        = models.ForeignKey('coordinates.Contact', null=True, blank=True,
+                                         help_text="En cas de liquidation ce champ peut être vide.")
     product_id       = models.PositiveSmallIntegerField()
     product_type     = models.ForeignKey(ProductType, null=True)
     product_owner    = models.ForeignKey(Enterprise, null=True)

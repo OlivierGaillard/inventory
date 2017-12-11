@@ -46,8 +46,8 @@ Il est possible de:
 
 - de générer un inventaire pour les trois types d'articles.
 
-A faire
--------
+A faire et fait
+---------------
 
 - afficher le total des achats et des frais pour un
   arrivage. Simplement ajouter le total des achats dans le tableau des
@@ -58,6 +58,8 @@ A faire
 
 - afficher la prévision du chiffre de ventes requis pour couvrir un
   arrivage selon le bénéfice prévu en pourcentage.
+
+
 
 Lister les achats d'un arrivage
 -------------------------------

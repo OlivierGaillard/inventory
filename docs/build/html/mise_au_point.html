@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Where we are? &#8212; documentation boutique 0.1</title>
+    <title>Reprise en décembre 2017 &#8212; documentation boutique 0.1</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -27,6 +27,7 @@
     <script type="text/javascript" src="_static/translations.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="User Stories" href="userstories.html" />
     <link rel="prev" title="How to start" href="deployment.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -43,34 +44,85 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="where-we-are">
-<h1>Where we are?<a class="headerlink" href="#where-we-are" title="Lien permanent vers ce titre">¶</a></h1>
-<p>Discovering <em>oscar</em> &#8212; a Django package to build e-commerce &#8212;- causes me to think about the
-future of this site.</p>
-<div class="section" id="some-questions-for-the-future">
-<h2>Some questions for the future<a class="headerlink" href="#some-questions-for-the-future" title="Lien permanent vers ce titre">¶</a></h2>
+  <div class="section" id="reprise-en-decembre-2017">
+<h1>Reprise en décembre 2017<a class="headerlink" href="#reprise-en-decembre-2017" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="impressions">
+<h2>Impressions<a class="headerlink" href="#impressions" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li>Should I throw away entirely the selling section and replace it with <em>oscar</em>?</li>
-<li>Should I replace all the stuff with <em>oscar</em>?</li>
-<li>What about a transition to REST and a mobile app? Is a mobile app really useful, for what?<ul>
-<li>selling: ideally with barcode scan</li>
-<li>quick search within the inventory</li>
-</ul>
-</li>
+<li>Le <em>design</em> choisi avec la classe <em>Product</em> se révèle, sans
+surprise, peu pratique à reprendre.</li>
+<li>Il y a une confusion, un léger glissement entre les buts d&#8217;un
+inventaire et celui d&#8217;une gestion.</li>
+<li>L&#8217;ajoût d&#8217;une vente passe par un clic sur le lien <em>quantité</em> d&#8217;une
+liste d&#8217;un article. C&#8217;est pas terriblement parlant mais c&#8217;est
+utilisable et suffisant pour un test fonctionnel.</li>
 </ul>
 </div>
-<div class="section" id="what-we-did">
-<h2>What we did<a class="headerlink" href="#what-we-did" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="ajouts-tout-recents">
+<h2>Ajouts tout récents<a class="headerlink" href="#ajouts-tout-recents" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li>I learned a lot for sure, about:<ul>
-<li>Django framework</li>
-<li>CSS, Bootstrap</li>
-<li>Git</li>
-<li>Virtual environments with Python and pip</li>
-<li>Design of models with Django: abstract model or not.</li>
+<li>La liste des arrivages est complétée par des données de gestion
+telles que le coût de revient, le total des ventes et le solde.</li>
 </ul>
-</li>
+</div>
+<div class="section" id="perspective">
+<h2>Perspective<a class="headerlink" href="#perspective" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Les totaux ajoutés à la liste des arrivages sont valides pendant
+combien de temps?</p>
+<p>Le processus est le suivant:</p>
+<ol class="arabic simple">
+<li>création d&#8217;un arrivage avec frais.</li>
+<li>ajout des articles liés à cet arrivage (avec photos
+éventuellement).</li>
+<li>ajout des ventes manuellement.</li>
+</ol>
+<p>En pratique il faut pouvoir relier les articles en magasin avec ceux
+qui ont été saisis. Ceci n&#8217;est pas possible actuellement car rien
+n&#8217;est prévu pour imprimer une fiche article ou une étiquette.</p>
+<p>Saisir une vente implique de rechercher l&#8217;article manuellement en
+faisant défiler le contenu (certes par type d&#8217;article) ce qui peut
+s&#8217;avérer impossible si le nombre est trop grand. Il faudra donc
+implémenter une recherche, mais avec quels critères?</p>
+<p>Le nom du modèle est un critère de choix essentiel mais son ID reste
+la solution la plus sûre.</p>
+</div>
+<div class="section" id="separer-le-module-des-ventes">
+<h2>Séparer le module des ventes<a class="headerlink" href="#separer-le-module-des-ventes" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Avant de poursuivre avec l&#8217;amélioration du processus de vente et de
+recherche il faut envisager de séparer le processus de vente, et même
+la partie servant à l&#8217;analyse.</p>
+<p>Il est clair qu&#8217;un petit modèle de données ne serait pas de trop!</p>
+<p>Question analyse il est possible qu&#8217;un ou plusieurs arrivages soient
+déficitaires mais que globalement le solde soit positif. Pourvu que
+les bénéfices réalisés par tous les arrivages soient suffisants.</p>
+<p>Le stock d&#8217;un arrivage peut durer jusqu&#8217;à son épuisement ou jusqu&#8217;à la
+liquidation du stock. Cela implique qu&#8217;une <em>sortie</em> n&#8217;est pas
+nécessairement liée à un client car la liquidation peut consister à
+jeter les invendus invendables! J&#8217;imagine aussi facilement la
+situation où une centaine d&#8217;articles doivent être liquidés: dans cette
+version il n&#8217;est pas possible de réaliser cette opération facilement:</p>
+<ul class="simple">
+<li>aucun scan des étiquettes;</li>
+<li>pas de fonction &#8220;liquidation&#8221; pour un arrivage (cela présuppose
+qu&#8217;il est facile de repérer l&#8217;arrivage des articles en magasin);</li>
 </ul>
+<p>Il est possible d&#8217;implémenter cette partie dans le site d&#8217;inventaire
+mais clairement il faudrait créer un site dédié à la vente, surtout si
+l&#8217;on pense à la vente par internet.</p>
+<p>De façon générale le module de vente devrait être indépendant de la
+façon dont les ventes sont réalisées (par internet ou en magasin). Il
+y a aussi une raison pratique concernant aussi la saisie des articles
+des arrivages. Il est commercialement valable de prévoir l&#8217;usage d&#8217;un
+mobile pour ces opérations:</p>
+<ol class="arabic simple">
+<li>scan du code-barre ou saisie du no d&#8217;article;</li>
+<li>saisie d&#8217;un nouvel article avec envoi des photos.</li>
+</ol>
+<p>Dans la version actuelle il faut regrouper tous les arrivages et
+saisir les ventes. Mais quand s&#8217;arrêter?</p>
+<p>Si un nouvel arrivage date de fin décembre, qu&#8217;il est saisi en
+décembre, il va fausser le résultat du budget de l&#8217;an prochain. Il
+faut alors lui donner une date de naissance dans le futur. Vraiment?</p>
 </div>
 </div>
 
@@ -94,13 +146,17 @@ future of this site.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_article.html">Processus to create one article</a></li>
+<li class="toctree-l1"><a class="reference internal" href="thumbnails_setup.html">Thumbnails Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deployment.html">How to start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deployment.html#todo">TODO</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Where we are?</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#some-questions-for-the-future">Some questions for the future</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#what-we-did">What we did</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reprise en décembre 2017</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#impressions">Impressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ajouts-tout-recents">Ajouts tout récents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#perspective">Perspective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#separer-le-module-des-ventes">Séparer le module des ventes</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="userstories.html">User Stories</a></li>
 </ul>
 
 <div class="relations">
@@ -108,6 +164,7 @@ future of this site.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="deployment.html" title="Chapitre précédent">How to start</a></li>
+      <li>Next: <a href="userstories.html" title="Chapitre suivant">User Stories</a></li>
   </ul></li>
 </ul>
 </div>

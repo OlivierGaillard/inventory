@@ -135,7 +135,11 @@ class ArrivageListView(ListView):
         total_frais_all_inventories = 0
         total_achats = 0
         total_achats_all_inventories = 0
-        target_currency = settings.DEFAULT_CURRENCY
+        try:
+            target_currency = Currency.objects.filter(default=True)[0]
+        except:
+            target_currency = settings.DEFAULT_CURRENCY
+        context['target_currency'] = target_currency
 
         for a in arrivages:
             total_achats += a.get_total_achats()

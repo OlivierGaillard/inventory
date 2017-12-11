@@ -12,8 +12,8 @@
             <th>Compléter</th>
             <th>Détails</th>
             {% if perms.accessories.view_achat %}
-            <th>Total frais</th>
-            <th>Total achats</th>
+            <th class="text-center">Total frais</th>
+            <th class="text-center">Total achats</th>
             {% endif %}
             <th title="Saisir des frais">Frais</th>
          </tr>
@@ -26,8 +26,8 @@
             <th>Compléter</th>
             <th>Détails</th>
             {% if perms.accessories.view_achat %}
-            <th>Total frais</th>
-            <th>Total achats</th>
+            <th class="text-center">Total frais</th>
+            <th class="text-center">Total achats</th>
             {% endif %}
             <th title="Saisir des frais">Frais</th>
          </tr>
@@ -44,8 +44,8 @@
                 <a href="{% url "coordinates:arrivage-detail" pk=i.pk %}">Détails</a>
                 </td>
                 {% if perms.accessories.view_achat %}
-                   <td>{{i.get_total_frais|floatformat}}  {{target_currency}}</td>
-                   <td>{{i.get_total_achats|floatformat}} {{target_currency}}</td>
+                   <td align="right">{{i.get_total_frais|floatformat:2}}  {{target_currency}}</td>
+                   <td align="right">{{i.get_total_achats|floatformat:2}} {{target_currency}}</td>
                 {% endif %}
                 <td>
                 <a href="{% url "finance:add_frais" pk=i.pk %}">Saisir</a>
@@ -60,24 +60,24 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Total des frais</th>
-            <th>Total des achats</th>
-            <th>Coût de revient total</th>
-            <th>Total des ventes</th>
-            <th>Solde</th>
+            <th class="text-center">Total des frais</th>
+            <th class="text-center">Total des achats</th>
+            <th class="text-center">Coût de revient total</th>
+            <th class="text-center">Total des ventes</th>
+            <th class="text-center">Solde</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-          <td>{{total_frais_all_inventories|floatformat}}</td>
-          <td>{{total_achats_all_inventories|floatformat}}</td>
-          <td>{{total_cout_revient|floatformat}}</td>
+          <td align="center">{{total_frais_all_inventories|floatformat:2}} {{target_currency}}</td>
+          <td align="center">{{total_achats_all_inventories|floatformat:2}} {{target_currency}}</td>
+          <td align="center">{{total_cout_revient|floatformat:2}} {{target_currency}}</td>
           {% if total_ventes %}
-            <td>{{total_ventes|floatformat}}</td>
+            <td align="center">{{total_ventes|floatformat:2}} {{target_currency}}</td>
           {% else %}
-            <td>zéro pour l'instant</td>
+            <td align="center">zéro pour l'instant</td>
           {% endif %}
-          <td>{{solde|floatformat}}</td>
+          <td align="center">{{solde|floatformat:2}} {{target_currency}}</td>
         </tr>
         </tbody>
     </table>
