@@ -61,7 +61,8 @@ class AccessoryListView(UserPassesTestMixin, ListView):
     #                     format='%(asctime)s %(levelname)s:%(message)s')
 
 #    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s')
-    logger = logging.getLogger('django')
+    logger = logging.getLogger()
+    logger.info("START")
     model = Accessory
     template_name = 'accessories/list.html'
     context_object_name = 'accessoires'

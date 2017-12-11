@@ -9,7 +9,9 @@ from finance.models import Currency, FraisArrivage, Vente
 from coordinates.models import Pays
 from .models import Arrivage, Fournisseur, Contact, Localite
 from .forms import ArrivageCreateForm, ArrivageUpdateForm, LocaliteCreateForm, LocaliteUpdateForm
+import logging
 
+logger = logging.getLogger('django')
 
 
 class LocationListView(ListView):
@@ -129,6 +131,7 @@ class ArrivageListView(ListView):
 
     def get_context_data(self, **kwargs):
         """To calculate the total of frais and achats."""
+
         context = super(ArrivageListView, self).get_context_data(**kwargs)
         arrivages = self.get_queryset()
         total_frais = 0
@@ -137,7 +140,10 @@ class ArrivageListView(ListView):
         total_achats_all_inventories = 0
         try:
             target_currency = Currency.objects.filter(default=True)[0]
+            logger.debug('target_currency: %s' %  target_currency)
+            logger.debug('target')
         except:
+            logger.fatal('target_currency not set')
             raise Exception("Please set a default currency using admin.")
         context['target_currency'] = target_currency
 
@@ -146,26 +152,38 @@ class ArrivageListView(ListView):
             total_achats_all_inventories += total_achats
             total_frais  += a.get_total_frais()
             total_frais_all_inventories += total_frais
+        logger.debug('total_achats__all_inventories: %s' % total_achats_all_inventories)
         context['total_achats'] = total_achats
         context['total_frais']  = total_frais
         context['target_currency'] = target_currency
         context['total_frais_all_inventories']  = total_frais_all_inventories
+        logger.debug('total_frais_all_inventories: %s' % total_frais_all_inventories)
         context['total_achats_all_inventories'] = total_achats_all_inventories
         context['total_cout_revient'] = total_achats_all_inventories + total_frais_all_inventories
         enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
         q = Vente.objects.filter(product_owner=enterprise_of_current_user)
 
         if q.exists():
+            logger.debug('Il existe des ventes')
             e_sum = q.aggregate(Sum('montant'))
             e_sum = e_sum['montant__sum']
+            logger.debug('total des montants des ventes: %s' % e_sum)
             context['total_ventes'] = e_sum
             if total_frais_all_inventories and total_achats_all_inventories:
+                logger.debug('total frais ET total achats')
                 solde = e_sum - (total_frais_all_inventories + total_achats_all_inventories)
+                logger.debug('Le solde: %s' % solde)
             elif total_frais_all_inventories:
+                logger.debug('total frais uniquement')
                 solde = e_sum - total_frais_all_inventories
+                logger.debug('Le solde: %s' % solde)
             else:
+                logger.debug('total achats uniquement')
                 solde = e_sum - total_achats_all_inventories
+                logger.debug('Le solde: %s' % solde)
             context['solde'] = solde
+        else:
+            logger.debug("Il n'existe pas encore de ventes.")
         return context
 
 
