@@ -159,7 +159,12 @@ class ArrivageListView(ListView):
             e_sum = q.aggregate(Sum('montant'))
             e_sum = e_sum['montant__sum']
             context['total_ventes'] = e_sum
-            solde = e_sum - (total_frais_all_inventories + total_achats_all_inventories)
+            if total_frais_all_inventories and total_achats_all_inventories:
+                solde = e_sum - (total_frais_all_inventories + total_achats_all_inventories)
+            elif total_frais_all_inventories:
+                solde = e_sum - total_frais_all_inventories
+            else:
+                solde = e_sum - total_achats_all_inventories
             context['solde'] = solde
         return context
 
