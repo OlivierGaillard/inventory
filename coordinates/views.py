@@ -163,25 +163,30 @@ class ArrivageListView(ListView):
         enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
         q = Vente.objects.filter(product_owner=enterprise_of_current_user)
 
+        montant_ventes = 0
         if q.exists():
             logger.debug('Il existe des ventes')
             e_sum = q.aggregate(Sum('montant'))
             e_sum = e_sum['montant__sum']
             logger.debug('total des montants des ventes: %s' % e_sum)
-            context['total_ventes'] = e_sum
-            if total_frais_all_inventories and total_achats_all_inventories:
-                logger.debug('total frais ET total achats')
-                solde = e_sum - (total_frais_all_inventories + total_achats_all_inventories)
-                logger.debug('Le solde: %s' % solde)
-            elif total_frais_all_inventories:
-                logger.debug('total frais uniquement')
-                solde = e_sum - total_frais_all_inventories
-                logger.debug('Le solde: %s' % solde)
+            if e_sum:
+                montant_ventes = e_sum
             else:
-                logger.debug('total achats uniquement')
-                solde = e_sum - total_achats_all_inventories
-                logger.debug('Le solde: %s' % solde)
-            context['solde'] = solde
+                logger.debug("Le montant des ventes est zéro.")
+                context['total_ventes'] = montant_ventes
+                if total_frais_all_inventories and total_achats_all_inventories:
+                    logger.debug('total frais ET total achats')
+                    solde = montant_ventes - (total_frais_all_inventories + total_achats_all_inventories)
+                    logger.debug('Le solde: %s' % solde)
+                elif total_frais_all_inventories:
+                    logger.debug('total frais uniquement')
+                    solde = montant_ventes - total_frais_all_inventories
+                    logger.debug('Le solde: %s' % solde)
+                else:
+                    logger.debug('total achats uniquement')
+                    solde = montant_ventes - total_achats_all_inventories
+                    logger.debug('Le solde: %s' % solde)
+                context['solde'] = solde
         else:
             logger.debug("Il n'existe pas encore de ventes.")
         return context
