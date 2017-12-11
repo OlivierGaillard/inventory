@@ -8,13 +8,8 @@ from django.utils import timezone
 from django.conf import settings
 import os
 from coordinates.models import Arrivage
-from accessories.models import Accessory, AccessoryOutput
-from clothes.models import Clothes, ClothesOutput
-from shoes.models import Shoe, ShoeOutput
 from products.models import Enterprise
 
-
-    
 class Converter():
     """ 'source' is one instance of 'Montant' and 'target'
          is an instance of 'Devise'.
@@ -103,7 +98,7 @@ class Currency(models.Model):
     currency_code   = models.CharField(max_length=3, unique=True)
     currency_name   = models.CharField(max_length=100, null=True)
     used            = models.BooleanField(default=False, verbose_name="utilisée?")
-    default         = models.BooleanField(default=False, verbose_name="monnaie par défaut",
+    default         = models.BooleanField(default=False, verbose_name="monnaie par défaut", unique=True,
                                           help_text="Cette valeur est utilisée sur les pages de résumé des arrivages.")
     rate_usd        = models.DecimalField(max_digits=15, decimal_places=4, default=1.0, editable=False)
     last_update     = models.DateField(auto_now=True)
