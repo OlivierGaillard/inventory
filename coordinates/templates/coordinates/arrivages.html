@@ -57,6 +57,7 @@
     </table>
   </p>
 
+{% if perms.accessories.view_achat %}
     <table class="table">
         <thead>
         <tr>
@@ -81,4 +82,5 @@
         </tr>
         </tbody>
     </table>
+{% endif %}
 {% endblock %}
