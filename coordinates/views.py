@@ -138,7 +138,7 @@ class ArrivageListView(ListView):
         try:
             target_currency = Currency.objects.filter(default=True)[0]
         except:
-            target_currency = settings.DEFAULT_CURRENCY
+            raise Exception("Please set a default currency using admin.")
         context['target_currency'] = target_currency
 
         for a in arrivages:
