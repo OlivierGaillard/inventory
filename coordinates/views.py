@@ -155,14 +155,12 @@ class ArrivageListView(ListView):
         enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
         q = Vente.objects.filter(product_owner=enterprise_of_current_user)
 
-        #        q = Vente.objects.filter(product_owner=enterprise_of_current_user[0].product_owner)
         if q.exists():
             e_sum = q.aggregate(Sum('montant'))
             e_sum = e_sum['montant__sum']
             context['total_ventes'] = e_sum
-
-        solde = e_sum - (total_frais_all_inventories + total_achats_all_inventories)
-        context['solde'] = solde
+            solde = e_sum - (total_frais_all_inventories + total_achats_all_inventories)
+            context['solde'] = solde
         return context
 
 
