@@ -7,7 +7,7 @@
     <table class="table">
       <thead>
          <tr>
-            <th>No</th>
+            <th>No / ID</th>
             <th>Arrivage</th>
             <th>Date d'ajout</th>
             <th>Nom</th>
@@ -23,7 +23,7 @@
 
       <tfoot>
          <tr>
-            <th>No</th>
+            <th>No / ID</th>
             <th>Arrivage</th>
             <th>Date d'ajout</th>
             <th>Nom</th>
@@ -38,7 +38,7 @@
 
       <tbody>
       {% for a in clothes %}
-      <tr><td>{{ forloop.counter }}</td>
+      <tr><td>{{ forloop.counter }}/{{a.id}}</td>
           <td>{{ a.arrivage }}</td>
           <td>{{ a.date_ajout }}</td>
           <td> <a title="Cliquer pour voir les détails" href="{% url "clothes:detail" a.pk %}">{{ a.name }}</a>  </td>

@@ -98,7 +98,7 @@ class Currency(models.Model):
     currency_code   = models.CharField(max_length=3, unique=True)
     currency_name   = models.CharField(max_length=100, null=True)
     used            = models.BooleanField(default=False, verbose_name="utilisée?")
-    default         = models.BooleanField(default=False, verbose_name="monnaie par défaut", unique=True,
+    default         = models.BooleanField(default=False, verbose_name="monnaie par défaut", unique=False,
                                           help_text="Cette valeur est utilisée sur les pages de résumé des arrivages.")
     rate_usd        = models.DecimalField(max_digits=15, decimal_places=4, default=1.0, editable=False)
     last_update     = models.DateField(auto_now=True)

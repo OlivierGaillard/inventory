@@ -14,6 +14,7 @@ Welcome to boutique's documentation! Eh oui
    create_article
    thumbnails_setup
    deployment
+   labels_generation
    mise_au_point
    userstories
 

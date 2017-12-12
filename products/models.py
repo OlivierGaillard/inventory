@@ -309,6 +309,11 @@ class Product(models.Model):
             #print("There are no entries.")
         return balance
 
+    def get_quantity_as_list(self):
+        """Helper for template to print labels."""
+        quantity = self.get_quantity()
+        return list(range(1, quantity+1))
+
 
     def get_marque_class(self):
         """Can be implemented by the concrete class if it has its own Marque"""

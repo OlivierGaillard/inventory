@@ -1,0 +1,39 @@
+{% extends "inventex.html" %}
+{% block content %}
+<table class="table-striped">
+<tbody>
+{% for c in label_clothes %}
+    {% for i in c.get_quantity_as_list %}
+    {% if forloop.counter == 1 %}
+    <tr>
+        <td>
+            <table class="table">
+                <tr><th>Nom</th><td>{{c.name}}</td></tr>
+                <tr><th>ID</th><td>{{c.pk}}</td></tr>
+                <tr><th>Qte</th><td>{{i}}/{{c.get_quantity}}</td></tr>
+            </table>
+        </td>
+    {% elif forloop.counter|divisibleby:'4' %}
+        <td>
+            <table class="table">
+                <tr><th>Nom</th><td>{{c.name}}</td></tr>
+                <tr><th>ID</th><td>{{c.pk}}</td></tr>
+                <tr><th>Qte</th><td>{{i}}/{{c.get_quantity}}</td></tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+    {% else %}
+        <td>
+            <table class="table">
+                <tr><th>Nom</th><td>{{c.name}}</td></tr>
+                <tr><th>ID</th><td>{{c.pk}}</td></tr>
+                <tr><th>Qte</th><td>{{i}}/{{c.get_quantity}}</td></tr>
+            </table>
+        </td>
+    {% endif %}
+    {% endfor %}
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
