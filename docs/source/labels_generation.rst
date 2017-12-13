@@ -1,7 +1,6 @@
 # Labels Generation
 
-Labels generation can be made with LaTeX, with HTML, with Django packages to write PDF or convert from
-HTML to PDF. The requirements are:
+The requirements are:
 
 1. generate as many labels as the stock quantity.
 2. each label must contain the article's type and its ID.
@@ -14,34 +13,34 @@ Nice to have:
 We need probably a dedicated "app" as it make no sense to include it in one or another articles' type app like
 "accessories", "clothes" or "shoes".
 
+
+## Implementation
+
+Finally I choosed to generate a LaTeX source and produce a PDF with it. I used the
+LaTeX package `labels`. It is a little bit obsolete but a lot simpler to use than
+HTML and CSS. DjangoEurope included this package per default.
+
+## Other tempatives
+
+Trying to print the labels generated with a custom CSS failed a little bit because the
+background color of the lables was not printable, even by adding a Google chrome extension.
+As this problem depends on the browser setting it is a lot better to generate a PDF.
+
+
+- Install django-easy-pdf
+- Intall WeasyPrint
+
+
+Installing "cairocffi" failed for unknown reason. Then I wonder what to do Options are:
+
+- trying to install to find that DjangoEurope has not this library?
+- generate one LaTeX source file (and the package is not installed on DjangoEurope?)
+
+### Package `django-hardcopy`
+
+Ce package nécessite `chromium`.
+
+The result was deceiving.
+
 I created the app "labels". Do I need any specific model? Not sure. Only a view and one template.
-
-## Constructing the table for labels
-
-I will a table with 3 columns, each item itself being a table with the data for one label.
-We have:
-
-- one loop over the list of articles
-- one inner loop over the quantity of each article
-
-The logic is contained within the inner loop. If the inner loop counter is divisible by
-3,  we have reached the end of a row and we close "</tr>".
-
-Otherwise we add one table data element "td".
-
-Let's say we have the list 5 quantity of article ID 3. Then:
-
-(Why not use bootstrap grid system?)
-
-Nous aurons un début de ligne aux valeurs du compteur suivantes:
-
-1, 2, 3
-4, 5, 6
-7, 8, 9,
-10, 11, 12
-13, 14, 15
-
-Après chaque multiple de 3 il y a passage à la ligne, ainsi qu'avec 1.
-
-Si le compteur = 1 ou s'il est divisible par 3.
 
