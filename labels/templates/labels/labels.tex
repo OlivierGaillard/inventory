@@ -1,0 +1,26 @@
+{% autoescape off %}
+{% load mptt_tags %}
+\documentclass{article}
+\usepackage{labels}
+\usepackage[utf8]{inputenc}
+\begin{document}
+\begin{labels}
+{% for c in articles %}
+    {% with forloop.counter as article_count %}
+    {% for i in c.get_quantity_as_list %}
+    \genericlabel{%
+    \begin{tabular}{l}
+    Nom: \emph{ {{ c.name }} }\\
+    Catégorie: {{ c.categories.last }}\\
+    Code article: {{ c.pk }}\\
+    {\footnotesize No d'exemplaire: {{ i }}/{{ c.get_quantity }} }\\
+    {\footnotesize No d'article: {{ article_count }}/{{ total_articles }} }\\
+    \end{tabular}}
+
+    {% endfor %}
+    {% endwith %}
+{% endfor %}
+\end{labels}
+
+\end{document}
+{% endautoescape %}

@@ -5,5 +5,5 @@ from . import views
 app_name = 'labels'
 
 urlpatterns = [
-    url(r'^labelsforclothes/$', views.clothes_labels, name='clothes_labels'),
+    url(r'^labels_tex/(?P<article_type>\w+)$', views.labels_tex, name='labels'),
 ]
