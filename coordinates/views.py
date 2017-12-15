@@ -172,23 +172,27 @@ class ArrivageListView(ListView):
             if e_sum:
                 montant_ventes = e_sum
             else:
-                logger.debug("Le montant des ventes est zéro.")
-                context['total_ventes'] = montant_ventes
-                if total_frais_all_inventories and total_achats_all_inventories:
-                    logger.debug('total frais ET total achats')
-                    solde = montant_ventes - (total_frais_all_inventories + total_achats_all_inventories)
-                    logger.debug('Le solde: %s' % solde)
-                elif total_frais_all_inventories:
-                    logger.debug('total frais uniquement')
-                    solde = montant_ventes - total_frais_all_inventories
-                    logger.debug('Le solde: %s' % solde)
-                else:
-                    logger.debug('total achats uniquement')
-                    solde = montant_ventes - total_achats_all_inventories
-                    logger.debug('Le solde: %s' % solde)
-                context['solde'] = solde
+                logger.debug("Le montant des ventes est zéro. (liquidation, cadeaux)")
+            context['total_ventes'] = montant_ventes
         else:
             logger.debug("Il n'existe pas encore de ventes.")
+
+        if total_frais_all_inventories and total_achats_all_inventories:
+            logger.debug('total frais ET total achats')
+            solde = montant_ventes - (total_frais_all_inventories + total_achats_all_inventories)
+            logger.debug('Le solde: %s' % solde)
+            context['solde'] = solde
+        elif total_frais_all_inventories:
+            logger.debug('total frais uniquement')
+            solde = montant_ventes - total_frais_all_inventories
+            logger.debug('Le solde: %s' % solde)
+            context['solde'] = solde
+        else:
+            logger.debug('total achats uniquement')
+            solde = montant_ventes - total_achats_all_inventories
+            logger.debug('Le solde: %s' % solde)
+            context['solde'] = solde
+
         return context
 
 
