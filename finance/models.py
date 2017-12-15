@@ -9,6 +9,9 @@ from django.conf import settings
 import os
 from coordinates.models import Arrivage
 from products.models import Enterprise
+from accessories.models import Accessory, AccessoryOutput
+from clothes.models import Clothes, ClothesOutput
+from shoes.models import Shoe, ShoeOutput
 
 class Converter():
     """ 'source' is one instance of 'Montant' and 'target'

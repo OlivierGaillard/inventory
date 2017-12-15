@@ -2,13 +2,11 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.utils.decorators import method_decorator
-from django.http import HttpResponse
 from django.forms import modelformset_factory
 from crispy_forms.layout import Submit
 from django.shortcuts import reverse, render
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, DeleteView, UpdateView, ListView, FormView
-from django.views import View
 from django_filters.views import FilterView
 from django.db.models import Sum
 from coordinates.models import Arrivage
@@ -19,9 +17,7 @@ from .models import Vente
 from .tables import VenteTable
 from products.models import Employee
 from django_tables2 import RequestConfig
-
 from crispy_forms.bootstrap import PrependedText
-from crispy_forms.layout import  Hidden
 
 
 @method_decorator(login_required, name='dispatch')
