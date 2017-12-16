@@ -243,7 +243,8 @@ def make_selling(request, product_id, product_type):
 
         form = VenteCreateForm(data)
         form.helper.layout.append(PrependedText('quantity', 'Max: ' + str(remaining)))
-        return render(request, "finance/create_vente.html", {'form': form, 'article' : article})
+        return render(request, "finance/create_vente.html", {'form': form, 'article' : article,
+                                                             'product_type':product_type})
 
     else:
         form = VenteCreateForm(request.POST)
