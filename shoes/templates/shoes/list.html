@@ -43,7 +43,7 @@
           <td>{{ a.categories.last }}</td>
           <td>{{ a.marque_ref }}</td>
           {% if a.get_quantity > 0 %}
-          <td> <a class="btn btn-primary" title="quantité disponible" href="{% url "finance:create_vente" a.pk 'Accessory' %}">Vendre
+          <td> <a class="btn btn-primary" title="quantité disponible" href="{% url "finance:create_vente" a.pk 'Shoe' %}">Vendre
               <span class="badge">{{ a.get_quantity }}</span></a>   </td>
           {% else %}
           <td> <a class="btn btn-danger disabled" title="quantité disponible" href="{% url "finance:create_vente" a.pk 'Shoe' %}">Vendre
