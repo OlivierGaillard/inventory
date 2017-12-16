@@ -90,6 +90,11 @@ class VenteCreateForm(forms.ModelForm):
     class Meta:
         model = Vente
         fields = ['product_type', 'product_id', 'quantity', 'montant', 'client_id', ]
+        widgets = {
+            'product_type': forms.TextInput(
+                attrs={'type': 'disabled'}
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         super(VenteCreateForm, self).__init__(*args, **kwargs)
