@@ -42,7 +42,13 @@
           <td> <a title="Cliquer pour voir les détails" href="{% url "shoes:detail" a.pk %}">{{ a.name }}</a>  </td>
           <td>{{ a.categories.last }}</td>
           <td>{{ a.marque_ref }}</td>
-          <td> <a title="Vendre" href="{% url "finance:create_vente" a.pk 'Shoe' %}">{{ a.get_quantity }}</a>   </td>
+          {% if a.get_quantity > 0 %}
+          <td> <a class="btn btn-primary" title="quantité disponible" href="{% url "finance:create_vente" a.pk 'Accessory' %}">Vendre
+              <span class="badge">{{ a.get_quantity }}</span></a>   </td>
+          {% else %}
+          <td> <a class="btn btn-danger disabled" title="quantité disponible" href="{% url "finance:create_vente" a.pk 'Shoe' %}">Vendre
+              <span class="badge">{{ a.get_quantity }}</span></a>   </td>
+          {% endif %}
           {% if perms.accessories.view_achat %}
              <td>{{a.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>
           {% endif %}
