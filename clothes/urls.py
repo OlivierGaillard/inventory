@@ -7,7 +7,8 @@ app_name = 'clothes'
 
 urlpatterns = [
     url(r'^clothes_create/$', views.ClothesCreationView.as_view(), name='clothes_create'),
-    url(r'^list/$', views.ClothesListView.as_view(), name='list'),
+    url(r'^list/$', views.ArticleFilteredView.as_view(), name='list'),
+    #url(r'^list/$', views.ClothesListView.as_view(), name='list'),
     url(r'detail/(?P<pk>[0-9]+)$', views.ClothesDetailView.as_view(), name='detail'),
     url(r'^delete/(?P<pk>[0-9]+)$', views.ClothesDeleteView.as_view(), name='delete'),
     url(r'^update/(?P<pk>[0-9]+)$', views.ClothesUpdateView.as_view(), name='update'),

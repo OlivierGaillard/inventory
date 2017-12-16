@@ -9,20 +9,37 @@ from .forms import ShoeForm, CategoryForm, CategoryUpdateForm, InventoryShoeForm
 from coordinates.models import Arrivage
 from products.models import Employee
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django_filters import FilterSet
+from django_filters.views import FilterView
+
+class ArticleFilter(FilterSet):
+    class Meta:
+        model = Shoe
+        fields = {'id' : ['exact'],
+                  'name' : ['icontains'],
+                  }
+
+    @property
+    def qs(self):
+        parent = super(ArticleFilter, self).qs
+        enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
+        return parent.filter(product_owner=enterprise_of_current_user)
+
 
 @method_decorator(login_required, name='dispatch')
-class ShoeListView(UserPassesTestMixin, ListView):
-    model = Shoe
-    template_name = 'shoes/list.html'
+class ArticleFilteredView(UserPassesTestMixin, FilterView):
+    filterset_class = ArticleFilter
+    template_name = 'shoes/flist.html' # filtered list
     context_object_name = 'shoes'
-
-    def get_queryset(self):
-        return Shoe.objects.filter(product_owner=Employee.get_enterprise_of_current_user(self.request.user).pk)
 
     def test_func(self):
         return  Employee.is_current_user_employee(self.request.user)
 
-
+    def get_context_data(self, **kwargs):
+        context = super(ArticleFilteredView, self).get_context_data(**kwargs)
+        enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
+        context['enterprise'] = enterprise_of_current_user
+        return context
 
 
 @method_decorator(login_required, name='dispatch')

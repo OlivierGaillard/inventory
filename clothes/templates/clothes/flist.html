@@ -1,0 +1,70 @@
+{% extends "inventex.html" %}
+{% load mptt_tags %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>Liste des habits</h1>
+<p>
+    <form action="" method="get">
+        {{ filter.form|crispy}}
+    <button type="submit" class="btn btn-default">Filtrer</button>
+</form>
+</p>
+
+
+<p>Cliquez sur la quantité pour saisir une vente.</p>
+<p>
+    <table class="table">
+      <thead>
+         <tr>
+            <th>No / ID</th>
+            <th>Arrivage</th>
+            <th>Date d'ajout</th>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>Marque</th>
+            <th>Quantité</th>
+            {% if perms.accessories.view_achat %}
+                <th>Prix d'achat</th>
+            {% endif %}
+
+         </tr>
+      </thead>
+
+      <tfoot>
+         <tr>
+            <th>No / ID</th>
+            <th>Arrivage</th>
+            <th>Date d'ajout</th>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>Marque</th>
+            <th>Quantité</th>
+            {% if perms.accessories.view_achat %}
+                <th>Prix d'achat</th>
+            {% endif %}
+         </tr>
+      </tfoot>
+
+      <tbody>
+      {% for a in clothes %}
+      <tr><td>{{ forloop.counter }}/{{a.id}}</td>
+          <td>{{ a.arrivage }}</td>
+          <td>{{ a.date_ajout }}</td>
+          <td> <a title="Cliquer pour voir les détails" href="{% url "clothes:detail" a.pk %}">{{ a.name }}</a>  </td>
+          <td>{{ a.categories.last }}</td>
+          <td>{{ a.marque_ref }}</td>
+          {% if a.get_quantity > 0 %}
+          <td> <a class="btn btn-primary" title="quantité disponible" href="{% url "finance:create_vente" a.pk 'Clothes' %}">Vendre
+              <span class="badge">{{ a.get_quantity }}</span></a>   </td>
+          {% else %}
+          <td> <a class="btn btn-danger disabled" title="quantité disponible" href="{% url "finance:create_vente" a.pk 'Clothes' %}">Vendre
+              <span class="badge">{{ a.get_quantity }}</span></a>   </td>
+          {% endif %}
+          {% if perms.accessories.view_achat %}
+             <td>{{a.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>
+          {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+  </p>
+{% endblock %}

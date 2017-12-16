@@ -12,8 +12,8 @@ from finance.models import Achat, Currency
 from .forms import AccessoryForm, AccessoryUpdateForm, InventoryAccessoryForm, AccessoryCategoryForm
 from .forms import AddPhotoForm, CategoryUpdateForm
 from products.models import Employee, Enterprise
-
-
+from django_filters import FilterSet
+from django_filters.views import FilterView
 
 
 @method_decorator(login_required, name='dispatch')
@@ -49,47 +49,34 @@ class AccessoryCreationView(CreateView):
         return kwargs
 
 
-@method_decorator(login_required, name='dispatch')
-class AccessoryListView(UserPassesTestMixin, ListView):
-    """
-    If the user is bounded to an enterprise it passes the test.
+class ArticleFilter(FilterSet):
+    class Meta:
+        model = Accessory
+        fields = {'id' : ['exact'],
+                  'name' : ['icontains'],
+                  }
 
-    Otherwise the user is redirected to the login page which will
-    explain the situation.
-    """
-    # logging.basicConfig(filename="accessories.log", level=logging.DEBUG,
-    #                     format='%(asctime)s %(levelname)s:%(message)s')
-
-#    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s')
-    logger = logging.getLogger()
-    logger.info("START")
-    model = Accessory
-    template_name = 'accessories/list.html'
-    context_object_name = 'accessoires'
-
-
-    def get_queryset(self):
-        """If the enterprise of the user has no data it returns an empty list."""
+    @property
+    def qs(self):
+        parent = super(ArticleFilter, self).qs
         enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
-        q = Accessory.objects.filter(product_owner=enterprise_of_current_user)
-        if q.exists():
-            return q
-        else:
-            return []
+        return parent.filter(product_owner=enterprise_of_current_user)
 
-    def get_context_data(self, **kwargs):
-        enterprise = Employee.get_enterprise_of_current_user(self.request.user)
-        accessories_list = self.get_queryset()
-        context = {}
-        if len(accessories_list) == 0:
-            context['empty'] = 'vide'
-        context['enterprise'] = enterprise
-        context['accessoires'] = accessories_list
-        return context
 
+@method_decorator(login_required, name='dispatch')
+class ArticleFilteredView(UserPassesTestMixin, FilterView):
+    filterset_class = ArticleFilter
+    template_name = 'accessories/flist.html' # filtered list
+    context_object_name = 'accessoires'
 
     def test_func(self):
         return  Employee.is_current_user_employee(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleFilteredView, self).get_context_data(**kwargs)
+        enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
+        context['enterprise'] = enterprise_of_current_user
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
