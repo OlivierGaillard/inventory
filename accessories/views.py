@@ -12,7 +12,7 @@ from finance.models import Achat, Currency
 from .forms import AccessoryForm, AccessoryUpdateForm, InventoryAccessoryForm, AccessoryCategoryForm
 from .forms import AddPhotoForm, CategoryUpdateForm
 from products.models import Employee, Enterprise
-from django_filters import FilterSet
+from django_filters import FilterSet, CharFilter
 from django_filters.views import FilterView
 
 
@@ -50,6 +50,7 @@ class AccessoryCreationView(CreateView):
 
 
 class ArticleFilter(FilterSet):
+    arrivage__designation = CharFilter(lookup_expr='icontains')
     class Meta:
         model = Accessory
         fields = {'id' : ['exact'],

@@ -9,10 +9,12 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
 from products.models import Employee
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django_filters import FilterSet
+from django_filters import FilterSet, CharFilter
 from django_filters.views import FilterView
 
+
 class ArticleFilter(FilterSet):
+    arrivage__designation = CharFilter(lookup_expr='icontains')
     class Meta:
         model = Clothes
         fields = {'id' : ['exact'],

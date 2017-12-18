@@ -9,10 +9,11 @@ from .forms import ShoeForm, CategoryForm, CategoryUpdateForm, InventoryShoeForm
 from coordinates.models import Arrivage
 from products.models import Employee
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django_filters import FilterSet
+from django_filters import FilterSet, CharFilter
 from django_filters.views import FilterView
 
 class ArticleFilter(FilterSet):
+    arrivage__designation = CharFilter(lookup_expr='icontains')
     class Meta:
         model = Shoe
         fields = {'id' : ['exact'],
