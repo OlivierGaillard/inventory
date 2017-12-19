@@ -37,10 +37,10 @@ class FraisArrivageListView(PermissionRequiredMixin, FilterView):
         context = super(FraisArrivageListView, self).get_context_data(**kwargs)
         arrivage = self.request.GET.get('arrivage_ref', '')
         devises = Currency.objects.filter(used=True)
-        monnaie = 'XOF'
+        monnaie = 'XAF'
         monnaie = self.request.GET.get('monnaie', '')
         if len(monnaie) == 0:
-            monnaie = 'XOF'
+            monnaie = 'XAF'
         total =0
         devise_total = monnaie
         converter = Converter()
@@ -186,6 +186,20 @@ class VenteUpdateView(UpdateView):
     context_object_name = 'ventes'
     form_class = VenteUpdateForm
 
+    def get_success_url(self):
+        return reverse('finance:ventes')
+
+
+def sum_amounts(dataset, target_currency):
+    total = 0
+    for i in dataset:
+        if i.montant == None:
+            continue
+        elif i.devise_id.currency_code == target_currency:
+            total += i.montant
+        else:
+            total += i.convert(target_currency)
+    return total
 
 @login_required
 @user_passes_test(Employee.is_current_user_employee)
@@ -195,14 +209,14 @@ def ventes(request):
     q = Vente.objects.filter(product_owner=enterprise_of_current_user)
 
     table = None
+    total = 0
     if q.exists():
         table = VenteTable(q)
-        e_sum = q.aggregate(Sum('montant'))
-        e_sum = e_sum['montant__sum']
+        total = sum_amounts(q, 'XAF')
     else:
         table = VenteTable([])
     RequestConfig(request).configure(table)
-    return render(request, 'finance/ventes.html', {'table' : table, 'total': e_sum,})
+    return render(request, 'finance/ventes.html', {'table' : table, 'total': total,})
 
 
 
@@ -239,7 +253,8 @@ def make_selling(request, product_id, product_type):
         article, product_type, remaining = get_concrete_article_and_product_type(product_type, product_id)
         data = {'product_id' : product_id,
                 'product_type' : product_type.pk,
-                'quantity' : '1'}
+                'quantity' : '1',
+                }
 
         form = VenteCreateForm(data)
         form.helper.layout.append(PrependedText('quantity', 'Max: ' + str(remaining)))

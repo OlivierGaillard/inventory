@@ -183,7 +183,7 @@ class ProductType(models.Model):
 
 class Vente(models.Model):
     """
-    Generic class used to store selling of aritcles (Clothes, Accessory or
+    Generic class used to store selling of articles (Clothes, Accessory or
     Shoe). The core of the class are the fields *product_type* and
     *product_id*. They allow to retrieve the concrete class (Clothes,
     Accessory or Shoe) for creating and saving the *Output* instance.
@@ -207,6 +207,7 @@ class Vente(models.Model):
     product_type     = models.ForeignKey(ProductType, null=True)
     product_owner    = models.ForeignKey(Enterprise, null=True)
     montant          = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=False)
+    devise_id        = models.ForeignKey(Currency, null=True)
 
     class Meta:
         ordering = ['-date_vente']
@@ -238,6 +239,10 @@ class Vente(models.Model):
         article = product_cls.objects.get(pk=self.product_id)
         self.product_owner = article.product_owner
 
+    def convert(self, target_currency_code):
+        converter = Converter()
+        montant_source = Money(self.montant, self.devise_id.currency_code)
+        return converter.convert(montant_source, target_currency_code)
 
     def __str__(self):
         s = "Client: %s - article-ID: %s - type de produit: %s - quantité: %s - date: %s"

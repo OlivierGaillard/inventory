@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import permission_required, login_required
 from clothes.models import Clothes
 from django.http import HttpResponse
 from django.views.generic import ListView
@@ -27,7 +28,7 @@ def make_pdf(latex_source):
 
 
     #return HttpResponse(content_type='text/plain', content=rendered_template)
-
+@login_required
 def labels_tex(request, article_type):
     enterprise_of_current_user = Employee.get_enterprise_of_current_user(request.user)
     if article_type == 'Clothes':

@@ -29,7 +29,9 @@
                         <li><a href="{% url "clothes:list" %}" title="Liste des habits">Liste des habits</a></li>
                         <li><a href="{% url "clothes:inventory_create" %}" title="après avoir entré les habits">Générer un inventaire</a></li>
                         <li><a href="{% url "clothes:inventory" %}" title="Visualiser un inventaire, par défaut le plus récent est affiché.">Afficher un inventaire</a></li>
+                        {% if request.user.is_authenticated %}
                         <li><a href="{% url "labels:labels" "Clothes" %}" title="Générer étiquettes avec pdflatex" target="_blank">Générer étiquettes</a></li>
+                        {% endif %}
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -41,7 +43,9 @@
                         <li><a href="{% url "shoes:list" %}" title="">Liste des chaussures</a></li>
                         <li><a href="{% url "shoes:inventory_create" %}" title="après avoir entré les articles">Générer un inventaire</a></li>
                         <li><a href="{% url "shoes:inventory" %}" title="Visualiser un inventaire, par défaut le plus récent est affiché.">Afficher un inventaire</a></li>
+                        {% if request.user.is_authenticated %}
                         <li><a href="{% url "labels:labels" "Shoes" %}" title="Générer étiquettes avec pdflatex" target="_blank">Générer étiquettes</a></li>
+                        {% endif %}
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -53,7 +57,9 @@
                         <li><a href="{% url "accessories:list" %}" title="Liste des accessoires">Liste des accessoires</a></li>
                         <li><a href="{% url "accessories:inventory-create" %}" title="après avoir entré les articles">Générer un inventaire</a></li>
                         <li><a href="{% url "accessories:inventory-list" %}" title="Visualiser un inventaire, par défaut le plus récent est affiché.">Afficher un inventaire</a></li>
+                        {% if request.user.is_authenticated %}
                         <li><a href="{% url "labels:labels" "Accessories" %}" title="Générer étiquettes avec pdflatex" target="_blank">Générer étiquettes</a></li>
+                        {% endif %}
                     </ul>
                 </li>
                 <li class="dropdown">

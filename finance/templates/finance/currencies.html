@@ -7,6 +7,7 @@
          <tr>
             <th>No</th>
             <th>Code</th>
+            <th>ID</th>
             <th>Modifier</th>
             <th>Nom</th>
             <th>en usage?</th>
@@ -19,6 +20,7 @@
       {% for a in currencies %}
       <tr><td>{{ forloop.counter }}</td>
           <td>{{ a.currency_code }}
+          <td>{{ a.id }}</td>
           <td title="Modifier"><a href="{% url "finance:update_currency" a.pk %}">M</a></td>
           <td>{{ a.currency_name }}</td>
           <td>{{ a.used|yesno:"oui,non,peut-être" }}  </td>

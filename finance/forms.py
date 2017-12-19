@@ -86,10 +86,11 @@ class CurrencyUsageForm(forms.ModelForm):
 
 
 class VenteCreateForm(forms.ModelForm):
+    devise_id = CoolCurrencyChoiceField(queryset=Currency.objects.filter(used=True))
 
     class Meta:
         model = Vente
-        fields = ['product_type', 'product_id', 'quantity', 'montant', 'client_id', ]
+        fields = ['product_type', 'product_id', 'quantity', 'montant', 'devise_id', 'client_id', ]
         widgets = {
             'product_type': forms.TextInput(
                 attrs={'type': 'disabled'}
@@ -143,9 +144,11 @@ class VenteCreateForm(forms.ModelForm):
         return cleaned_data
 
 class VenteUpdateForm(forms.ModelForm):
+    devise_id = CoolCurrencyChoiceField(queryset=Currency.objects.filter(used=True))
+
     class Meta:
         model = Vente
-        fields = ['quantity', 'montant']
+        fields = ['client_id', 'quantity', 'montant', 'devise_id']
 
     def __init__(self, *args, **kwargs):
         super(VenteUpdateForm, self).__init__(*args, **kwargs)
