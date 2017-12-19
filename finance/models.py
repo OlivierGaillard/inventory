@@ -226,6 +226,7 @@ class Vente(models.Model):
         self._set_product_owner()
         return super(Vente,self).save()
 
+
     @property
     def article(self):
         return self._get_concrete_article()

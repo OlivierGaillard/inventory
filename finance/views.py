@@ -272,45 +272,6 @@ def make_selling(request, product_id, product_type):
             return render(request, "finance/create_vente.html", {'form': form, 'article': article})
 
 
-class SellingView(FormView):
 
-    form_class = VenteCreateForm
-    template_name = "finance/create_vente.html"
-
-    def get_concrete_article_and_product_type(self, product_type, product_id):
-        product_type = ProductType.objects.get(model_class=product_type)
-        product_cls = product_type.get_concrete_class()
-        article = product_cls.objects.get(pk=product_id)
-        remaining = article.get_quantity()
-        return (article, product_type, remaining)
-
-
-    def get(self, request, *args, **kwargs):
-        product_id   = kwargs['product_id']
-        product_type = kwargs['product_type']
-        article, product_type, remaining = self.get_concrete_article_and_product_type(product_type, product_id)
-
-        data = {'product_id': product_id,
-                'product_type': product_type.pk}
-
-        form = self.form_class(initial=data)
-        # form.helper.layout.append(Hidden('product_type', product_type.pk))
-        # form.helper.layout.append(Hidden('product_id',   str(product_id)))
-
-        form.helper.layout.append(PrependedText('quantity', 'Max: ' + str(remaining)))
-        return render(request, self.template_name, {'form': form, 'article': article, 'remaining' : remaining})
-
-    def post(self, request, *args, **kwargs):
-        form = VenteCreateForm(request.POST)
-        print(form.is_bound)
-        print(form.cleaned_data())
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('finance:ventes'))
-        else:
-            product_id   = kwargs['product_id']
-            product_type = kwargs['product_type']
-            article, product_type, remaining = self.get_concrete_article_and_product_type(product_type, product_id)
-            return render(request, self.template_name, {'form': form, 'article': article, 'remaining': remaining})
 
 

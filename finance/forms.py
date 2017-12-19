@@ -148,7 +148,7 @@ class VenteUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Vente
-        fields = ['client_id', 'quantity', 'montant', 'devise_id']
+        fields = ['client_id', 'montant', 'devise_id']
 
     def __init__(self, *args, **kwargs):
         super(VenteUpdateForm, self).__init__(*args, **kwargs)
@@ -158,4 +158,29 @@ class VenteUpdateForm(forms.ModelForm):
         self.helper.field_class = 'col-sm-3'
         self.helper.form_method = 'POST'
         self.helper.add_input(Submit('submit', 'Submit'))
+
+    # def clean(self):
+    #     """Check if the quantity does not exceed the available quantity.
+    #
+    #     If it was the last article the quantity may not be greater than one.
+    #     If stock was 1 and selling was 1, then the available quantity does not
+    #     allow to sell one.
+    #
+    #
+    #     """
+    #     cleaned_data = super(VenteUpdateForm,self).clean()
+    #     quantity = cleaned_data.get("quantity", "")
+    #     if len(str(quantity)) > 0:
+    #         quantity     = cleaned_data["quantity"]
+    #         product_id   = cleaned_data["product_id"]
+    #         product_type = cleaned_data["product_type"]
+    #         product_cls  = product_type.get_concrete_class()
+    #         article      = product_cls.objects.get(pk=product_id)
+    #         available    = article.get_quantity()
+    #
+    #         msg = "Quantity %s exceed available stock of %s." % (str(quantity), available)
+    #         if quantity > available:
+    #             raise forms.ValidationError(msg)
+    #     return cleaned_data
+
 
