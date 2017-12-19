@@ -193,7 +193,7 @@ class VenteUpdateView(UpdateView):
 def sum_amounts(dataset, target_currency):
     total = 0
     for i in dataset:
-        if i.montant == None:
+        if i.montant == None or i.devise_id == None:
             continue
         elif i.devise_id.currency_code == target_currency:
             total += i.montant
