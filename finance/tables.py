@@ -17,6 +17,10 @@ class VenteTable(tables.Table):
 
 
 class AchatTable(tables.Table):
+    article = tables.columns.Column('Article', accessor='article', orderable=False)
+    product_id = tables.columns.Column('product_id', accessor='product_id', visible=True)
+    product_owner = tables.columns.Column('product_owner', visible=True)
+
 
     class Meta:
         model = Achat

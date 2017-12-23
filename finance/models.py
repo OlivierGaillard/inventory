@@ -155,24 +155,6 @@ class Facture(models.Model):
     arrivage        = models.ForeignKey(Arrivage, null=True, blank=True)
 
 
-class Achat(models.Model):
-    """Achat d'un (1 seul) article.
-    Il s'agit de la classe utilisée par 'Product.achat'.
-    """
-    montant     = models.DecimalField(max_digits=10, decimal_places=2  )
-    objet       = models.CharField(max_length=80, null=True)
-    quantite    = models.IntegerField()
-    date_achat  = models.DateField()
-    devise_id   = models.ForeignKey('Currency', default=1)
-    facture     = models.ForeignKey(Facture, null=True, blank=True)
-    
-    def __str__(self):
-        return str(self.montant) + ' ' + self.devise_id.currency_code
-
-    def convert(self, target_currency_code):
-        converter = Converter()
-        montant_source = Money(self.montant, self.devise_id.currency_code)
-        return converter.convert(montant_source, target_currency_code )
 
 
 class ProductType(models.Model):
@@ -191,6 +173,64 @@ class ProductType(models.Model):
 
     def get_concrete_class(self):
         return eval(str(self.model_class))
+
+class Achat(models.Model):
+    """Achat d'un (1 seul) article.
+    Il s'agit de la classe utilisée par 'Product.achat'.
+    """
+    product_owner = models.ForeignKey(Enterprise, null=True)
+    product_id = models.PositiveSmallIntegerField(null=True)
+    product_type = models.ForeignKey(ProductType, null=True)
+    montant = models.DecimalField(max_digits=10, decimal_places=2)
+    objet = models.CharField(max_length=80, null=True)
+    quantite = models.IntegerField()
+    date_achat = models.DateField()
+    devise_id = models.ForeignKey('Currency', default=1)
+    facture = models.ForeignKey(Facture, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-date_achat']
+
+
+    def __str__(self):
+        return str(self.montant) + ' ' + self.devise_id.currency_code
+
+    def convert(self, target_currency_code):
+        converter = Converter()
+        montant_source = Money(self.montant, self.devise_id.currency_code)
+        return converter.convert(montant_source, target_currency_code)
+
+    def _get_concrete_article(self):
+        product_cls = self.product_type.get_concrete_class()
+        article = product_cls.objects.get(pk=self.product_id)
+        return article
+
+    @property
+    def article(self):
+        return self._get_concrete_article()
+
+    @property
+    def article_id(self):
+        return self._get_concrete_article().id
+
+    def _set_product_owner(self):
+        product_cls = self.product_type.get_concrete_class()
+        article = product_cls.objects.get(pk=self.product_id)
+        self.product_owner = article.product_owner
+
+    def save(self, *args, **kwargs):
+        output_cls_name = str(self.product_type.model_class) + 'Output'
+        output_cls = eval(output_cls_name)
+        article = self._get_concrete_article()
+        output_cls.objects.create(article=article, date=self.date_achat, quantity=self.quantite)
+        self._set_product_owner()
+        return super(Achat,self).save()
+
+    # def __str__(self):
+    #     # s = "Article-ID: %s - type de produit: %s - quantité: %s - date: %s"
+    #     # s = s % (str(self.product_id), self.product_type, str(self.quantite), str(self.date_achat))
+    #     return str(self.montant + " " + self.devise_id)
+    #
 
 
 #class ArticleTransaction(models.Model):

@@ -4,13 +4,17 @@ from django.views.generic import ListView, CreateView, FormView, DetailView, Upd
 from .models import ClothesCategory, Clothes, ClothesEntry, InventoryClothes, Photo
 from .forms import ClothesCategoryForm, ClothesForm, ClothesUpdateForm, AddPhotoForm, InventoryClothesForm, CategoryUpdateForm
 from coordinates.models import Arrivage
-from finance.models import Achat, Currency
+from finance.models import Achat, Currency, ProductType
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
 from products.models import Employee
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django_filters import FilterSet, CharFilter
 from django_filters.views import FilterView
+
+import logging
+
+logger = logging.getLogger('django')
 
 
 class ArticleFilter(FilterSet):
@@ -132,9 +136,15 @@ class ClothesUpdateView(UpdateView):
             montant_total = montant
 
         entree.save()
+        logger.debug('Entree sauvee.')
+        logger.debug('Devise: %s' % devise)
+        product_type = ProductType.objects.filter(model_class='Clothes')[0]
+        logger.debug('ProductType: %s' % product_type)
         achat = Achat.objects.create(montant=montant_total,
                                      quantite=form['quantite_achetee'].value(),
                                      date_achat=form['date_achat'].value(),
+                                     product_id = entree.article.id,
+                                     product_type = product_type,
                                      devise_id=devise)
         self.object.prix_achat = achat
         self.object.update_marque_ref(marque=form['marque'].value(), marque_ref = form['marque_ref'].value())
