@@ -1,6 +1,6 @@
 from django_tables2 import Table, tables, columns
 from django_tables2.utils import A
-from .models import Vente
+from .models import Vente, Achat
 
 class VenteTable(tables.Table):
     article = tables.columns.Column('Article', accessor='article', orderable=False)
@@ -14,4 +14,13 @@ class VenteTable(tables.Table):
     class Meta:
         model = Vente
         attrs = {'class' : 'table'}
+
+
+class AchatTable(tables.Table):
+
+    class Meta:
+        model = Achat
+        attrs = {'class' : 'table'}
+
+
 

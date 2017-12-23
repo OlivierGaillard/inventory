@@ -1,0 +1,26 @@
+{% extends "inventex.html" %}
+{% load render_table from django_tables2 %}
+{% block content %}
+
+<h1>Tous les achats</h1>
+{% render_table table %}
+
+
+<!--<table class="table">-->
+      <!--<thead>-->
+         <!--<tr>-->
+            <!--<th>Total des ventes</th>-->
+         <!--</tr>-->
+      <!--</thead>-->
+
+      <!--<tfoot>-->
+
+      <!--</tfoot>-->
+
+      <!--<tbody>-->
+      <!--<tr>-->
+       <!--<td>{{total}}</td>-->
+      <!--</tr>-->
+      <!--</tbody>-->
+<!--</table>-->
+{% endblock %}

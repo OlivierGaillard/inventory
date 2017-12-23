@@ -7,7 +7,7 @@ import requests
 from django.utils import timezone
 from django.conf import settings
 import os
-from coordinates.models import Arrivage
+from coordinates.models import Arrivage, Fournisseur
 from products.models import Enterprise
 from accessories.models import Accessory, AccessoryOutput
 from clothes.models import Clothes, ClothesOutput
@@ -145,12 +145,26 @@ class Currency(models.Model):
         ordering = ['-used', 'currency_code']
 
 
+class Facture(models.Model):
+    """Facture pour un ou plusieurs achats. Donc certains
+    achats possèdent une référence vers une même facture."""
+    date_facture    = models.DateField()
+    montant_facture = models.DecimalField(max_digits=10, decimal_places=2, help_text="montant total de la facture")
+    fournisseur     = models.ForeignKey(Fournisseur, null=True, blank=True)
+    devise_id       = models.ForeignKey('Currency', default=1)
+    arrivage        = models.ForeignKey(Arrivage, null=True, blank=True)
+
+
 class Achat(models.Model):
+    """Achat d'un (1 seul) article.
+    Il s'agit de la classe utilisée par 'Product.achat'.
+    """
     montant     = models.DecimalField(max_digits=10, decimal_places=2  )
     objet       = models.CharField(max_length=80, null=True)
     quantite    = models.IntegerField()
     date_achat  = models.DateField()
     devise_id   = models.ForeignKey('Currency', default=1)
+    facture     = models.ForeignKey(Facture, null=True, blank=True)
     
     def __str__(self):
         return str(self.montant) + ' ' + self.devise_id.currency_code
@@ -179,6 +193,7 @@ class ProductType(models.Model):
         return eval(str(self.model_class))
 
 
+#class ArticleTransaction(models.Model):
 
 
 class Vente(models.Model):

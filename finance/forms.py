@@ -54,9 +54,6 @@ class FraisArrivageUpdateForm(forms.ModelForm):
         self.helper.form_method = 'POST'
         self.helper.add_input(Submit('submit', 'Submit'))
 
-
-
-
 class CurrencyUsageForm(forms.ModelForm):
 
     class Meta:

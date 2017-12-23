@@ -40,6 +40,7 @@
       {% if perms.accessories.view_achat %}
       <tr>
         <th>Prix d'achat</th>
+        <!--<td>{{accessory.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>-->
         <td>{{accessory.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>
       </tr>
       {% endif %}

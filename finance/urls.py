@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^currencies/$', views.CurrencyListView.as_view(), name='currencies'),
     url(r'^update_currency/(?P<pk>[0-9]+)$', views.CurrencyUsageView.as_view(), name='update_currency'),
     url(r'^ventes/$', views.ventes, name='ventes'),
+    url(r'^achats/$', views.achats, name='achats'),
     # To sell product-ID
     url(r'^create_vente/(?P<product_id>[0-9]+)/(?P<product_type>.+)$', views.make_selling, name='create_vente'),
     url(r'update-vente/(?P<pk>[0-9]+)$', views.VenteUpdateView.as_view(), name='update_vente'),

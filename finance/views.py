@@ -13,8 +13,8 @@ from coordinates.models import Arrivage
 from .models import FraisArrivage, Currency, Converter, Vente, ProductType
 from .forms import FraisArrivageCreateForm, FraisArrivageFormSetHelper, FraisArrivageUpdateForm, CurrencyUsageForm, VenteCreateForm, VenteUpdateForm
 from .filters import FraisArrivageFilter
-from .models import Vente
-from .tables import VenteTable
+from .models import Vente, Achat
+from .tables import VenteTable, AchatTable
 from products.models import Employee
 from django_tables2 import RequestConfig
 from crispy_forms.bootstrap import PrependedText
@@ -270,6 +270,15 @@ def make_selling(request, product_id, product_type):
             article, product_type, remaining = get_concrete_article_and_product_type(product_type, product_id)
             form.helper.layout.append(PrependedText('quantity', 'Max: ' + str(remaining)))
             return render(request, "finance/create_vente.html", {'form': form, 'article': article})
+
+@login_required
+@user_passes_test(Employee.is_current_user_employee)
+def achats(request):
+    #enterprise_of_current_user = Employee.get_enterprise_of_current_user(request.user)
+    q = Achat.objects.all()
+    table = AchatTable(q)
+    RequestConfig(request).configure(table)
+    return render(request, 'finance/achats.html', {'table':table})
 
 
 

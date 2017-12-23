@@ -32,7 +32,6 @@ class AccessoryCreationView(CreateView):
 
     def form_valid(self, form):
         """This method saves the Accessory instance. """
-        print("form valid")
         self.object = form.save()
         arrivage_id = form['arrivage'].value()
         arrivage = Arrivage.objects.get(pk=arrivage_id)
@@ -147,10 +146,13 @@ class AccessoryUpdateView(UpdateView):
             montant_total = montant
 
         entree.save()
+        # vérifier si un achat pour l'article existe déjà et mettrer à jour si c'est le cas.
+        # Sinon: créer un nouvel 'Achat'.
         achat = Achat.objects.create(montant=montant_total,
                                      quantite=form['quantite_achetee'].value(),
                                      date_achat=form['date_achat'].value(),
                                      devise_id=devise)
+        # TODO: DANGER: à chaque sauvegarde un nouvel 'Achat' est créé? Non, c'est ok: one-to-one field.
         self.object.prix_achat = achat
         self.object.update_marque_ref(marque=form['marque'].value(), marque_ref = form['marque_ref'].value())
         return super(AccessoryUpdateView, self).form_valid(form)
