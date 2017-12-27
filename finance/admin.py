@@ -1,7 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Currency, FraisType, Achat, Tarif, FraisArrivage, Vente
+from .models import Currency, FraisType, Achat, Tarif, FraisArrivage, Vente, ProductType
+
+admin.site.register(ProductType)
 
 class CurrencyAdmin(admin.ModelAdmin):
     list_display = ('currency_code', 'currency_name', 'used', 'default', 'rate_usd', 'last_update')

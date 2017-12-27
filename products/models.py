@@ -5,7 +5,9 @@ from django.db.models import Sum
 from coordinates.models import Arrivage
 from mptt.models import MPTTModel
 from mptt.fields import TreeForeignKey
+import logging
 
+logger = logging.getLogger('django')
 
 
 # Create your models here.
@@ -275,7 +277,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nom du modèle')
     marque_ref = models.ForeignKey(Marque, null=True, blank=True, help_text='Choix des marques')
     arrivage = models.ForeignKey(Arrivage, null=True)
-    prix_achat = models.OneToOneField('finance.Achat', null=True, blank=True, verbose_name="Prix d'achat unitaire")
+    prix_achat = models.OneToOneField('finance.Achat', null=True, blank=True, verbose_name="Prix d'achat global")
     date_ajout = models.DateField(auto_created=True, default=timezone.now)
 
 
@@ -292,21 +294,30 @@ class Product(models.Model):
         """ Retourne la quantité en stock.
         """
         entrees = self.get_entrees()
+        logger.debug('total des entrées: %s' % entrees.count())
+        logger.debug('Liste de entrées avec quantité:')
+        for e in entrees.all():
+            logger.debug(e.quantity)
+        logger.debug('fin de la liste.')
         sorties = self.get_sorties()
         balance = 0
         if entrees.filter(article=self.id).exists():
             #print("There are entries.")
             e_sum = entrees.filter(article = self.id).aggregate(Sum('quantity'))
+            logger.debug("Quantité des entrées: %s" % e_sum)
             e_sum = e_sum['quantity__sum']
             if sorties.filter(article=self.id).exists():
+                logger.debug("Des sorties existent.")
                 e_sub = sorties.filter(article = self.id).aggregate(Sum('quantity'))
                 e_sub = e_sub['quantity__sum']
+                logger.debug("Quantité sorties: %s" % e_sub)
                 balance = e_sum - e_sub
+                logger.debug("e_sum - e_sub = %s" % balance)
             else:
                 balance = e_sum
         else:
-            pass
-            #print("There are no entries.")
+            logger.debug("Il n'y a pas d'entrées.")
+        logger.debug('quantité en stock: %s' % balance)
         return balance
 
     def get_quantity_as_list(self):

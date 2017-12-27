@@ -43,6 +43,10 @@
         <!--<td>{{accessory.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>-->
         <td>{{accessory.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>
       </tr>
+      <tr>
+        <th>Prix à l'unité</th>
+        <td>{{accessory.prix_achat.prix_unitaire|default_if_none:"<em>à renseigner</em>"}} </td>
+      </tr>
       {% endif %}
     </tbody>
   </table>

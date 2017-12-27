@@ -61,6 +61,7 @@ class ClothesCreationView(CreateView):
         ClothesEntry.objects.create(date=arrivage.date,
             article=form.instance,
             quantity=form['quantity'].value())
+        logger.debug('quantity: %s' % form['quantity'].value())
         self.object.update_marque_ref(form['marque'].value(), form['marque_ref'].value())
         return HttpResponseRedirect(self.get_success_url())
 
@@ -91,8 +92,10 @@ class ClothesUpdateView(UpdateView):
 
     def get_initial(self):
         previous_quantity = self.object.get_quantity()
+        logger.debug('previous_quantity: %s' % previous_quantity)
         initial = super(ClothesUpdateView, self).get_initial()
         initial['quantity'] = previous_quantity
+        logger.debug('Mise à jour de la quantité acheté: égale à la quantité précédente: %s ' % previous_quantity)
         initial['quantite_achetee'] = previous_quantity # updated below if prix_achat exists.
         initial['categories'] = self.object.categories.last()
         if self.object.marque_ref:
@@ -136,7 +139,7 @@ class ClothesUpdateView(UpdateView):
             montant_total = montant
 
         entree.save()
-        logger.debug('Entree sauvee.')
+        logger.debug('Entree sauvee. Quantité: %s.' % entree.quantity)
         logger.debug('Devise: %s' % devise)
         product_type = ProductType.objects.filter(model_class='Clothes')[0]
         logger.debug('ProductType: %s' % product_type)

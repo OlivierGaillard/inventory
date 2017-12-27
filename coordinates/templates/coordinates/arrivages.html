@@ -65,7 +65,8 @@
             <th class="text-center">Total des achats</th>
             <th class="text-center">Coût de revient total</th>
             <th class="text-center">Total des ventes</th>
-            <th class="text-center">Solde</th>
+            <th class="text-center">Marge</th>
+            <th class="text-center">Taux de marge</th>
         </tr>
         </thead>
         <tbody>
@@ -79,8 +80,24 @@
             <td align="center">zéro pour l'instant</td>
           {% endif %}
           <td align="center">{{solde|floatformat:2}} {{target_currency}}</td>
+          <td align="center">{{ taux_de_marge|floatformat:2|default_if_none:"pas disponible" }}</td>
         </tr>
         </tbody>
     </table>
 {% endif %}
+
+<h3>Marge commerciale</h3>
+
+<p>La <em>marge commerciale</em> est la différence entre le total des ventes et le coût de revient, ce qu'on
+appelait le <em>bénéfice</em>.</p>
+
+<h3>Taux de marge</h3>
+
+<p>Le <em>taux de marge</em> est le bénéfice réalisé pour un montant de marchandise de 100. On le calcule en prenant
+la marge commerciale divisée par le coût de revient (achats et frais), puis multipliée par 100. Cela
+nous donne une idée du <em>rendement</em> de l'entreprise.</p>
+
+<h4>Taux de marge: {{ taux_de_marge|floatformat:2|default_if_none:"pas disponible" }}</h4>
+
+
 {% endblock %}

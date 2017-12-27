@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import ListView, CreateView, FormView, DetailView, DeleteView, UpdateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
-from finance.models import Achat, Currency
+from finance.models import Achat, Currency, ProductType
 from .models import Shoe, ShoeEntry, ShoeCategory, InventoryShoe, Photo
 from .forms import ShoeForm, CategoryForm, CategoryUpdateForm, InventoryShoeForm, AddPhotoForm, ShoeUpdateForm
 from coordinates.models import Arrivage
@@ -11,6 +11,10 @@ from products.models import Employee
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django_filters import FilterSet, CharFilter
 from django_filters.views import FilterView
+import logging
+
+logger = logging.getLogger('django')
+
 
 class ArticleFilter(FilterSet):
     arrivage__designation = CharFilter(lookup_expr='icontains')
@@ -142,10 +146,17 @@ class ShoeUpdateView(UpdateView):
             montant_total = montant
 
         entree.save()
+        logger.debug('Entree sauvee.')
+        logger.debug('Devise: %s' % devise)
+        product_type = ProductType.objects.filter(model_class='Shoe')[0]
+        logger.debug('ProductType: %s' % product_type)
         achat = Achat.objects.create(montant=montant_total,
                                      quantite=form['quantite_achetee'].value(),
                                      date_achat=form['date_achat'].value(),
+                                     product_id=entree.article.id,
+                                     product_type=product_type,
                                      devise_id=devise)
+
         self.object.prix_achat = achat
         self.object.update_marque_ref(marque=form['marque'].value(), marque_ref = form['marque_ref'].value())
         return super(ShoeUpdateView, self).form_valid(form)

@@ -140,7 +140,13 @@ class Arrivage(models.Model):
         """Return the total for this arrivage.
         This is used in the arrivages' table beneath total des frais.
         Les achats concernent tous les types d'articles confondus
-        (habits, chaussures et accessoires). """
+        (habits, chaussures et accessoires).
+
+        Avec cette implémentation  les achats sont liés à un
+        article. Et si un article est effacé alors tous les achats de cet article
+        n'apparaissent plus dans le total mais perdurent dans la classe "Achat".
+
+        """
         target_currency = settings.DEFAULT_CURRENCY
         montant = 0
         for c in self.clothes_set.all():

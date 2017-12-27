@@ -159,7 +159,8 @@ class ArrivageListView(ListView):
         context['total_frais_all_inventories']  = total_frais_all_inventories
         logger.debug('total_frais_all_inventories: %s' % total_frais_all_inventories)
         context['total_achats_all_inventories'] = total_achats_all_inventories
-        context['total_cout_revient'] = total_achats_all_inventories + total_frais_all_inventories
+        cout_de_revient = total_achats_all_inventories + total_frais_all_inventories
+        context['total_cout_revient'] = cout_de_revient
         enterprise_of_current_user = Employee.get_enterprise_of_current_user(self.request.user)
         q = Vente.objects.filter(product_owner=enterprise_of_current_user)
 
@@ -182,6 +183,8 @@ class ArrivageListView(ListView):
             solde = montant_ventes - (total_frais_all_inventories + total_achats_all_inventories)
             logger.debug('Le solde: %s' % solde)
             context['solde'] = solde
+            taux_de_marge = (solde / (total_frais_all_inventories + total_achats_all_inventories))* 100
+            context['taux_de_marge'] = taux_de_marge
         elif total_frais_all_inventories:
             logger.debug('total frais uniquement')
             solde = montant_ventes - total_frais_all_inventories

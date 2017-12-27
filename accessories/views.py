@@ -8,12 +8,15 @@ from django.shortcuts import reverse
 from django.views.generic import CreateView, ListView, FormView, DetailView, UpdateView, DeleteView
 from .models import Accessory, AccessoryCategory, InventoryAccessory, AccessoryEntry, Photo
 from coordinates.models import Arrivage
-from finance.models import Achat, Currency
+from finance.models import Achat, Currency, ProductType
 from .forms import AccessoryForm, AccessoryUpdateForm, InventoryAccessoryForm, AccessoryCategoryForm
 from .forms import AddPhotoForm, CategoryUpdateForm
 from products.models import Employee, Enterprise
 from django_filters import FilterSet, CharFilter
 from django_filters.views import FilterView
+import logging
+
+logger = logging.getLogger('django')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -148,11 +151,15 @@ class AccessoryUpdateView(UpdateView):
         entree.save()
         # vérifier si un achat pour l'article existe déjà et mettrer à jour si c'est le cas.
         # Sinon: créer un nouvel 'Achat'.
+        product_type = ProductType.objects.filter(model_class='Accessory')[0]
+        logger.debug('ProductType: %s' % product_type)
         achat = Achat.objects.create(montant=montant_total,
                                      quantite=form['quantite_achetee'].value(),
                                      date_achat=form['date_achat'].value(),
+                                     product_id=entree.article.id,
+                                     product_type=product_type,
                                      devise_id=devise)
-        # TODO: DANGER: à chaque sauvegarde un nouvel 'Achat' est créé? Non, c'est ok: one-to-one field.
+
         self.object.prix_achat = achat
         self.object.update_marque_ref(marque=form['marque'].value(), marque_ref = form['marque_ref'].value())
         return super(AccessoryUpdateView, self).form_valid(form)
@@ -160,6 +167,11 @@ class AccessoryUpdateView(UpdateView):
 
 @method_decorator(login_required, name='dispatch')
 class AccessoryDeleteView(DeleteView):
+    """Lorsqu'un accessoire est effacé les achats le concernant ne le
+    sont pas. Est-ce ok ainsi? Pas encore éclairci. En tous cas si l'article
+    est effacé les achats qui lui sont associés n'apparaissent plus dans la
+    liste des inventaires.
+    """
     model = Accessory
     template_name = 'accessories/delete.html'
     context_object_name = 'accessory'

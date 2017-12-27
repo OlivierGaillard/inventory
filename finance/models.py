@@ -206,6 +206,10 @@ class Achat(models.Model):
         return article
 
     @property
+    def prix_unitaire(self):
+        return self.montant / self.quantite
+
+    @property
     def article(self):
         return self._get_concrete_article()
 
@@ -219,22 +223,10 @@ class Achat(models.Model):
         self.product_owner = article.product_owner
 
     def save(self, *args, **kwargs):
-        output_cls_name = str(self.product_type.model_class) + 'Output'
-        output_cls = eval(output_cls_name)
-        article = self._get_concrete_article()
-        output_cls.objects.create(article=article, date=self.date_achat, quantity=self.quantite)
+        """Comme il s'agit de la sauvegarde d'un achat et non
+        d'une vente il serait faux de créer une sortie. """
         self._set_product_owner()
         return super(Achat,self).save()
-
-    # def __str__(self):
-    #     # s = "Article-ID: %s - type de produit: %s - quantité: %s - date: %s"
-    #     # s = s % (str(self.product_id), self.product_type, str(self.quantite), str(self.date_achat))
-    #     return str(self.montant + " " + self.devise_id)
-    #
-
-
-#class ArticleTransaction(models.Model):
-
 
 class Vente(models.Model):
     """

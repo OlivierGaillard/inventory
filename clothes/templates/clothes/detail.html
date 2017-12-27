@@ -38,8 +38,12 @@
       </tr>
       {% if perms.accessories.view_achat %}
       <tr>
-        <th>Prix d'achat</th>
+        <th>Total des achats</th>
         <td>{{cloth.prix_achat|default_if_none:"<em>à renseigner</em>"}}</td>
+      </tr>
+      <tr>
+        <th>Prix à l'unité</th>
+        <td>{{cloth.prix_achat.prix_unitaire|default_if_none:"<em>à renseigner</em>"}} </td>
       </tr>
       {% endif %}
     </tbody>
