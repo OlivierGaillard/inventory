@@ -274,13 +274,15 @@ def make_selling(request, product_id, product_type):
 @login_required
 @user_passes_test(Employee.is_current_user_employee)
 def achats(request):
-    #enterprise_of_current_user = Employee.get_enterprise_of_current_user(request.user)
-    q = Achat.objects.all()
-    table = AchatTable(q)
+    enterprise_of_current_user = Employee.get_enterprise_of_current_user(request.user)
+    q = Achat.objects.filter(product_owner=enterprise_of_current_user)
+    table = None
+    total = 0
+    if q.exists():
+        table = AchatTable(q)
+        total = sum_amounts(q, 'XAF')
+    else:
+        table = AchatTable([])
     RequestConfig(request).configure(table)
-    return render(request, 'finance/achats.html', {'table':table})
-
-
-
-
+    return render(request, 'finance/achats.html', {'table':table, 'total': total,})
 
